@@ -1,24 +1,37 @@
 # Git与GitHub
 
+### 安装Git
+
+[推荐安装使用教程：菜鸟教程](https://www.runoob.com/manual/git-guide/)
+
 ## 使用命令行创建Git本地仓库
 
-1. 右击鼠标，选择**Git Bash Here**，该命令会在当前目录下打开一个**Linux**的命令行窗口，执行：**git init**，初始化一个本地仓库，执行**ls -la**可以查看创建的**git**隐藏目录
+##### 基本指令
 
-##### 设置签名,必须要配置
+1. git init：初始化一个本地库
+2. git config：配置，下面是各种参数
+   1. user.name：设置用户名
+   2. user.email：设置邮箱
+   3. --global user.name：设置全局用户名（可以直接省略1、2两步，直接3、4）
+   4. --global user.email：设置全局邮箱
+   5. --global --list：查看是否设置了全局用户名与邮箱
+3. git clone：将远程库代码克隆下来
+4. git add：将工作区代码添加到暂存区
+5. git commit：将暂存区代码提交到本地库
+6. git pull：拉去远程仓库分支代码，merge（融合）到本地库中，完整命令：git pull 远程库地址 分支名
+7. git push：将本地库代码提交到远程仓库，完整命令：git push 远程库地址 分支名
 
-1. 形式：
+##### 使用
 
-   用户名：Tom
+1. 选择一个自定义文件夹，进入，右击鼠标，选择**Git Bash Here**，该命令会在当前目录下打开一个**Linux**的命令行窗口，执行：**git init**，初始化一个本地仓库，执行**ls -la**可以查看创建的**.git**隐藏目录
 
-   Email地址：good@qq.com
+###### 设置签名,必须要配置
 
-2. 作用：区分不同开发人员的身份
-
-3. 命令：
-
-   1. 项目级别/仓库级别：仅在当前本地仓库生效
+1. 1. 项目级别/仓库级别：仅在当前本地仓库生效
 
       执行：**git config user.name Tom**
+
+      ​			**git config user.emali 邮箱**
 
       信息保存位置：**.git/config**文件中
 
@@ -26,23 +39,25 @@
 
       执行：**git config --global user.name Tom**
 
+      ​			**git config --global user.email 邮箱**
+
       信息保存位置：**~/.gitconfig**文件中，**~**代表系统夹目录
 
    3. 级别优先级：
 
       1. 就近原则，项目级别优先于系统用户级别，二者都有时，采用项目级别的签名
-   
-4. 查看配置：git config -l
 
-5. 查看系统配置：git config --system --list
+2. 查看配置：git config -l
 
-6. 查看全局配置：git config --global --list
+3. 查看系统配置：git config --system --list
 
-7. 设置完成后，会生成一个.gitconfig文件，该文件在当前目录下，与.git目录平级
+4. 查看全局配置：git config --global --list
 
-8. 如果不设置签名，则无法提交数据
+5. 设置完成后，会生成一个.gitconfig文件，该文件在当前目录下，与.git目录平级
 
-9. 环境变量设置只是为了全局使用
+6. 如果不设置签名，则无法提交数据
+
+7. 环境变量设置只是为了全局使用
 
 ##### git基本命令操作
 
@@ -92,12 +107,6 @@
    1. --soft：只改变**本地库**HEAD指针，简而言之就是版本回退时，信息只有**本地库**会立即更新
    2. --mixed：只改变**本地库**和**暂存区**HEAD指针，简而言之就是版本回退时，信息只有**本地库和暂存区**会立即更新
    3. --hard：只改变**本地库**和**暂存区**和**工作区**HEAD指针，简而言之就是版本回退时，信息只有**本地库、暂存区和工作区**会立即更新
-
-### 初始化git方法
-
-#### 第一种方法：clone
-
-1. git clone 远程地址
 
 ## 分支
 
