@@ -7,7 +7,7 @@
 	 src/main/java：存放代码
 	 src/main/resources
 	 	static: 存放静态文件，比如 css、js、image, （访问方式 http://localhost:8080/js/main.js）
-	 	templates:存放静态页面jsp,html,tpl
+	 	templates:存放动态页面jsp,html,tpl
 	 	config:存放配置文件,application.properties
 	 	resources:
 	项目默认的目录名在访问时默认在这些目录中寻找，所有可以不加上目录名，访问static目录下的图片时，不需要写上static
