@@ -85,6 +85,15 @@
 >
 > 使用IOC的目的：减少对代码的改动，也能实现不同的功能，实现解耦合
 >
+> IOC的体现：servlet创建对象
+>
+> - <servlet-name>myservlet</servlet>
+> - <servlet-class>com.cth.controller.MyServlet</servlet-class>
+>
+> 没有创建对象，但是Tomcat服务器帮我们创建了
+>
+> IOC技术实现：DI（Dependency 是IOC的技术实现
+>
 > java中创建对象的方式：
 >
 > + 构造方法，new Object（）；

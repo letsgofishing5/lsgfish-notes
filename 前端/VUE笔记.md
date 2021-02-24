@@ -6,7 +6,7 @@
 
 #### el:挂载点
 
-> el是用来设置Vue实例挂载（管理 ）的元素
+> el（element）是用来设置Vue实例挂载（管理 ）的元素
 
 ##### Vue实例的作用范围是什么？
 
@@ -385,7 +385,80 @@ $emit("自定义事件名","参数")
 </script>
 ```
 
+#### 单文件组件
 
+##### 安装npm
+
+1. 安装npm，全称为Node Package Manager，是一个基于Node.js的包管理器，也是整个Node.js社区最流行、支持的第三方模块最多的包管理器
+
+2. 由于网络原因 安装 cnpm
+
+   1. npm install -g cnpm --registry=https://registry.npm.taobao.org
+
+3. 安装 vue-cli
+
+   1. cnpm install -g @vue/cli
+
+4. 安装webpack
+
+   1. cnpm install -g webpack
+   2. webpack 是 JavaScript 打包器（module bundler）
+
+5. 通过：vue ui 
+
+   可以启动一个图形化界面，
+
+6. 生成一个vue文件，里面有目录：
+
+   1. node_modules
+   2. pulic：打包之后，用于生产环境下的一个目录
+   3. src：开发的目录
+      1. assets
+      2. components：整个项目的组件目录
+      3. App.vue：项目的入口文件，完成对项目的引入工作
+      4. main.js
+   4. 一些文件
+
+##### 单文件组件格式
+
+```vue
+<template>
+模板或者试图区域
+</template>
+
+<script>
+    脚本区域
+</script>
+
+<style>
+    样式区域
+</style>
+
+```
+
+uni-app+HBuilder
+
+需要了解node知识，终端知识，npm知识
+
+
+
+#### 使用HBuilder结合uni-app开发
+
+1. 打开HBuilder，新建项目
+2. 选择uni-app，选择默认模板
+
+##### 介绍目录
+
+1. pages：用于存放业务页面文件
+   1. index
+2. static：用于存放静态资源文件
+   1. logo.png
+3. App.vue：用来配置整个应用的全局样式以及监听生命周期
+4. main.js：Vue初始化入口文件
+5. manifest.json：配置应用名称、appid、logo、版本等打包信息
+6. pages.json：配置页面路由、导航条、选项卡等页面类信息
+7. uni.scss
+8. new_file.txt
 
 ## 网络通信-axios
 
