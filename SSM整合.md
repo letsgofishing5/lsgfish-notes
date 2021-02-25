@@ -196,7 +196,7 @@
 
 #### 注解
 
-1. 在类上加注解：@Component、@Repository（dao对象）、@Service（service对象）、@Controller（controller控制器对象），这些事给项目的对象进行分层
+1. 在类上加注解：@Component（组件）、@Repository（dao对象）、@Service（service对象）、@Controller（controller控制器对象），这些事给项目的对象进行分层
 
    ```java
    @Component("student")
