@@ -269,18 +269,230 @@ background-color: rgba(0,0,0,0.5);
    border:1px dashed red;
    ```
 
-   1. 表格边框合并
+
+2. padding，内边框，会影响盒子大小，会撑大盒子。如果不设置w、h，则不会撑开盒子
+
+   ```css
+   /*一套连招带走:上，右，下，左*/
+   padding:0 0 0 0;
+   /*上下，左右*/
+   padding：0 0;
+   ```
+
+3. content，内容
+
+4. margin，外边距
+
+   ```css
+   /*一套连招带走*/
+   margin:0 0 0 0;
+   /*水平居中-只限于块级元素*/
+   margin: auto;
+   /*行内元素水平居中-给父元素添加*/
+   text-align: center;
+   ```
+
+
+   1. 嵌套块元素塌陷——外边距塌陷问题
+
+      子元素设置上外边距，父元素塌陷
+
+      解决方法：
+
+      1. 给父元素设置上边框即可
+      2. 给父元素设置上内边距
+      3. 给父元素添加overflow：hidden
+
+   2. 清楚内外边距
 
       ```css
-       border-collapse: collapse; 
+      *{
+          padding:*;
+          margin:*;
+      }
       ```
 
-      ```html
-      //cellspacing="0"
-      <table border="1" cellspacing="0" cellpadding="50">
-          <tr><th>Header</th></tr>
-          <tr><td>Data</td></tr>
-      </table>
-      ```
+##### 圆角
 
-      
+一套连招带走
+
+```css
+border-radius:0 0 0 0;
+border-radius:0;
+/*单位可以是：%，也可以是：px*/
+```
+
+##### 盒子阴影
+
+一套连招带走
+
+```css
+/*x轴，y轴，阴影模糊程度，阴影范围大小，阴影颜色，内阴影*/
+box-shadow: 10px 10px 10px 10px blue insert;
+/*insert不写，则默认是外阴影*/
+```
+
+##### 文字阴影
+
+一套连招带走
+
+```css
+/*x轴，y轴，阴影模糊程度，阴影颜色*/
+text-shadow: 10px 10px 2px gray;
+```
+
+### 浮动
+
+##### 布局三种方式
+
+1. 标准流：按标签规定好的默认方式排列
+2. 浮动
+3. 定位
+
+##### 网页布局准则
+
+1. 多个块级元素纵向排列找标准流，多个块级元素横向排列找浮动
+2. 确定页面版心（可视区）
+3. 分析页面中的行模块，以及每个行模块中的列模块（页面布局第一准则）
+4. 一行中的列模块经常浮动布局，先确定每个列的大小，之后确定列的位置（页面布局第二准则）
+5. 制作HTMl结构。我们还是遵循：先有结构，后有样式的原则。结构永远最重要
+6. 先理清布局结构，再写代码
+
+
+
+##### 浮动
+
+属性：
+
+1. none：不浮动
+2. left：左浮动
+3. right：右浮动
+
+特性（重难点）
+
+1. 浮动元素会脱标（脱离标准普通流的控制移动到指定位置）
+2. 浮动的盒子不再保留原先的位置
+3. 任何元素都可以浮动，不管原先是什么模式的元素，添加浮动后具有行内块元素相似的特性
+4. 浮动的盒子，只会影响到后面的盒子，不会影响前面盒子
+
+##### 浮动存在的问题
+
+1. 父元素没有设置高度时，子元素设置浮动，这是父元素则没有高度
+
+##### 清除浮动本质
+
+1. 清除浮动的本质就是清除浮动元素造成的影响
+2. 如果父盒子本身就有高度，则不需要清除浮动
+3. 清除浮动后，父级就会根据浮动的子盒子自动检测高度。父级有了高度，就不会影响到下面的标准流了
+
+**语法：**
+
+```css
+clear: left;
+clear: right;
+clear: both;
+/*实际工作中基本上都只用：clear:both 
+	清除浮动的策略时：闭合浮动
+*/
+```
+
+###### 清除浮动方法
+
+1. 额外标签法也称为隔墙法，时W3C推荐的做法（在最后一个浮动的子元素后面添加一个额外标签，必须是块级元素，清除浮动样式）
+
+   ```css
+   *{
+       margin: 0;
+       padding: 0;
+   }
+   .son{
+       width: 100px;
+       height: 100px;
+       background: gray;
+       margin: 10px;
+       float: left;
+   }
+   .father{
+       border: 1px solid red;
+       background: orange;
+   }
+   .clear{
+       clear:both;
+   }
+   ```
+
+   ```html
+   <div class="father">
+       <div class="son">1</div>
+       <div class="son">2</div>
+       <div class="son">3</div>
+       <div class="son">4</div>
+       <div class="clear"></div>
+   </div>
+   ```
+
+2. 父级添加overflow属性
+
+   给**父元素**设置overflow属性，值：hidden、auto、scroll
+
+3. 父级添加after伪元素
+
+   时额外标签法的升级版，给**父元素**添加
+
+   ```css
+   .father:after{
+       content: "";
+       display: block;
+       height: 0;
+       clear: both;
+       visibility: hidden;
+   }
+   .father{
+       overflow: hidden;
+       border: 1px solid red;
+       background: orange;
+       /*IE6、7专有*/
+       *zoom: 1;
+   }
+   ```
+
+4. 父级添加双伪元素
+
+   给父元素添加
+
+   ```css
+   .father::before,.father:after{
+       content: "";
+       display: table;
+   }
+   .father:after{
+       clear: both;
+   }
+   .father{
+       overflow: hidden;
+       border: 1px solid red;
+       background: orange;
+       /*IE6、7专有*/
+       *zoom: 1;
+   }
+   ```
+
+##### CSS属性书写建议顺序
+
+1.布局定位属性: display / position/ float/ clear / visibility/ overflow (建议display第一个写,毕竟关系到模式)
+2.自身属性: width/ height / margin/ padding / border/ background
+3.文本属性: color/ font / text-decoration/ text- align/ vertical-align/ white- space / break-word
+4.其他属性(CSS3) : content /cursor/ border-radius/ box-shadow/ text-shadow/ background:inear-gradient...
+
+#### 制作导航栏注意
+
+
+实际开发中,我们不会直接用链接a而是用li包含链接(i+ a)的做法。
+
+1. li+a语义更清晰 , -看这就是有条理的列表型内容。
+2.如果直接用a ,搜索引学容易辨别为有堆砌关键字嫌疑(故意堆砌关键字容易被搜索引学有降权的风险) ,
+从而影响网站排名
+2. 1.让导航栏-行显示， 给li加浮动,因为li是块级元素,需要一行显示
+  2.这个nav导航栏可以不给宽度,将来可以继续添加其余文字
+  3.因为导航栏里面文字不一 样多所以最好给链接a左右padding撑开盒子,而不是指定宽度
+
