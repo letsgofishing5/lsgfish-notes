@@ -633,7 +633,266 @@ overflow：auto/scroll;
 使用方法：
 
 - 下载字体包
-- 将fonts文件复制粘贴到项目中
+- 将fonts文件复制粘贴到项目中，fonts中有四个文件夹，是为了兼容性
 - 打开style.css，复制第一段话，放入style中
 - 在span标签中输入特殊符号
 - 在span的css样式用引入：font-family: 'Linearicons-Free';
+- 如果需要重新添加新的字体，可以导入selection.json文件
+
+#### 三角制作
+
+```css
+div{
+    width: 0;
+    height: 0;
+    border-top: 100px solid red;
+    border-left: 100px solid blue;
+    border-right: 100px solid green;
+    border-bottom: 100px solid orchid;
+}
+```
+
+##### 三角强化
+
+锐角直角三角形
+
+```css
+.trinagle{
+    width: 100px;
+    height: 0;
+    border-top: 50px solid #0000FF;
+    border-right: 20px solid transparent;
+}
+```
+
+
+
+#### 更改用户界面样式
+
+##### 鼠标样式
+
+```css
+li{
+    cursor:pointer;
+}
+```
+
+| 属性值      | 描述     |
+| ----------- | -------- |
+| default     | 小白默认 |
+| pointer     | 小手     |
+| move        | 移动     |
+| text        | 文本     |
+| not-allowed | 禁止     |
+
+##### 轮廓线
+
+```css
+input{
+    outline: none;
+    /*或着设置为 0 */
+    outline: 0;
+}
+```
+
+##### 防止拖拽文本域
+
+文本域标签尽量放在一行，否则会有空格，体验效果很差
+
+```css
+textarea{
+    resize:none;
+}
+```
+
+##### 行内块和文字垂直居中
+
+默认是基线对齐
+
+```css
+vertical: middle;
+```
+
+##### 解决图片底侧有空白缝隙
+
+原因：与基线对齐
+
+```css
+/*方式一（推荐）*/
+vertical: bottom;
+/*方式二*/
+vertical: middle;
+/*第三种方式：图片转块级元素*/
+display:block;
+```
+
+##### 单行文字溢出用省略号显示
+
+1. 单行文本溢出显示省略号显示，必须满足三个条件
+
+   ```css
+   /*1.先强制-行内显示文本（默认是normal自动换行）*/
+   white- space:nowrap;
+   /*2.超出的部分隐藏*/
+   overflow: hidden;
+   /*3.文字用省略号替代超出的部分*/
+   text-overflow: ellipsis;
+   ```
+
+#### 多行文本溢出省显示略号
+
+有兼容性问题，了解即可
+
+```css
+overflow: hidden;
+text-overflow: ellipsis;
+/*弹性伸缩盒子模型显示*/
+display: -webkit-box;
+/*限制在一个块元索显示的文本的行数*/
+-webkit-line-clamp: 2;
+/*设置或检索伸缩盒对象的子元素的排列方式*/
+-webkit-box-orient: vertical;
+```
+
+##### 常见布局技巧
+
+1. margin负值的运用
+
+2. 文字围绕浮动元素
+
+3. 行内块的巧妙运用
+
+  行内块元素在不进行换行时，是不会有空隙的
+
+4. css三角强化
+
+#### CSS初始化
+
+不同浏览器对标签的默认值是不同的，为了消除不同浏览器对HTML文本呈现的差异，照顾浏览器的兼容，我们需要对CSS初始化
+
+简单理解：CSS初始化是指重设浏览器的样式（也称CSSreset）
+
+每个网页都必须首先进行CSS初始化
+
+```css
+* {
+	margin: 0;
+	padding: 0
+}
+
+em,
+i {
+	font-style: normal
+}
+
+li {
+	list-style: none
+}
+
+img {
+	border: 0;
+	vertical-align: middle
+}
+
+button {
+	cursor: pointer
+}
+
+a {
+	color: #666;
+	text-decoration: none
+}
+
+a:hover {
+	color: #c81623
+}
+
+button,
+input {
+	font-family: Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif
+}
+
+body {
+	/*抗锯齿性*/
+	-webkit-font-smoothing: antialiased;
+	background-color: #fff;
+	font: 12px/1.5 Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+	color: #666
+}
+
+.hide,
+.none {
+	display: none
+}
+/* 清除浮动 */
+.clearfix:after {
+	visibility: hidden;
+	clear: both;
+	display: block;
+	content: ".";
+	height: 0
+}
+
+.clearfix {
+	*zoom: 1
+}
+```
+
+## 新特性
+
+新特性要考虑兼容性问题
+
+**语义化标签**
+
+```
+<header> : 头部标签
+<nav> :导航标签
+<article> :内容标签
+<section> :定义文档某个区域
+<aside> :侧边栏标签
+<footer> :尾部标签
+```
+
+这种语义化标准主要是针对搜索弓|擎的
+这些新标签页面中可以使用次
+在IE9中,需要把这些元素转换为块级元素
+其实,我们移动端更喜欢使用这些标签
+HTML5还增加了很多其他标签,我们后面再慢慢学
+
+##### 多媒体标签
+
+1. 音频：audio
+
+   设置MP3格式，[菜鸟教程](https://www.runoob.com/html/html5-audio.html)
+
+2. 视频：video，尽量使用mp4格式
+
+   | [autoplay](https://www.runoob.com/tags/att-video-autoplay.html) | autoplay      | 如果出现该属性，则视频在就绪后马上播放。                     |
+   | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
+   | [controls](https://www.runoob.com/tags/att-video-controls.html) | controls      | 如果出现该属性，则向用户显示控件，比如播放按钮。             |
+   | [height](https://www.runoob.com/tags/att-video-height.html)  | *pixels*      | 设置视频播放器的高度。                                       |
+   | [loop](https://www.runoob.com/tags/att-video-loop.html)      | loop          | 如果出现该属性，则当媒介文件完成播放后再次开始播放。         |
+   | [muted](https://www.runoob.com/tags/att-video-muted.html)    | muted         | 如果出现该属性，视频的音频输出为静音。                       |
+   | [poster](https://www.runoob.com/tags/att-video-poster.html)  | *URL*         | 规定视频正在下载时显示的图像，直到用户点击播放按钮。         |
+   | [preload](https://www.runoob.com/tags/att-video-preload.html) | metadata none | 如果出现该属性，则视频在页面加载时进行加载，并预备播放。如果使用 "autoplay"，则忽略该属性。 |
+   | [src](https://www.runoob.com/tags/att-video-src.html)        | *URL*         | 要播放的视频的 URL。                                         |
+   | [width](https://www.runoob.com/tags/att-video-width.html)    | *pixels*      | 设置视频播放器的宽度。                                       |
+
+   谷歌需要设置muted=muted，才能自动播放
+
+##### 表单
+
+| 属性         | 值        | 描述                       |
+| ------------ | --------- | -------------------------- |
+| autocomplete | on/off    | 开启时会记住上次输入的内容 |
+| autofocus    | autofocus | 自动文本聚焦               |
+
+#### 选择器
+
+##### 属性选择器
+
+1. input[value]：input标签，具有value属性
+2. input[type=text]：input标签，具有type属性，并且属性值为text，text可以夹引号，也可以不加引号
+3. input[type^=text]：input标签，type值的**开头**是text
+4. input[type$=text]：input标签，type值的**结尾**是text
+5. input[type*=text]：input标签，type值包含text值
