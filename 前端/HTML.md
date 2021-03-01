@@ -1,16 +1,3 @@
-# HTML遇到的问题
-
-## 行内元素问题
-
-##### 行内元素之间用间隙
-
-1. 设置父元素：font-size:0
-2. 
-
-##### 按钮点击时出现黑色边框
-
-1. 设置：outline：none；
-
 ### HTML头部标签
 
 #### base标签
@@ -732,7 +719,7 @@ display:block;
 
    ```css
    /*1.先强制-行内显示文本（默认是normal自动换行）*/
-   white- space:nowrap;
+   white-space:nowrap;
    /*2.超出的部分隐藏*/
    overflow: hidden;
    /*3.文字用省略号替代超出的部分*/
@@ -777,7 +764,8 @@ display: -webkit-box;
 ```css
 * {
 	margin: 0;
-	padding: 0
+	padding: 0;
+    box-sizing:border-box;
 }
 
 em,
@@ -896,3 +884,96 @@ HTML5还增加了很多其他标签,我们后面再慢慢学
 3. input[type^=text]：input标签，type值的**开头**是text
 4. input[type$=text]：input标签，type值的**结尾**是text
 5. input[type*=text]：input标签，type值包含text值
+
+##### 结构伪类选择器
+
+1. div:nth:child(n)，选择某个父元素下的第n个是div标签的元素，如果第n个不是div标签元素，则什么都不选择
+2. 参数：n，可以是odd，或者even，如果**只写n**，则表示选择所有子元素
+3. div:nth-of-type(1)，选择div类型的第一个元素
+
+###### 区别
+
+div:nth-child(n)，他是先看子元素下标，然后根据子元素下标对比元素类型
+
+div：nth-of-type(n)，他是先看元素类型，然后根据类型找下标
+
+##### 伪元素选择器
+
+可以简化HTML结构
+
+1. ::before，在元素头部新增元素
+2. ::after，在元素尾部新增元素
+
+**注意：**
+
+1. before和after创建一个元素，但是属于**行内元素**
+2. 新创建的这个元素在文档树中是找不到的，所以我们称为伪元素
+3. 语法: element::before{}
+4. before和after 必须有content属性
+5. before在父元素内容的前面创建元素，after在父元素内容的后面插入元素伪元素选择器和标签选择器一样，权重为1
+
+#### CSS3盒子新模型
+
+1. box-sizing:content-box 盒子大小为 width + padding + border（默认的）
+
+2. box-sizing:border-box 盒子大小为 width，
+
+   如果盒子模型我们改成了第二种方式，那么padding和border就不会撑开盒子，前提是padding和border不会超过width宽度
+
+   ```css
+   *{
+       margin: 0;
+       paddding: 0;
+       box-sizing:border-box;
+   }
+   ```
+
+#### CSS3其他新特性
+
+##### 1、滤镜
+
+filter：blur（5px）；模糊处理，数值越大越模糊
+
+##### 2、calc函数
+
+width：calc(+ - * /运算)
+
+```css
+width: calc(100%+30px)
+```
+
+##### 3、过渡
+
+经常与：hover一起，搭配使用
+
+transition，**谁要过渡给谁加**
+
+**一套连招带走**
+
+```css
+transition: 变化属性 花费时间 运动曲线 开始时间
+transition: width 1s ease-out 0s;
+```
+
+##### 4、移动transform
+
+```css
+transform：translate(x,y);
+```
+
+1. 定义2D转换中的移动，沿着X和Y轴移动
+2. 元素translate最大的优点∶不会影响到其他元素的位置
+3. translate中的百分比单位是相对于自身元素的translate:(50%,50%);
+4. 对行内标签没有效果
+
+##### 5、旋转rotate
+
+平面内顺时针或逆时针旋转
+
+
+
+### 扩展
+
+1. icon图片在线生成：比特虫
+   1. 免费空间：http://free.3v.do/
+
