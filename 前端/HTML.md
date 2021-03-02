@@ -962,7 +962,7 @@ transform：translate(x,y);
 ```
 
 1. 定义2D转换中的移动，沿着X和Y轴移动
-2. 元素translate最大的优点∶不会影响到其他元素的位置
+2. 元素translate最大的优点∶不会影响到其他元素的位置（**不会脱标**）
 3. translate中的百分比单位是相对于自身元素的translate:(50%,50%);
 4. 对行内标签没有效果
 
@@ -983,7 +983,7 @@ transform-origin: x y;
 
 1. 参数用空格分开
 2. xy默认转换的中心点是元素的中心点（50% 50%）
-3. 还可以给xy设置 像素 或者 方位名词（top bottom left right center)
+3. 还可以给xy设置 **像素** 或者 **方位名词**（top bottom left right center)
 
 ###### 2.缩放scale(x y)
 
@@ -1000,7 +1000,53 @@ transform-origin: x y;
 transform:translate() rotate() scale();
 ```
 
+#### 3D动画
 
+##### 一套连招带走
+
+**animation :动画名称 持续时间 运动曲线 何时开始 播放次数 是否反方向 动画起始或者结束的状态;**
+
+```css
+/* 声明动画 */
+@keyframes move{
+    from{
+        transform: translate(0,0);
+    }
+    to{
+        transform: translate(100px,300px);
+    }
+}
+div{
+
+    /* 调用动画 */
+    animation-name: move;
+    /* 动画时间 */
+    animation-duration: 5s;
+    width: 200px;
+    height: 200px;
+    transition: all 1s ease-in;
+    background-color: #009688;
+}
+```
+
+| 属性                                                         | 描述                                                         | CSS  |
+| :----------------------------------------------------------- | :----------------------------------------------------------- | :--- |
+| [@keyframes](https://www.runoob.com/cssref/css3-pr-animation-keyframes.html) | 规定动画。                                                   | 3    |
+| [animation](https://www.runoob.com/cssref/css3-pr-animation.html) | 所有动画属性的简写属性。                                     | 3    |
+| [animation-name](https://www.runoob.com/cssref/css3-pr-animation-name.html) | 规定 @keyframes 动画的名称。                                 | 3    |
+| [animation-duration](https://www.runoob.com/cssref/css3-pr-animation-duration.html) | 规定动画完成一个周期所花费的秒或毫秒。默认是 0。             | 3    |
+| [animation-timing-function](https://www.runoob.com/cssref/css3-pr-animation-timing-function.html) | 规定动画的速度曲线。默认是 "ease"。                          | 3    |
+| [animation-fill-mode](https://www.runoob.com/cssref/css3-pr-animation-fill-mode.html) | 规定当动画不播放时（当动画完成时，或当动画有一个延迟未开始播放时），要应用到元素的样式。 | 3    |
+| [animation-delay](https://www.runoob.com/cssref/css3-pr-animation-delay.html) | 规定动画何时开始。默认是 0。                                 | 3    |
+| [animation-iteration-count](https://www.runoob.com/cssref/css3-pr-animation-iteration-count.html) | 规定动画被播放的次数。默认是 1。                             | 3    |
+| [animation-direction](https://www.runoob.com/cssref/css3-pr-animation-direction.html) | 规定动画是否在下一周期逆向地播放。默认是 "normal"。          | 3    |
+| [animation-play-state](https://www.runoob.com/cssref/css3-pr-animation-play-state.html) | 规定动画是否正在运行或暂停。默认是 "running"。               | 3    |
+
+#### 3D旋转
+
+1. x轴:水平向右注意:x右边是正值，左边是负值
+2. y轴:垂直向下注意:y下面是正值，上面是负值
+3. z轴:垂直屏幕注意:往外面是正值，往里面是负值
 
 ### 扩展
 
