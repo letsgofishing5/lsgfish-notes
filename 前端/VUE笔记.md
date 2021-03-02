@@ -528,5 +528,9 @@ uni-app+HBuilder
 </script>
 ```
 
+### 每日知识点回顾
 
+1. v-bind:src：强制数据绑定，简化：:src
+2. v-on:click=一个回调函数：绑定事件监听，简化：@click
+3. 
 
