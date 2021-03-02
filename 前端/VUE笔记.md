@@ -97,18 +97,18 @@
 > 设置标签的innerHTML
 
 ```html
-	<div id="app">
-			<p v-HTML="message01"></p>
-			
-		</div>
-		<script type="text/javascript">
-			var v=new Vue({
-				el:"#app",
-				data:{
-					message01:"<a href='https://www.baidu.com/' target='_blank'>百度一下</a>"
-				}
-			})
-		</script>
+<div id="app">
+    <p v-HTML="message01"></p>
+
+</div>
+<script type="text/javascript">
+    var v=new Vue({
+        el:"#app",
+        data:{
+            message01:"<a href='https://www.baidu.com/' target='_blank'>百度一下</a>"
+        }
+    })
+</script>
 ```
 
 ##### v-show
@@ -135,7 +135,7 @@
 		</script>
 ```
 
-##### 
+
 
 ### 事件绑定
 
@@ -194,10 +194,6 @@
 
 **练习：计数器**
 
-> 效果图
->
-> ![计数器效果图](C:\Users\cth\Pictures\Saved Pictures\A计数器.png)
->
 > 描述：
 >
 > > 点击加减号，数字随之发生增减，最大值10，最小值1
@@ -532,5 +528,14 @@ uni-app+HBuilder
 
 1. v-bind:src：强制数据绑定，简化：:src
 2. v-on:click=一个回调函数：绑定事件监听，简化：@click
-3. 
+
+##### 总结
+
+1. vue中的methods是用来加载方法的，
+2. vue中可以用VM直接调用JavaScript方法
+3. vue中双引号下的是变量，加上单引号才是常量
+4. computed是用来计算属性值的，被**computed**包裹的变量，不可再次使用**data**进行声明
+5. computed内get、set方法，分别在对应内容发生改变时调用，和在自身内容发生改变时调用。并更新相关数据
+6. 监听：watch，使用回调函数，包含了两个参数，一个newVal，一个oldVal
+7. 
 
