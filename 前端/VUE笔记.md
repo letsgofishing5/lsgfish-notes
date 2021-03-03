@@ -113,7 +113,7 @@
 
 ##### v-show
 
-> v-show(**布尔值**)，用真假值来判定是否显示，它实际上是操纵了display：none/block
+> v-show(**布尔值**)，用真假值来判定是否显示，它实际上是操纵了display：none/block，元素只是隐藏了，并不是消失了，而if-else是元素消失了
 
 ```html
 		<div id="app">
@@ -330,6 +330,34 @@
 		</script>
 ```
 
+##### 结构赋值
+
+```html
+<script type="text/javascript">
+    new Vue({
+        el: "#test",
+        data: {
+            searchName: "",
+            persons: [
+                	  {name: 'Tom', age: 18},
+                      {name: 'Jack',age: 16},
+                      {name: 'Bob',age: 19},
+                      {name: 'Rose',age: 17},
+                     ],
+        },
+        computed: {
+            filterPersons() {
+                //取出相关的数据
+                const {searchName, persons} = this //结构赋值，
+                return |
+            }
+            })
+        })
+</script>
+```
+
+
+
 ### 数据双向绑定
 
 ##### v-model
@@ -524,6 +552,78 @@ uni-app+HBuilder
 </script>
 ```
 
+## 尚硅谷
+
+#### 绑定监听
+
+```html
+<ul id="app">
+    <button type="button" @click="add(123,$event)">添加</button>
+</ul>
+<script type="text/javascript">
+    var v = new Vue({
+        el: "#app",
+        data: {
+            arr: ["地虎", "炎龙", "黑犀", "风鹰", "雪獒"]
+        },
+        methods: {
+            add(num,event) {//event
+                this.arr.push("未知");
+                alert(event.target.innerHTML)
+            },
+            remove: function() {
+                this.arr.shift();
+            }
+        }
+    })
+</script>
+```
+
+#### 阻止事件冒泡
+
+```html
+<div @click.stop="click">
+    
+</div>
+```
+
+#### 事件修饰符
+
+[官方文档：]([https://cn.vuejs.org/v2/guide/events.html#%E4%BA%8B%E4%BB%B6%E4%BF%AE%E9%A5%B0%E7%AC%A6](https://cn.vuejs.org/v2/guide/events.html#事件修饰符))
+
+#### 表单
+
+##### 提交表单
+
+@submit=”“
+
+##### 阻止事件默认行为
+
+.prevent
+
+#### 生命周期
+
+1. 初始化
+2. 更新
+3. 死亡
+
+匿名函数直接使用=>函数，这样里面的this指向vm
+
+1. beforeCreate：再创建vue后立即调用
+2. created：挂载前调用，
+3. beforeMount：挂载替换挂载前调用
+4. mounted：
+
+#### 过渡与动画
+
+[官网地址：]([https://cn.vuejs.org/v2/guide/transitions.html#%E6%A6%82%E8%BF%B0](https://cn.vuejs.org/v2/guide/transitions.html#概述))
+
+#### 过滤器
+
+[官方地址：](https://cn.vuejs.org/v2/guide/filters.html)
+
+自定义过滤器：Vue.filter();
+
 ### 每日知识点回顾
 
 1. v-bind:src：强制数据绑定，简化：:src
@@ -539,3 +639,15 @@ uni-app+HBuilder
 6. 监听：watch，使用回调函数，包含了两个参数，一个newVal，一个oldVal
 7. 
 
+#### 问题
+
+1.  filter过滤： p => p.name
+
+2. ```html
+   add(event) {
+       this.arr.push("未知");
+       alert(event.target.innerHTML)
+   },
+   ```
+
+3. 
