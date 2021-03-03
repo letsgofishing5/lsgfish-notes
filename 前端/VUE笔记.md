@@ -624,6 +624,62 @@ uni-app+HBuilder
 
 自定义过滤器：Vue.filter();
 
+#### 自定义指令
+
+##### 注册全局指令
+
+##### 注册局部指令
+
+```html
+<div id="app">
+    <p v-up-text="msg"></p>
+    <p v-lower-text="msg2"></p>
+</div>
+<script type="text/javascript">
+    //全局指令
+    Vue.directive("up-text",function(el,binding){
+        console.log(el,binding)
+        el.textContent=binding.value.toUpperCase()
+    })
+    new Vue({
+        el:"#app",
+        data:{
+            msg:"I love you~",
+            msg2:"I like You~"
+        },
+        //局部指令，只发生在当前VM中
+        directives:{
+            "lower-text":function(el,binding){
+                console.log(el,binding)
+                el.textContent=binding.value.toLowerCase()
+            }
+        }
+    })
+</script>
+```
+
+#### 插件
+
+##### 制作插件
+
+#### vue-cli
+
+#### 基于脚手架编写项目
+
+##### 1、配置目录解说
+
+[视频](https://www.bilibili.com/video/BV1Wp411d7Ur?p=19&spm_id_from=pageDriver)
+
+1. 模板里必须要有根标签
+2. settings里去掉eslint、jslint、jshint里的Enable勾选
+3. 组件里data必须写函数
+
+##### 引入组件步骤
+
+1. import导入文件
+2. components映射组件标签
+3. 使用组件标签
+
 ### 每日知识点回顾
 
 1. v-bind:src：强制数据绑定，简化：:src
