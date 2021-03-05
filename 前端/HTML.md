@@ -574,7 +574,7 @@ clear: both;
 
 1. display
 2. visibility
-3. n
+3. overflow
 
 ##### display
 
