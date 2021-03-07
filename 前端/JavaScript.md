@@ -101,10 +101,10 @@
 ####  作用域
 
 > 1）全局作用域
-> 		直接编写在script中的 JavaScript 代码，都是全局 作用域
+> 		直接编写在script中的 JavaScript 代码，都是全局作用域
 > 		全局作用域在页面打开时创建，在页面关闭时销毁
-> 		在全局 作用域中有一个全局对象：window，他代表的是一个浏览器窗口，它由浏览器创建我们可以直接使用
-> 		在全局作用域中 创建变量都会作为 window 对象 的属性进行保存，创建的方法 都会作为 window 对象 的方法进行保存
+> 		在全局作用域中有一个全局对象：window，他代表的是一个浏览器窗口，它由浏览器创建我们可以直接使用
+> 		在全局作用域中创建变量都会作为 window 对象的属性进行保存，创建的方法 都会作为 window 对象 的方法进行保存
 
 #### 声明提前
 
@@ -137,7 +137,7 @@
 > 3）unshift()；向数组开头添加一个或 多个元素，并返回新的长度
 > 4）shift()；删除数组第一个元素，并返回数组新的长度
 > 5）slice（起始下标：包含，结束下标：不包含），提取数组中的元素返回，但不会影响到原数组
-> 6）splice（起始下标：包含，删除的数量，...表示新增加的元素并自动插入参数1 的位置索引前面）；
+> 6）splice（起始下标，删除的数量，...表示新增加的元素并自动插入参数1 的位置索引前面）；
 > 			删除数组中指定元素，会影响到原数组，并将删除的元素返回
 
 ##### 数组遍历
@@ -254,4 +254,54 @@
 > 修改后：‘（{"name":"孙悟空","age":12,"gender":"男"}）’
 > ```
 >
-> 
+
+## 零散成长笔记
+
+#### forEach使用
+
+forEach() 方法对数组的每个元素执行一次提供的函数。总是返回undefined；
+
+forEach方法中的function回调有三个参数：
+第一个参数是遍历的数组内容，
+第二个参数是对应的数组索引，
+第三个参数是数组本身
+
+foreach 语法：
+
+```js
+forEach(function(value,index,array){
+　
+});
+var arr = [1,2,3,4];
+var sum =0;
+arr.forEach(function(value,index,array){
+
+ array[index] == value; //结果为true
+
+ sum+=value; 
+
+ });
+
+console.log(sum); //结果为 10
+```
+
+### ES6
+
+#### 箭头函数
+
+[推荐博客](https://blog.csdn.net/u012149969/article/details/80261081?ops_request_misc=&request_id=&biz_id=102&utm_term=ES6%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-5-80261081.pc_search_result_before_js)
+
+#### fetch
+
+[推荐博客](https://blog.csdn.net/qq_36754767/article/details/89645041?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522161495369716780266263445%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=161495369716780266263445&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-89645041.pc_search_result_before_js&utm_term=fetch)
+
+### VUE
+
+#### 生命周期
+
+### node.js
+
+#### 全局变量
+
+1. __filename：当前文件名
+2. __dirname：当前目录名
