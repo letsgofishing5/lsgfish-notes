@@ -144,6 +144,22 @@
 > 3）以构造函数的形式调用时，this是新创建的那个对象
 > 4）使用 call 和 apply 调用时，this是指定的那个对象
 
+### 构造函数
+
+```js
+function Person(name){
+    this.name=name;
+}
+var p = new Person();
+//构造函数的执行流程
+//1.使用new关键字，创建一个对象
+//2.将新建的对象设置为函数中this，在构造函数中可以使用this来引用新建的对象
+//3.逐行执行函数中的代码
+//4.将新建的对象作为返回值返回
+```
+
+
+
 #### 数组（Array）
 
 ##### 声明数组：
@@ -170,12 +186,71 @@
 > 			参数2：下标
 > 			参数3：数组
 
+#### call 与 apply
+
+这两个方法都是函数对象的方法，需要通过函数来调用，当函数调用call() 和 apply() 都会调用函数执行
+
+```js
+function fun(){
+    console.log(this)
+    console.log("执行了");
+}
+var obj = {
+    name="obj"
+};
+fun.apply();
+fun.call();
+fun();
+//这三个效果都是一样的，但是call与apply，他们可以通过第一个参数，来指定对象
+fun.call();//[object window]
+fun.call(obj)//[object object]
+//this的指向发生变化
+
+//call()方法可以将实参在对象之后一次传递
+function t(a,b){
+    console.log("a="+a);
+    console.log("b="+b);
+}
+t.call(obj,2,3);//a=2,b=3
+//apply()方法需要将实参封装到一个数组当中统一传递
+t.apply(obj,[2,3]);//a=2,b=3
+```
+
+#### arguments
+
+this,arguments都是在调用函数时，浏览器每次都会传递进两个隐含的参数
+
+1. this：函数的上下文对象
+
+2. 封装实参的对象arguments
+
+   1. arguments是一个**类数组对象**，不是数组
+
+   2. 在调用函数时，我们所传递的**实参**都会封装到arguments中保存
+
+   3. arguments里边有一个属性：callee，这个属性对应一个函数对象，就是当前正在指向的函数的对象
+
+      ```js
+      //形参：在声明函数时表示的参数为形参
+      function fun(a,b){//这里的a,b是形参
+          console.log(arguments.length)
+      }
+      //调用函数时，实际输入的参数，是实参
+      fun("hello",true)//hello与true都是实参
+      ```
+
+      
+
 #### 时间对象 Date
 
 > 1）时间对象创建：var date = new Date（）；
 > 2）获取时间戳：getTime（）;
 
 #### 数学：Math
+
+Math.random()，生成一个0~1之间的数字，不为0,1
+
+Math.random()*10，生成一个0~10之间的数字，不为0,10
 
 > 1）Math.ceil（）；向上取整，
 > 2）Math.floor（）；向下取整
@@ -202,6 +277,22 @@
 > 			g，全局匹配
 > 2）test()；正则表达式 方法
 > 3）match()；会将匹配到的内容封装到一个数组中返回
+
+```js
+var reg = /ab/i;//字符串中包含ab,ab必须是一体的
+reg.test("abc")//true，
+
+reg=/a|b/i;//字符串包含a或者b
+reg=/[ab]/i;//同上
+reg.test("abc")//true
+
+reg=/[^ab]/i;//字符串中除了ab都可以
+reg.test("abc");//false
+
+
+```
+
+
 
 #### DOM对象
 
