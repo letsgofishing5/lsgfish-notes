@@ -289,12 +289,25 @@ reg.test("abc")//true
 reg=/[^ab]/i;//字符串中除了ab都可以
 reg.test("abc");//false
 
-
+/*match( )
+-可以根据正则表达式， 从一个字符串中将符合条件的内容提取出来
+-默认情况下我们的match只会找到第- 个符合要求的内容，找到以后就停止检索
+我们可以设置正则表达式为全局匹配模式，这样就会匹配到所有的内容
+*/
 ```
 
 
 
 #### DOM对象
+
+1. DOM，全称Document Object Model文档对象模型。
+2. JS中通过DOM来对HTML文档进行操作。只要理解了DOM就可以随心所欲的操作WEB页面。
+3. 文档-
+   1. 文档表示的就是整个的HTML网页文档
+4. 对象
+   1. 对象表示将网页中的**每一个 部分都转换为了一个对象。**
+5. 模型
+   1. -使用模型来表示对象之间的关系,这样方便我们获取对象。
 
 > 1节点
 > 		1）文档节点：整个HTML文档
@@ -309,6 +322,58 @@ reg.test("abc");//false
 > 		语法：元素.currentStyle.样式名；该方法只有IE浏览器支持
 > 		语法：getComputedStyle（元素，可以传递一个伪元素，一般写null）；该方法返回一个对象，通过
 > 			该对象获取参数值
+
+##### 浏览器加载页面
+
+浏览器执行，从上到下，读取到一行运行一行
+
+##### 获取元素节点
+
+1. document.getElementById()
+
+   通过id属性获取一个元素节点
+
+2. document.getElementsByTagName()
+
+   通过标签名获取**一组**元素节点
+
+3. document.getElementsByName()
+
+   通过name属性获取**一组**元素节点对象
+
+##### 操作元素
+
+1. inner HTML用于获取元素内部的HTML代码的，对于自结束标签，这个属性没有意义
+
+2. 如果需要读取元素节点属性名，直接使用 元素.属性名
+
+   ```html
+   <input class="haha" type="text" value="hello world" id="id"/>
+   ```
+
+   ```js
+   var content = document.getElementById("id");
+   alert(content.value)
+   //注意：读取class属性不能采用这个方法，需要使用className
+   alert(content.className)
+   ```
+
+3. 修改元素的样式
+
+   元素.style.样式名=样式值
+
+   注意：如果CSS的样式名中含有"-"，则将样式名改成驼峰命名法
+
+4. 获取元素整个的高度，返回值不带单位，可以直接计算
+
+   ```js
+   var b = document.getElementById("b");
+   alert(b.offsetHeight)
+   alert(b.clientHeight)
+   alert(b.offsetLeft)//计算元素偏移量
+   ```
+
+   
 
 #### 取消事件冒泡
 
