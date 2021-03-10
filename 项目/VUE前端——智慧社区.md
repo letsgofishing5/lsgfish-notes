@@ -33,49 +33,24 @@ let result2 = function(){
 
 ## VUE
 
-### vue模板加载
+### element-ui框架的el-dialog弹出框被遮罩层挡住了
 
-1. 作为模板，我们先要暴露自己，让外界接收
+问题解决：[推荐博客](https://blog.csdn.net/Mr_JavaScript/article/details/80888681)
 
-   ```vue
-   <template>
-   	<div>
-   		<p>我是组件HelloWorld</p>
-   	</div>
-   </template>
-   
-   <script>
-       //export default是固定语法，用来暴露模板
-   	export default{
-   		name:"HelloWorld",//给模板起个名儿
-   	}
-   </script>
-   
-   <style>
-   </style>
-   ```
+解决方法：在el-dialog标签里添加 :modal-append-to-body='false'
 
-2. 引用模板，我们要导入已暴露的模板
+出现新问题，当点击退出状态时，选择取消，则dialog再次被遮罩层挡住
 
-   ```vue
-   <template>
-   	<div>
-   		<HelloWorld></HelloWorld>
-   	</div>
-   </template>
-   
-   <script>
-   	import HelloWorld from "./components/HelloWorld.vue"
-   	export default{
-   		name:"App",
-   		components:{
-   			HelloWorld:HelloWorld
-   		}
-   	}
-   </script>
-   
-   <style>
-   </style>
-   ```
+解决方法：
 
-   
+```vue
+ <el-dialog
+        title="多重错误"
+        :visible.sync="dialogVisible"
+        :modal-append-to-body='false' //添加这个属性同时，添加下方的属性
+        :append-to-body="true" //该属性需要设置
+    >
+```
+
+
+
