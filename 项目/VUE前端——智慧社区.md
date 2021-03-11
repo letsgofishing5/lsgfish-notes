@@ -33,7 +33,7 @@ let result2 = function(){
 
 ## VUE
 
-### element-ui框架的el-dialog弹出框被遮罩层挡住了
+#### element-ui框架的el-dialog弹出框被遮罩层挡住了
 
 问题解决：[推荐博客](https://blog.csdn.net/Mr_JavaScript/article/details/80888681)
 
@@ -52,5 +52,8 @@ let result2 = function(){
     >
 ```
 
+#### 引入store里的js文件
 
+1. 再main.js中引入store：import store from './store';
+2. 再当前使用组件中：this.$store.state.communityId=uuid;引入需要的store中的全局状态
 
