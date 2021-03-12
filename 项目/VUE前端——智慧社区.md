@@ -57,3 +57,13 @@ let result2 = function(){
 1. 再main.js中引入store：import store from './store';
 2. 再当前使用组件中：this.$store.state.communityId=uuid;引入需要的store中的全局状态
 
+#### mapGetters
+
+#### mutations
+
+#### actions
+
+#### getters
+
+
+
