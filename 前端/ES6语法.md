@@ -158,8 +158,8 @@ rest(1,2,3,4,5,6);
 ES6引入了一种新的原始数据类型 Symbol，表示独一无二的值。它是JavaScript语言的第七种数据类型，是一种类似于字符串的数据类型。
 **Symbol特点**
 
-1.  Symbol的值是唯一的，用来解决命名冲突的问题
-2. Symbol值不能与其他数据进行运算
+1.  Symbol的值**是唯一**的，用来解决命名冲突的问题
+2. Symbol值**不能与其他数据进行运算**
 3. Symbol定义的对象属性不能使用for...in循环遍历，但是可以使用Reflect.ownKeys来获取对象的所有键名
 
 ```js
@@ -216,7 +216,48 @@ iterator.next();
 iterator.next("传入参数，他会直接替代yield 111的返回值")
 ```
 
+### 生成器
+
+生成器是一个特殊的函数，异步编程，纯回调函数：node fs ajax mongodb
+
+```js
+function * gen(){
+    console.log("hello world")
+}
+let iterator = gen()
+iterator.next();
+```
+
+#### 生成器函数参数
+
+```js
+function * gen(args){
+    yield 111;
+    let two = yield 222;//传入的参数是yield的返回值
+    console.log(two)
+    yield 333;
+}
+let iterator = gen('AAA')
+console.log(iterator.next('BBB'));//next可以传入实参
+console.log(iterator.next());
+console.log(iterator.next());
+```
+
+
+
 ### Promise
+
+封装读取文件（安装node）
+
+```js
+let fs = require('fs')
+fs.readFile('./test.html',(e,data)=>{
+	if(e)throw e;
+	console.log(data.toString())
+})
+```
+
+
 
 `promise`是一个构造函数，通过`resolve`与`reject`来改变`p `的状态，来判断调用`then`中的第几个函数
 

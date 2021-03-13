@@ -64,3 +64,22 @@ flex-grow：指定弹性元素的伸展的系数
 - 当父元素有多余的空间时，子元素自如伸展
 
 flex-shrink：指定弹性元素的收缩系数
+
+- flex-shrink：0；表示不会收缩了
+
+flex-wrap：设置弹性元素是否在容器中自动换行
+
+- nowrap：默认值，不会自动换行
+- wrap：元素沿着辅轴方向自动换行
+
+flex-flow：wrap和direction的简写
+
+- flex-flow：row wrap;
+
+justify-content：分配主轴上的空白空间
+
+- 可选值
+  - flex-start：元素沿着主轴起边排列
+  - flex-end：元素沿着主轴终边排列
+  - center：元素居中排列
+  - space-around：空白分布到元素两侧
