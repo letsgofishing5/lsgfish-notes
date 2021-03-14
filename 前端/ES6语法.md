@@ -272,7 +272,7 @@ p.then(
 )
 ```
 
-### 集合
+### Set
 
 ```js
 let arr = [1,2,3,3,3,2,2,3,5,5,5]
@@ -294,7 +294,163 @@ let concat = [...arr,...result]
 let diff = [...new Set(arr)].filter(item => !(new Set(arr2).has(item)))
 ```
 
+### Map
 
+```js
+//1.声明
+let map = new Map()
+//2.添加
+map.set('name','尚硅谷教我学ES6')
+//3.获取大小
+map.size
+//4.删除
+map.delete("name")
+//5.获取
+map.get("name")
+//6.清空
+map.clear();
+//7.遍历
+for(let v of map){
+    console.log(v)
+}
+```
+
+### class类
+
+```js
+//ES5写法
+function Phone(name,price)
+{
+    this.name=name;
+    this.price=price;
+}
+let phone = new Phone("华为",1999)
+//ES6写法
+class Phone{
+    constructor(name,price){
+        this.name=name;
+        this.price=price;
+    }
+}
+let phone = new Phone("小米",1999)
+```
+
+#### 构造函数继承
+
+```js
+class Phone{
+    constructor(brand,price){
+        this.brand=brand;
+        this.price=price;
+    }
+    call(){
+        console.log("我可以打电话！！")
+    }
+}
+class SmartPhone extends Phone{
+    constructor(brand,price,color,size){
+        super(band,price);
+        this.color=color;
+        this.size=size;
+    }
+    photo(){
+		console.log("拍照")
+    }
+}
+```
+
+#### get与set
+
+内置了get与set方法，但是我们可以重写他，进行增强，但是set方法一定要给参数
+
+### 数值扩展
+
+#### Number
+
+0. Number . EPSILON 是JavaScript 表示的最小精度
+EPSILON 属性的值接近于2.2204460492503130808472633361816E-16
+1. 二进制和八进制
+2. Number . isFinite
+    检测一个数值是否为有限数
+3. Number. isNaN 检测一个数值是否为NaN 
+4. Number . parseInt Number . parseFloat字符串转整数
+5. Number . isInteger 判断一个数是否为整数
+6.  Math. trunc 将数字的小数部分抹掉
+7. Math.sign 判断一个数到底为正数负数还是零
+   1. 为正数返回1
+   2. 为负数返回-1
+   3. 零返回0
+
+#### Object
+
+1. `0bject.is(val1,val2)`判断两个值是否完全相
+2. `0bject.assign(newVal,oldVal)`对象的合并，后面的参数会将前面的参数覆盖
+3. `Object.setPrototype0f(father,son)` `Object.getPrototypeof`
+
+### 模块化
+
+ES6之前的模块规范化有：
+
+1. CommonJS = => NodeJS、Browserify
+2.  AMD ==> requireJS
+3. CMD ==> seaJS
+
+ES6规范化
+
+`import`与`export`
+
+1. export let  a = "对外暴露方式1"
+
+2. let b = "对外暴露方式2"
+
+   export {a,b}
+
+3. export default{
+
+​	`let c = "对外暴露方式3";`
+
+​	`let d = "默认暴露代码块内部数据"`
+
+}
+
+在HTML中引入需要将type改成module
+
+```html
+<script type="module">
+	import bieming from "./test.js"//引入默认暴露，该引入方法只能引入默认暴露
+    
+    import {b1,b2} from "./test.js"//解构赋值引入
+    
+    import * as bieming from "./test.js"//通用导入方式
+    
+    import {default as beiming} from "./test.js"
+    
+
+</script>
+```
+
+### babel
+
+babel是一个JavaScript的编译器
+
+1. 安装工具：babel-cli、babel-preset-env、browserify(webpack)
+
+步骤：
+
+- 打开命令行：npm init --yes
+- npm i babel-cli babel-preset-env browserify -D
+- 安装完毕，-D：代表依赖
+- npx：局部安装，npm：全局安装
+- 局部安装（将ES6转换ES5）：npx babel src/js -d dist/js --presets=babel-preset-env
+- 全局安装：去掉npx即可
+- 打包（将转换后的app.js进行打包）：npx browserify dist/js/app.js -o dist/bundle.js
+- 引入打包好的bundle.js文件
+
+导入其他npm包
+
+- 引入jQuery包
+  - 执行：npm i jquery
+  - 引入：import $ from "jquery";//
 
 ### 问题
 
