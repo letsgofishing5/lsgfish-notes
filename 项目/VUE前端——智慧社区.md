@@ -29,6 +29,39 @@ let result2 = function(){
 //如果方法体不止只有返回值，那么需要些：参数 => {console.log("test");return n;}
 ```
 
+### 常用规则语法
+
+#### Object.assign
+
+[推荐博客](https://blog.csdn.net/dwb123456123456/article/details/83316471)
+
+Object.assign方法用来将源对象（source）的所有可枚举属性，复制到目标对象（target）。它至少需要两个对象作为参数，第一个参数是目标对象，后面的参数都是源对象。
+
+```js
+
+let targetObj1 = { a: 1 };
+let sourceObj1 = { b: 1 };
+let sourceObj11 = { c: 3 };
+Object.assign(targetObj1, sourceObj1, sourceObj11);
+console.log(targetObj1);//将sourceObj1,sourceObj11都复制到targetObj1
+//注：如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性
+```
+
+1. 如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性
+2. 如果只有一个参数，Object.assign会直接返回该参数。
+3.  如果该参数不是对象，则会先转成对象，然后返回。
+4. 注意：如果非对象参数出现在源对象的位置（即非首参数），那么处理规则有所不同。首先，这些参数都会转成对象，如果无法转成对象，就会跳过。这意味着， 如果undefined和null不在首参数，就不会报错。其他类型的值（即数值、字符串和布尔值）不在首参数，也不会报错。但是，除了字符串会以数组形式，拷贝入目标对象，其他值都不会产生效果。
+
+#### Object.keys
+
+返回对象的所有属性
+
+```js
+传入对象， 返回包含对象可枚举属性和方法的数组
+var obj = {'a': 'Beijing', 'b': 'Haidian'};
+console.log(Object.keys(obj));   //['a', 'b']
+```
+
 
 
 ## VUE
@@ -143,7 +176,7 @@ export default {
   export default {
     // 接受父组件的值
     props: {
-      inputName: String,
+      inputName: String,//类型：Array,Boolean,Number,String,Object,Date,Function 
       required: true
     }
   }
@@ -175,3 +208,56 @@ export default {
 然后给需要触发的标签加上触发事件，带上参数：props.row
 
 完成以上两步，即可。
+
+
+
+#### 加载动画——蒙版
+
+Element提供了两种调用Loading的方法：指令和服务。对于自定义指令`v-loading`，只需要绑定`Boolean`即可。交替状态下，Loading遮罩会插入到绑定元素的子`body`例程中，通过添加修饰符，可以使遮罩插入至DOM中的身体上。
+
+```vue
+<template>
+  <el-table
+    v-loading="loading"//添加该指令
+    :data="tableData"
+    style="width: 100%">
+    <el-table-column
+      prop="date"
+      label="日期"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="name"
+      label="姓名"
+      width="180">
+    </el-table-column>
+    <el-table-column
+      prop="address"
+      label="地址">
+    </el-table-column>
+  </el-table>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }],
+        loading: true//给定初始值：Boolean类型
+      };
+    }
+  };
+</script>
+```
+

@@ -43,7 +43,9 @@ verifycode=123123
 
 https://blog.csdn.net/lander_xiong/article/details/79018737?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.control&dist_request_id=1328666.9273.16159762534572049&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.control
 
-工单管理下的住户审批功能结束，人员管理下的物业人员管理操作功能结束，
+1. 工单管理下的住户审批功能结束，
+2. 人员管理下的物业人员管理操作功能结束，
+3. 代码已上传
 
 1. 短信验证登录bug（完成）
 2.  住户审批前后台
