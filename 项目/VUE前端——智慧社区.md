@@ -65,5 +65,113 @@ let result2 = function(){
 
 #### getters
 
+#### input输入框
+
+1. 使用`clearable`属性即可得到一个可清空的输入框，可清空的意思就是在文本框内输入文字后，文本框会出现要给清空图标按钮，点击即可清空
+
+#### $emit触发事件
+
+```js
+//子组件调用，get是触发事件，事件名自定义的，data是传过去的数据，
+function test(){
+	this.$emit('get',data)    
+}
+```
+
+```vue
+//父组件
+<template>
+  <div>
+ 	<pending-approve @get="pagination " v-if="key==1"></pending-approve>//使用子组件模板，声明自定义$emit需要的事件名：get,必须有@来声明，pagination是父组件方法
+  </div>
+</template>
+<script>
+export default {
+    methods: {
+      pagination(data){//data是子组件传来的值
+      this.listLoading = false;
+      const { pageNum, pageSize, total, list } = data;
+      this.listQuery.pageNum = pageNum;
+      this.listQuery.pageSize = pageSize || 10;
+      this.listQuery.page = pageNum;
+      this.listQuery.rows = pageSize;
+      this.listTotal = total || 0;
+      this.list = list || [];
+    }
+},
+</script>
+```
+
+#### props 父值传子
+
+```vue
+//父组件
+<template>
+  <div>
+    父组件:
+    <input type="text" v-model="name">
+    <br>
+    <br>
+    <!-- 引入子组件 -->
+    <child :inputName="name"></child>
+  </div>
+</template>
+<script>
+  import child from './child'
+  export default {
+    components: {
+      child
+    },
+    data () {
+      return {
+        name: ''
+      }
+    }
+  }
+</script>
+```
+
+```vue
+//子组件
+<template>
+  <div>
+    子组件:
+    <span>{{inputName}}</span>
+  </div>
+</template>
+<script>
+  export default {
+    // 接受父组件的值
+    props: {
+      inputName: String,
+      required: true
+    }
+  }
+</script>
+```
+
+[推荐博客](https://blog.csdn.net/lander_xiong/article/details/79018737)
 
 
+
+#### 生命周期函数
+
+
+
+## Element UI
+
+#### 点击当前行获取当前行信息
+
+```vue
+<template slot-scope="props">
+    <el-button type="text" size="default" @click="handleCreateAccess(props.row)">门禁权限</el-button>
+    <el-button type="text" size="default" @click="handleCreateEditor(props.row)">编辑</el-button>
+    <el-button type="text" size="default" @click="handleCreateDelete(props.row)">删除</el-button>
+</template>
+```
+
+在需要触发的标签外的父标签，加上：slot-scope="props"
+
+然后给需要触发的标签加上触发事件，带上参数：props.row
+
+完成以上两步，即可。
