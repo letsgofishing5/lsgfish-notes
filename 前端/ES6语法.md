@@ -88,6 +88,31 @@ map容器，和Java一样，键值对存储
 </script>
 ```
 
+### 可选链操作
+
+?.
+
+该符号用来判断是否有属性
+
+```js
+function main(config){
+    const dbHost = config?.db?.host;
+    console.log(dbHost);
+}
+main({
+    db:{
+        host:'127.0.0.1';
+        username:'root'
+    },
+    cache:{
+        host:'192.168.1.200'
+        username:'admin'
+    }
+})
+```
+
+
+
 ### 简化类
 
 ES6允许在大括号里，直接写入变量和函数，作为对象的属性和方法
@@ -167,6 +192,7 @@ ES6引入了一种新的原始数据类型 Symbol，表示独一无二的值。�
 let s = Symbol();
 //第二种方式创建
 let s2=Symbol.for("创建");
+console.log(s2.description)
 ```
 
 使用Symbol，添加属性
@@ -272,6 +298,48 @@ p.then(
 )
 ```
 
+##### allsettled
+
+返回的结果永远都是Promise成功
+
+```js
+const p1 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        resolve('成功 - 1')
+    },1000)
+})
+const p1 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      //  resolve('成功 - 2')
+        reject('失败 - 1')
+    },1000)
+})
+const result = Promise.allSettled([p1,p2])
+
+```
+
+##### all
+
+只有返回结果都是成功，才会返回Promise成功
+
+```js
+const p1 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        resolve('成功 - 1')
+    },1000)
+})
+const p1 = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      //  resolve('成功 - 2')
+        reject('失败 - 1')
+    },1000)
+})
+const result = Promise.all([p1,p2])
+
+```
+
+allSettled与all都是用来做批量异步请求处理
+
 ### Set
 
 ```js
@@ -334,6 +402,33 @@ class Phone{
 }
 let phone = new Phone("小米",1999)
 ```
+
+#### 私有属性
+
+```js
+class Person{
+    //公有属性
+    name;
+    //私有属性
+    #age;
+    #weigth;
+    //构造方法
+    constructor(name,age,weight){
+        this.name = name;
+        this.#age = age;
+        this.#weight = weight;
+    }
+intro(){
+    console.log(this.name);
+    console.log(this.#age);
+                console.log(this.#weight);
+                }
+}
+let person = new Person('大明',18,'50kg')
+person.intro();
+```
+
+
 
 #### 构造函数继承
 
@@ -452,6 +547,7 @@ babel是一个JavaScript的编译器
   - 执行：npm i jquery
   - 引入：import $ from "jquery";//
 
+<<<<<<< HEAD
 ### async 函数
 
 ```js
@@ -459,11 +555,144 @@ async function fn(){
     //返回的是一个Promise 类型的对象
     //内部抛出异常则返回一个失败的promise
 }
+=======
+## ES7、ES8
+
+#### async函数
+
+```js
+async function fun(){
+    //返回一个promise类型的对象
+}
+```
+
+#### await表达式
+
+await必须包含在async函数中，会得到 Promise 的一个返回值
+
+```js
+//返回成功的值
+let p = new Promise((resolve,reject)=>{
+    resolve("cs")
+})
+async function f(){
+    let result = await p;
+    console.log(result)
+}
+f();
+//返回失败的值，需要使用try/catch来捕获
+let p = new Promise((resolve,reject)=>{
+    reject("失败啦")
+})
+async function f(){
+    try{
+        let result = await p;
+        console.log(result)
+    }catch(e){
+        console.log(e)
+    }
+
+}
+f();
+```
+
+#### Object方法
+
+##### Object.keys()
+
+获取对象的所有的键值
+
+##### Object.values()
+
+获取所有对象的值
+
+##### Object.entries()
+
+将对象的键值对转换成一个小的数组
+
+#### 数组
+
+##### array.flat
+
+将多维数组转换成低位数组
+
+```js
+const arr = [1,2,3,4,[5,6]]
+console.log(arr.flat())
+//如果时三维数组，则需要添加参数，参数代表深度
+const arr2 = [1,2,3,[4,5,[6,7,8]]]
+console.log(arr2.flat())
+console.log(arr2.flat(2))
+
+```
+
+##### array.flatMap
+
+将多维数组合并为一个数组
+
+```js
+const arr = [1,2,3]
+const result = arr.flatMap(item => [item * 10])
+console.log(result)
 ```
 
 
 
+## ES9
+
+#### rest 参数
+
+Rest 参数与spread扩展运算符在ES6中已经引入，不过ES6中只针对于数组，
+在ES9中为对象提供了像数组一样的rest.参数和扩展运算符
+
+```js
+function connect({host,port,...user}){
+    console.log(host)
+    console.log(port)
+    console.log(user)
+}
+connect({
+    host:"localhost",
+    port:"8080",
+    username:"zs",
+    password:123123,
+})
+```
+
+#### 正则命名分组
+
+1. 分组
+
+```js
+let str = '<a href="http://www. atguigu. com" >尚硅谷</a>';
+const reg = /<a href="(?<url>. * )I">(?<text>. *)<\/a>/;
+const result = reg. exec(str );
+console.log(result.groups.url);
+console.log(result.groups.text);
+```
+
+2. 断言
+
+```js
+//声明字符串
+let str = ' JS5211314你知道么555啦啦啦' ;
+//正向断言
+// const reg = /\d+(?=啦)/;
+// const result = reg.exec(str);
+//反向断 言
+const reg = /(?<=么)\d+/ ;
+const result = reg.exec(str);
+console. log( result);
+>>>>>>> 4d3a24380de505aead24c416e1e93718e0cc2498
+```
+
+
+
+<<<<<<< HEAD
 ### 问题
+=======
+## 问题
+>>>>>>> 4d3a24380de505aead24c416e1e93718e0cc2498
 
 ##### 1.call与apply调用
 
