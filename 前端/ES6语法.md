@@ -452,6 +452,17 @@ babel是一个JavaScript的编译器
   - 执行：npm i jquery
   - 引入：import $ from "jquery";//
 
+### async 函数
+
+```js
+async function fn(){
+    //返回的是一个Promise 类型的对象
+    //内部抛出异常则返回一个失败的promise
+}
+```
+
+
+
 ### 问题
 
 ##### 1.call与apply调用
