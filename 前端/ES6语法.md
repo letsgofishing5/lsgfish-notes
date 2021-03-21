@@ -73,6 +73,84 @@
 </script>
 ```
 
+### module
+
+#### 提到的关键字
+
+1. 静态优化
+
+#### export
+
+正确的写法是下面这样。
+
+```javascript
+// 写法一
+export var m = 1;
+
+// 写法二
+var m = 1;
+export {m};
+
+// 写法三
+var n = 1;
+export {n as m};
+```
+
+#### import
+
+```javascript
+foo();
+
+import { foo } from 'my_module';
+```
+
+上面的代码不会报错，因为`import`的执行早于`foo`的调用。这种行为的本质是，`import`命令是编译阶段执行的，在代码运行之前。
+
+注意，`import`命令具有提升效果，会提升到整个模块的头部，首先执行。
+
+如果多次重复执行同一句`import`语句，那么只会执行一次，而不会执行多次。
+
+```javascript
+import 'lodash';
+import 'lodash';
+// 等同于
+import { foo, bar } from 'my_module';
+```
+
+#### export default 命令
+
+```javascript
+// import-default.js
+import customName from './export-default';
+customName(); // 'foo'
+```
+
+上面代码的`import`命令，可以用任意名称指向`export-default.js`输出的方法，这时就不需要知道原模块输出的函数名。需要注意的是，这时`import`命令后面，**不使用**大括号。
+
+下面比较一下默认输出和正常输出。
+
+```javascript
+// 第一组
+export default function crc32() { // 输出
+  // ...
+}
+
+import crc32 from 'crc32'; // 输入
+
+// 第二组
+export function crc32() { // 输出
+  // ...
+};
+
+import {crc32} from 'crc32'; // 输入
+```
+
+上面代码的两组写法，第一组是使用`export default`时，对应的`import`语句不需要使用大括号；第二组是不使用`export default`时，对应的`import`语句需要使用大括号。
+
+`export default`命令用于指定模块的默认输出。显然，一个模块只能有一个默认输出，因此`export default`命令只能使用一次。所以，import命令后面才不用加大括号，因为只可能唯一对应`export default`命令。
+
+本质上，`export default`就是输出一个叫做`default`的变量或方法，然后系统允许你为它取任意名字。所以，下面的写法是有效的。
+
 ### 容器
 
 set容器，和Java一样，不可重复
@@ -273,6 +351,8 @@ console.log(iterator.next());
 
 ### Promise
 
+[promise自定义封装视频](https://www.bilibili.com/video/BV1GA411x7z1?p=25)
+
 封装读取文件（安装node）
 
 ```js
@@ -308,19 +388,19 @@ const p1 = new Promise((resolve,reject)=>{
         resolve('成功 - 1')
     },1000)
 })
-const p1 = new Promise((resolve,reject)=>{
+const p2 = new Promise((resolve,reject)=>{
     setTimeout(()=>{
       //  resolve('成功 - 2')
         reject('失败 - 1')
     },1000)
 })
 const result = Promise.allSettled([p1,p2])
-
+console.log(result)
 ```
 
 ##### all
 
-只有返回结果都是成功，才会返回Promise成功
+只有返回结果都是成功，才会返回Promise成功，否则返回Promise失败
 
 ```js
 const p1 = new Promise((resolve,reject)=>{
@@ -328,7 +408,7 @@ const p1 = new Promise((resolve,reject)=>{
         resolve('成功 - 1')
     },1000)
 })
-const p1 = new Promise((resolve,reject)=>{
+const p2 = new Promise((resolve,reject)=>{
     setTimeout(()=>{
       //  resolve('成功 - 2')
         reject('失败 - 1')
@@ -339,6 +419,76 @@ const result = Promise.all([p1,p2])
 ```
 
 allSettled与all都是用来做批量异步请求处理
+
+##### util.promisify方法进行promise风格转换
+
+```js
+//引入util模块
+const util = require('util')
+//引入fs模块
+const fs = require('fs')
+//返回一个新的函数
+let newFun = util.promisify(fs.readFile)//将fs里的读取文件函数传进去，返回一个promise函数
+newFun('文件路径').then(data=>{
+    console.log(data.toString())
+})
+```
+
+##### promise状态
+
+1. pending变为resolved / fullfilled：成功
+2. pending变为rejected：失败
+
+##### promise的异常处理
+
+异常穿透，可以直接在最后catch处理
+
+##### 中断promise链
+
+有且只有一个方式
+
+```js
+return new Promise(()=>{})
+//使用pending状态，即无状态，无状态的时候then方法无法执行
+```
+
+##### async函数
+
+1. async函数的返回值结果为promise对象
+2. promise对象的结果由async函数执行的返回值决定
+
+##### await函数
+
+1. await右侧的表达式一般为promise对象，但也可以是其他值：await new Promise（）
+2. 如果表达式是promise对象，await返回的是promise成功的值
+3. 如果表达式是其他值，直接将此值作为await的返回值
+
+总结：await就是用来获取promise成功后的值，如果返回的是失败的值，通过捕获来获取
+
+```js
+async function main(){
+    let p = new Promise((resolve,reject)=>{
+        resolve("error")
+    })
+    let q = await p;
+    console.log(q)
+     let p1 = new Promise((resolve,reject)=>{
+        reject("error")
+    })
+     try{
+    	let q1 = await p1;
+     }catch(e){
+         console.log(e)
+     }
+}
+```
+
+
+
+注意：
+
+1. await必须写在async函数中，但async函数中可以没有await
+2. 如果await的promise失败了，就会抛出异常，需要通过try/catch捕获处理
 
 ### Set
 
@@ -479,7 +629,7 @@ EPSILON 属性的值接近于2.2204460492503130808472633361816E-16
 #### Object
 
 1. `0bject.is(val1,val2)`判断两个值是否完全相
-2. `0bject.assign(newVal,oldVal)`对象的合并，后面的参数会将前面的参数覆盖
+2. `0bject.assign(target,source1,source2)`对象的合并，后面的参数会将前面的参数覆盖
 3. `Object.setPrototype0f(father,son)` `Object.getPrototypeof`
 
 ### 模块化
@@ -547,22 +697,12 @@ babel是一个JavaScript的编译器
   - 执行：npm i jquery
   - 引入：import $ from "jquery";//
 
-<<<<<<< HEAD
 ### async 函数
 
 ```js
 async function fn(){
     //返回的是一个Promise 类型的对象
     //内部抛出异常则返回一个失败的promise
-}
-=======
-## ES7、ES8
-
-#### async函数
-
-```js
-async function fun(){
-    //返回一个promise类型的对象
 }
 ```
 
@@ -683,17 +823,11 @@ let str = ' JS5211314你知道么555啦啦啦' ;
 const reg = /(?<=么)\d+/ ;
 const result = reg.exec(str);
 console. log( result);
->>>>>>> 4d3a24380de505aead24c416e1e93718e0cc2498
 ```
 
 
 
-<<<<<<< HEAD
-### 问题
-=======
 ## 问题
->>>>>>> 4d3a24380de505aead24c416e1e93718e0cc2498
-
 ##### 1.call与apply调用
 
 ##### 2.函数中arguments变量
