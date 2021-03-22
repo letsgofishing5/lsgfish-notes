@@ -719,3 +719,37 @@ uni-app+HBuilder
    ```
 
 3. 
+
+## 温故而知新
+
+### vue结构
+
+MVVM：
+
+1. M：model（data）
+2. V：view
+3. VM：viewModel，包含DOM listener 和 Data Bindings（数据监听和数据绑定）
+
+#### 监听与数据绑定
+
+1. 绑定监听：
+
+```js
+<input :val="jianting"/>
+```
+
+2. 绑定数据：
+
+```js
+<input @val="click"/>
+```
+
+#### computed
+
+在初始化/相关data属性数据发生改变的时候执行
+
+1. 计算属性存在缓存，多次读取只执行一次getter计算
+2. 计算属性有get/set回调函数，分别对应getter与setter
+
+#### 监视：watch
+

@@ -91,7 +91,7 @@ function fun(a:number,b:number):number{//a,b类型是number，fun函数的返回
        name: '孙悟空', age: 18
    }
    
-   //[propName: string]: any 表示任意类型的属性
+   //[propName: string]: any 表示任意类型的属性，只要属性名是字符串
    let c: {name: string,[propName: string]:any}
    c = {
        name:'猪八戒'，
