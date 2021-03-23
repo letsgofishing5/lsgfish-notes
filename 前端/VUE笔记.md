@@ -753,3 +753,49 @@ MVVM：
 
 #### 监视：watch
 
+#### style与class
+
+1. 理解
+   在应用界面中，某个(些)元素的样式是变化的
+   class/style绑定就是专门用来实现动态样式效果的技术
+
+2. class绑定: :class= 'xxx'
+   xxx是字符串
+   xxx是对象
+   xxx是数组
+3. style绑定
+   :styLe="{ color: activeColor, fontSize: fontSize + 'px' }"
+   其中activeColor/fontSize是data属性
+
+##### style绑定
+
+```html
+<p :style="{color:active,fontSize:fontSize+'px'}"
+```
+
+##### class绑定
+
+```html
+<p :class="{aClass:true,bClass:false}">
+    xxx是对象，false的则不能显示类名
+</p>
+```
+
+#### 遍历for
+
+##### 遍历数组
+
+```html
+<li v-for="(p,index) in persons" :key="index">
+
+</li>
+```
+
+##### 遍历对象
+
+```html
+<li v-for="(value,key) in persons[1]" :key="value">
+
+</li>
+```
+
