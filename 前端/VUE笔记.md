@@ -795,7 +795,51 @@ MVVM：
 
 ```html
 <li v-for="(value,key) in persons[1]" :key="value">
-
+value:代表键值，key代表键名
 </li>
 ```
 
+```js
+let a=[1,2,3,4,5]
+//过滤，
+let b = a.filter(k=>{
+    return k>3
+})
+console.log("b="+b)
+//array.map(),类似于for循环，但是他不会被打断，除非程序出错
+a.map(k=>{
+    console.log(k)
+})
+```
+
+#### 事件处理
+
+##### $event绑定监听
+
+```html
+//不传参时，默认将信息以$event传递
+<button @click='test()'>
+    test获取文本
+</button>
+//传参时，则需要显式声明
+<button @click='test2(123,$event)'>
+    test获取文本
+</button>
+```
+
+```vue
+data:{
+	test(event){
+		alert(event)//test获取文本
+	},
+	test2(num,event){
+		alert(num+""+event)//123 test获取文本
+	}
+}
+```
+
+##### 事件修饰符
+
+1. 停止事件冒泡：@click.stop
+2. 阻止事件默认行为：@click.prevent
+3. 按键修饰符：@keyup
