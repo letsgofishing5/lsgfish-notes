@@ -261,3 +261,24 @@ Element提供了两种调用Loading的方法：指令和服务。对于自定义
 </script>
 ```
 
+#### element-ui表格数据判断是否可选
+
+后台传的参数 1 是普通会员，2 是高级会员
+用formatter
+
+```html
+<el-table-column
+   prop="userType"
+   label="会员类型"
+   :formatter="userTypeList"
+   width="120">
+ </el-table-column>
+```
+
+在methods里调用
+
+ methods: {
+    userTypeList (row) {
+      return row.userType==1?'普通会员':'高级会员'
+    }
+}
