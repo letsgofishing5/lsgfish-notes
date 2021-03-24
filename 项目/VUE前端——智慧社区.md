@@ -282,3 +282,115 @@ Element提供了两种调用Loading的方法：指令和服务。对于自定义
       return row.userType==1?'普通会员':'高级会员'
     }
 }
+
+#### 获取表单input值
+
+1. v-model 表单输入绑定
+
+> 使用v-model创建双向数据绑定, 用来监听用户的输入事件以更新数据，并对一些极端场景进行一些特殊处理。
+
+```vue
+<template>
+<div>
+    <input class="login-input" type="text"  v-model="username" placeholder="请输入账号">
+    <input class="login-input" type="password" v-model="password" placeholder="请输入密码">
+    <div class="login-button" @click="login" type="submit">登陆</div>
+    </div>
+</template>
+<script>
+    export default {
+        name: 'Login',
+        data() {
+            return {
+                username: '',
+                password: ''
+            }
+        },
+        methods: {
+            login() {
+                console.log(this.username)
+                console.log(this.password)
+            }
+        }
+    }
+<script/>
+```
+
+2. @input 监听输入框
+
+> 输入框只要输入的值变化了就会触发 input 调用 search 数据实时获取通过 event.currentTarget.value 获取到
+
+```vue
+<template>
+	  <div class="class">
+	    <div>
+	      <input type="text" @keyup.enter="search" @input="search($event)"/>
+	    </div>
+	  </div>
+	</template>
+	<script>
+    export default {
+      name: "search",
+      data() {
+      },
+      methods: {
+	        search(event){
+	          console.log(event.currentTarget.value)
+	        }
+      	}
+    }
+   </script>
+```
+
+3. ref 获取数据
+
+> 这种方式类似于原生DOM,但是ref获取数据更方便
+
+```vue
+<template>
+	  <div class="class">
+	      <input type="text" ref="getValue" />
+	      <button @click="subbmitButton">获取表单数据</button>
+	  </div>
+	</template>
+	<script>
+    export default {
+      name: "page",
+      data() {
+      },
+      methods: {
+	        subbmitButton(){
+	          console.log(this.$refs.getValue.value)
+	        }
+      	}
+    }
+  </script>
+```
+
+#### 修改 label 样式
+
+1.去掉style中的scoped
+
+```VUE
+<style scoped>
+
+</style>
+```
+
+2.在对应el-form-item的label属性中加入class样式
+
+```VUE
+<el-form-item label="用户名" class="item">
+    <el-input v-model="ruleForm.username" placeholder="请输入用户名" maxlength="10"></el-input>
+</el-form-item>
+```
+
+3.查看当前元素对应style的样式名称
+如：.el-form-item__label 添加如下样式代码
+
+```VUE
+.item .el-form-item__label{
+	color: wheat;
+}
+```
+
