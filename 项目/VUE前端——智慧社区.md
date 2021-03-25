@@ -394,3 +394,18 @@ Element提供了两种调用Loading的方法：指令和服务。对于自定义
 }
 ```
 
+#### 表单验证规则
+
+```VUE
+<el-form-item
+    label="年龄"
+    prop="age"
+    :rules="[
+        { required: true, message: '年龄不能为空'},
+        { type: 'number', message: '年龄必须为数字值'}
+    ]" >
+    <el-input type="age" v-model.number="numberValidateForm.age" autocomplete="off"></el-input>
+</el-form-item>
+```
+
+rules 与 ref
