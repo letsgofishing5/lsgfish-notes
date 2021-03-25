@@ -843,3 +843,19 @@ data:{
 1. 停止事件冒泡：@click.stop
 2. 阻止事件默认行为：@click.prevent
 3. 按键修饰符：@keyup
+
+#### 生命周期
+
+生命周期函数也叫钩子函数
+
+#### 指令
+
+```html
+[v-cloak]{
+	display: none;//指令属性，在模板加载完后会消失
+}
+<p v-cloak>
+    {{msg}}
+</p>
+```
+
