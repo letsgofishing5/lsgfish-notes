@@ -185,6 +185,36 @@ export default {
 
 [推荐博客](https://blog.csdn.net/lander_xiong/article/details/79018737)
 
+#### props路由传值
+
+首先我们要在需要获取参数：id 的页面这样写
+
+```js
+props:{
+    id:{
+    type:Number
+    }
+},
+```
+
+然后我们需要再路由注册中这样写
+
+```vue
+{
+    path: 'complaint',
+    name: 'workorder-complaint',
+    component: () => import(/* webpackChunkName: "page/personals" */'../views/workorder/components/repair'),
+    meta: {
+    icon: 'el-icon-document-checked',
+    	title: '投诉建议'
+    },
+//再路由注册中写上props属性，并声明id
+    props:{
+    	id:2
+    }
+}
+```
+
 
 
 #### 生命周期函数
@@ -408,4 +438,38 @@ Element提供了两种调用Loading的方法：指令和服务。对于自定义
 </el-form-item>
 ```
 
+#### 设置elementUI中el-select的默认值
+
+```vue
+<el-form-item label-width="10px">
+    <el-select
+               v-model="form.region"
+               placeholder="请选择分类维度"
+               >
+        <el-option
+                   label="上海"
+                   value="shanghai"
+                   ></el-option>
+        <el-option
+                   label="北京"
+                   value="beijing"
+                   ></el-option>
+    </el-select>
+</el-form-item>
+
+//设置model的值，跟option里的value保持一致即可
+data(){
+	return{
+		form:{
+			region:'shanghai'
+		}
+	}
+}
+```
+
+
+
 rules 与 ref
+
+
+

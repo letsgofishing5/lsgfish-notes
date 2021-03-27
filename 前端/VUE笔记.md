@@ -859,3 +859,11 @@ data:{
 </p>
 ```
 
+#### 创建vue项目
+
+npm install -g vue-cli
+vue init webpack vue_ demo
+cd vue_ derno
+npm install
+npm run dev
+访问: http://localhost:8080/
