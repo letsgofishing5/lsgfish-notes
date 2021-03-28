@@ -859,7 +859,6 @@ data:{
 </p>
 ```
 
-<<<<<<< HEAD
 #### 控制static文件夹
 
 在static文件夹下创建一个：.gitkeep文件即可
@@ -909,12 +908,78 @@ PubSub.publish('msgname',index)
 
 此方式用于父组件向子组件传递`标签数据`
 
+```js
+//父组件，写模板和方法，将写好的模板，插入子组件，
+<input type='text' slot='checkAll'/>//通过slot属性赋值来达到插槽标记目的
+```
+
+```js
+//子组件，引入父组件插槽，使用name属性获取对应的插槽
+<slot name='checkAll'/>
+```
+
+### Router
+
+路由器管理路由
+
+什么是路由？
+
+答：是一种映射关系，前台路由就是组件，path、component两个进行关系映射
+
+```js
+//路由注册：
+import router from './router'
+new Vue({
+    router
+})
+```
+
+使用路由标签来生成路由连接
+
+```html
+<router-link to="/xxx">Go to XXX页面</router-link>
+<router-view></router-view>//用来显示当前路由组件界面
+```
+
+#### 基本路由
+
+```js
+//路由器模块最基本搭建
+import Vue from 'vue';//只要使用vue下的插件，就需要引入vue
+import Router from 'vue-router';
+Vue.use(Router);
+
+export default new Router({
+  {
+    path:'/',
+    component:Hello
+	},
+    {
+    path:'/index',
+    component:About,
+    redirect:'/'
+	},                       
+});
+```
+
+在main.js中的配置对象的属性名都是一些确定的名称，不能随便更改
+
+```js
+import routers from './router'
+new Vue({
+    el:"app",
+    router:routers,
+    components:'{App}',
+    template:'<App/>'
+})
+```
+
 
 
 问题：
 
-1. main.js如何与index.html页面联系在一起的
-=======
+#### main.js如何与index.html页面联系在一起的
+
 #### 创建vue项目
 
 npm install -g vue-cli
@@ -922,5 +987,3 @@ vue init webpack vue_ demo
 cd vue_ derno
 npm install
 npm run dev
-访问: http://localhost:8080/
->>>>>>> 8c797f9a14df5a45c1c39a4242cb2d04f516d9fa

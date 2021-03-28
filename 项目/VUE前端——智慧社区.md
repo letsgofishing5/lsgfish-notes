@@ -31,6 +31,10 @@ let result2 = function(){
 
 ### 常用规则语法
 
+#### Object
+
+[推荐博客](https://blog.csdn.net/yexudengzhidao/article/details/98517515)
+
 #### Object.assign
 
 [推荐博客](https://blog.csdn.net/dwb123456123456/article/details/83316471)
@@ -91,29 +95,54 @@ console.log(y);   //[11, 12, 13, 14, 15]   返回一个新的数组
 
 ## VUE
 
-#### element-ui框架的el-dialog弹出框被遮罩层挡住了
-
-问题解决：[推荐博客](https://blog.csdn.net/Mr_JavaScript/article/details/80888681)
-
-解决方法：在el-dialog标签里添加 :modal-append-to-body='false'
-
-出现新问题，当点击退出状态时，选择取消，则dialog再次被遮罩层挡住
-
-解决方法：
-
-```vue
- <el-dialog
-        title="多重错误"
-        :visible.sync="dialogVisible"
-        :modal-append-to-body='false' //添加这个属性同时，添加下方的属性
-        :append-to-body="true" //该属性需要设置
-    >
-```
-
 #### 引入store里的js文件
 
 1. 再main.js中引入store：import store from './store';
 2. 再当前使用组件中：this.$store.state.communityId=uuid;引入需要的store中的全局状态
+
+#### 导出export、export default和导入import
+
+```js
+//向外暴露一个变量
+export let a = 1
+//引入这个变量
+import {a as num} from './test.js'
+
+//向外暴露一个对象
+let name='zs'
+let age = 23
+export {
+	name,age
+}
+//引入这个对象，并使用该对象中的属性
+import {age,name} from './test.js'
+console.log(name,age)
+
+//export default
+//向外暴露一个变量
+export default name = 'zs'
+//导入
+import name from './test.js'
+
+//向外暴露对象
+let name='zs'
+let age = 23
+export default{
+	name,age
+}
+//导入
+import obj from './test.js'
+let {name,age}=obj
+console.log(name,age)
+```
+
+
+
+#### 混入mixins
+
+个人理解就是定义了一个js文件，用来存放一些重复率高的代码（函数，计算属性等），然后引入这个js文件，通过mixins来达到将引入的这个js文件内部所有信息全部获取，然后调用使用
+
+[推荐博客](https://blog.csdn.net/weixin_43720095/article/details/89659179)
 
 #### mapGetters
 
@@ -126,6 +155,8 @@ console.log(y);   //[11, 12, 13, 14, 15]   返回一个新的数组
 #### input输入框
 
 1. 使用`clearable`属性即可得到一个可清空的输入框，可清空的意思就是在文本框内输入文字后，文本框会出现要给清空图标按钮，点击即可清空
+
+### 传值
 
 #### $emit触发事件
 
@@ -265,6 +296,29 @@ props:{
 }
 ```
 
+#### 消息订阅与发布
+
+```js
+//第一步引入
+import PubSub from 'pubsub-js'
+//第二步,订阅消息
+PubSub.subscribe('msgname',(msg,index)=>{//第一个参数：msg没什么用，但是必须要写，他就相当于msgname，第二个是接收的参数
+    this.receive(index)
+})
+```
+
+```js
+//另外一个组件
+//第一步引入
+import PubSub from 'pubsub-js'
+//第二步，发布消息
+PubSub.publish('msgname',index)
+```
+
+#### slot通信
+
+此方式用于父组件向子组件传递`标签数据`
+
 
 
 #### 生命周期函数
@@ -272,6 +326,27 @@ props:{
 
 
 ## Element UI
+
+#### element-ui框架的el-dialog弹出框被遮罩层挡住了
+
+问题解决：[推荐博客](https://blog.csdn.net/Mr_JavaScript/article/details/80888681)
+
+解决方法：在el-dialog标签里添加 :modal-append-to-body='false'
+
+出现新问题，当点击退出状态时，选择取消，则dialog再次被遮罩层挡住
+
+解决方法：
+
+```vue
+ <el-dialog
+        title="多重错误"
+        :visible.sync="dialogVisible"
+        :modal-append-to-body='false' //添加这个属性同时，添加下方的属性
+        :append-to-body="true" //该属性需要设置
+    >
+```
+
+
 
 #### 点击当前行获取当前行信息
 
@@ -343,7 +418,7 @@ Element提供了两种调用Loading的方法：指令和服务。对于自定义
 
 #### element-ui表格数据判断是否可选
 
-后台传的参数 1 是普通会员，2 是高级会员
+后台传的参数：1 是普通会员，2 是高级会员
 用formatter
 
 ```html
