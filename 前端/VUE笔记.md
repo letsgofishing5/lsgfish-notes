@@ -859,6 +859,7 @@ data:{
 </p>
 ```
 
+<<<<<<< HEAD
 #### 控制static文件夹
 
 在static文件夹下创建一个：.gitkeep文件即可
@@ -913,3 +914,13 @@ PubSub.publish('msgname',index)
 问题：
 
 1. main.js如何与index.html页面联系在一起的
+=======
+#### 创建vue项目
+
+npm install -g vue-cli
+vue init webpack vue_ demo
+cd vue_ derno
+npm install
+npm run dev
+访问: http://localhost:8080/
+>>>>>>> 8c797f9a14df5a45c1c39a4242cb2d04f516d9fa
