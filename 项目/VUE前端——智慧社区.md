@@ -62,6 +62,31 @@ var obj = {'a': 'Beijing', 'b': 'Haidian'};
 console.log(Object.keys(obj));   //['a', 'b']
 ```
 
+#### Object.map()
+
+1. forEach() 方法对数组的每个元素执行一次提供的函数。总是返回undefined
+2. map() 方法创建一个新数组，其结果是该数组中的每个元素都调用一个提供的函数后返回的结果。返回值是一个新的数组；
+
+```js
+var array1 = [1,2,3,4,5];
+ 
+var x = array1.forEach(function(value,index){
+ 
+    console.log(value);   //可遍历到所有数组元素
+ 
+    return value + 10
+});
+console.log(x);   //undefined    无论怎样，总返回undefined
+ 
+var y = array1.map(function(value,index){
+ 
+    console.log(value);   //可遍历到所有数组元素
+ 
+    return value + 10
+});
+console.log(y);   //[11, 12, 13, 14, 15]   返回一个新的数组
+```
+
 
 
 ## VUE
@@ -134,6 +159,31 @@ export default {
 },
 </script>
 ```
+
+#### $on与$emit
+
+该方法不常用
+
+```
+//父组件
+<child ref="test"/>
+mounted(){
+	this.$ref.test.$on("todo",()=>{
+		//绑定监听事件名，调用回调函数
+	})
+}
+```
+
+```vue
+//子组件
+methods:{
+	handle(){
+		$emit("todo")	
+	}
+}
+```
+
+
 
 #### props 父值传子
 

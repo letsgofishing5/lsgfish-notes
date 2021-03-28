@@ -859,3 +859,57 @@ data:{
 </p>
 ```
 
+#### 控制static文件夹
+
+在static文件夹下创建一个：.gitkeep文件即可
+
+#### 打包发布项目
+
+1. 执行：npm run build，进行项目打包
+2. 使用静态服务器工具包
+   1. npm install -g serve
+   2. serve dist
+   3. 访问：http://localhost:5000
+
+#### 向localStorage中存取值
+
+```vue
+JSON.parse(window.localStorage.getItem("todo_key" || '[]'))
+watch:{
+	todo:{
+		deep:true,
+		handler:function(){
+			window.localStorage.setItem('todo_key',JSON.stringify(value))//存的是json格式字符串
+		}
+	}
+}
+```
+
+#### 消息订阅与发布
+
+```js
+//第一步引入
+import PubSub from 'pubsub-js'
+//第二步,订阅消息
+PubSub.subscribe('msgname',(msg,index)=>{//第一个参数：msg没什么用，但是必须要写，他就相当于msgname，第二个是接收的参数
+    this.receive(index)
+})
+```
+
+```js
+//另外一个组件
+//第一步引入
+import PubSub from 'pubsub-js'
+//第二步，发布消息
+PubSub.publish('msgname',index)
+```
+
+#### slot通信
+
+此方式用于父组件向子组件传递`标签数据`
+
+
+
+问题：
+
+1. main.js如何与index.html页面联系在一起的
