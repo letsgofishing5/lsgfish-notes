@@ -974,13 +974,27 @@ new Vue({
 })
 ```
 
+总结：
+
+1. 定义路由
+2. 注册路由
+3. 使用路由
 
 
-问题：
 
-#### main.js如何与index.html页面联系在一起的
+#### 向路由组件传递数据
 
-#### 创建vue项目
+传递参数分两种
+
+1. params
+2. query
+
+```vue
+//获取参数
+$route.params.id
+```
+
+
 
 npm install -g vue-cli
 vue init webpack vue_ demo
