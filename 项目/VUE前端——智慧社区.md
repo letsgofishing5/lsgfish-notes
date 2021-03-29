@@ -319,6 +319,56 @@ PubSub.publish('msgname',index)
 
 此方式用于父组件向子组件传递`标签数据`
 
+```js
+//父组件，写模板和方法，将写好的模板，插入子组件，
+<input type='text' slot='checkAll'/>//通过slot属性赋值来达到插槽标记目的
+```
+
+```js
+//子组件，引入父组件插槽，使用name属性获取对应的插槽
+<slot name='checkAll'/>
+```
+
+#### .sync修饰符
+
+vue中我们经常会用v-bind(缩写为:)给子组件传入参数。
+或者我们会给子组件传入一个函数，子组件通过调用传入的函数来改变父组件的状态。
+
+```vue
+//父组件给子组件传入一个函数
+ <MyFooter :age="age" @setAge="(res)=> age = res">
+ </MyFooter>
+ //子组件通过调用这个函数来实现修改父组件的状态。
+ mounted () {
+      console.log(this.$emit('setAge',1234567));
+ }
+```
+
+这时子组件触发了父组件的修改函数使父组件的age修改成了1234567
+
+这种情况比较常见切写法比较复杂。于是我们引出今天的主角 .sync
+
+这时我们可以直接这样写
+
+```vue
+//父组件将age传给子组件并使用.sync修饰符。
+<MyFooter :age.sync="age">
+</MyFooter>
+//子组件触发事件
+ mounted () {
+    console.log(this.$emit('update:age',1234567));
+ }
+```
+
+这里注意我们的事件名称被换成了update:age
+update：是被固定的也就是vue为我们约定好的名称部分
+age是我们要修改的状态的名称，是我们手动配置的，与传入的状态名字对应起来
+
+这样就完成了，是不是感觉简单了很多。
+
+注意事项：
+这里我们必须在事件执行名称前加上update：的前缀才能正确触发事件。
+
 
 
 #### 生命周期函数
