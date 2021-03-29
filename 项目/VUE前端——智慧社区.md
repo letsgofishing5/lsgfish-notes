@@ -56,7 +56,7 @@ console.log(targetObj1);//将sourceObj1,sourceObj11都复制到targetObj1
 
 #### Object.keys
 
-返回对象的所有属性
+返回一个数组，包含对象的所有属性的键名
 
 ```js
 传入对象， 返回包含对象可枚举属性和方法的数组
