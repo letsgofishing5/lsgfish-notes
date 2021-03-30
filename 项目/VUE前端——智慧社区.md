@@ -371,6 +371,93 @@ age是我们要修改的状态的名称，是我们手动配置的，与传入�
 
 #### 生命周期函数
 
+### Vuex
+
+#### 问题1
+
+```js
+// 存储communities信息
+import api from '@/utils/fetch-v2';
+import { lget, lset } from '@/utils/browserStorage';
+
+const communities = {
+  state: {
+    communityId: null, // 社区id
+    currentCommunity: null,
+    communitys: null
+  },
+  mutations: {
+    SET_COMMUNITY_ID(state, id) {
+      state.communityId = id;
+      lset('communityId', id);
+    },
+    SET_CURRENT_COMMUNITY(state, comm) {
+      state.currentCommunity = comm;
+      lset('currentCommunity', comm);
+    },
+    SET_COMMUNITYS(state, list) {
+      state.communitys = list;
+      lset('communitys', list);
+    }
+  },
+  actions: {
+
+    SwitchCommunityID({ commit, rootState }, community) {
+      commit('SET_COMMUNITY_ID', community.uuid);
+      commit('SET_CURRENT_COMMUNITY', community);
+    },
+
+    GetCommunityList({ commit, rootState }, communitys) {
+      // 带参进来直接处理
+      if (Array.isArray(communitys) && communitys.length) {
+        console.log('使用输入数据更新社区列表');
+        commit('SET_COMMUNITYS', communitys);
+        commit('SET_CURRENT_COMMUNITY', communitys[0]);
+        commit('SET_COMMUNITY_ID', communitys[0].uuid);
+        return Promise.resolve(communitys);
+      }
+      console.log('从接口获取社区参数');
+      // 没有带参从接口获取
+      return new Promise((resolve, reject) => {
+        api({
+          url: '/community/getCommunityList',
+          method: 'get'
+        }).then(comm => {
+          if (comm.length > 0) {
+            commit('SET_COMMUNITYS', comm);
+          }
+          for (let i = 0; i < comm.length; i++) {
+            if (comm[i].currentCommunity) {
+              commit('SET_CURRENT_COMMUNITY', comm[i]);
+              commit('SET_COMMUNITY_ID', comm[i].uuid);
+            }
+          }
+          resolve(comm);
+        }).catch(e => {
+          reject(e);
+        });
+      });
+    }
+  },
+  getters: {
+    communityId: state => state.communityId ? state.communityId : null,
+    community: state => state.currentCommunity ? state.currentCommunity : null,
+    communitys: state => state.communitys ? state.communitys : []
+  }
+};
+
+
+export default communities;
+```
+
+```vue
+import { mapGetters } from 'vuex';
+computed:{
+	...mapGetters(['communityId']),
+},
+this.communityId
+```
+
 
 
 ## Element UI
@@ -640,9 +727,36 @@ data(){
 }
 ```
 
+#### 下拉框
+
+```html
+<el-select  v-model="form.orderStatus" placeholder="请选择">
+    <el-option
+               v-for="item in orderStatusMapKV"
+               :key="item.k"//
+               :value="item.k"//与v-module进行对应
+               :label="item.v"//下拉框显示内容
+               >
+    </el-option>
+</el-select>
+```
+
+#### 分页
+
+```vue
+<span class="demonstration">完整功能</span>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"//这里写了什么属性，页面才会展示什么属性页面，否则不会生成页面效果
+      :total="400">
+    </el-pagination>
+```
 
 
-rules 与 ref
 
 
 

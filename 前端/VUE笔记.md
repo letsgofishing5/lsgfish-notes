@@ -330,7 +330,7 @@
 		</script>
 ```
 
-##### 结构赋值
+##### 解构赋值
 
 ```html
 <script type="text/javascript">
@@ -735,13 +735,13 @@ MVVM：
 1. 绑定监听：
 
 ```js
-<input :val="jianting"/>
+<input @val="jianting"/>
 ```
 
 2. 绑定数据：
 
 ```js
-<input @val="click"/>
+<input :val="click"/>
 ```
 
 #### computed
@@ -975,6 +975,71 @@ new Vue({
 ```
 
 总结：
+=======
+### vuex
+
+#### actions
+
+actions 用来触发mutations
+
+#### mutations
+
+mutations 用来更新 state 状态数据
+
+#### state
+
+state 用来响应视图数据
+
+#### getters
+
+就是对象的`get`方法，
+
+#### 方法
+
+1. dispatch（actionName，data)：分发调用Actions
+2. Actions 调用 Commit 更新 mutations
+
+```vue
+//store.vue
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vue)
+//状态对象
+const state = {
+
+}
+//包含多个更新state函数的对象
+const actions = {
+
+}
+//包含多个对应事件回调函数的对象
+const actions = {
+
+}
+//包含多个getter计算属性函数的对象
+const getters = {
+
+}
+export default new Vuex.Store({
+	state,//状态对象
+	mutations,//包含多个更新state函数的对象
+	actions,//包含多个对应事件回调函数的对象
+	getters//包含多个getter计算属性函数的对象
+})
+```
+
+```js
+//main.js
+import store from './store'
+
+new Vue({
+  el:'#app',
+  components:{App},
+  template:'<App/>',
+  store//所有组件对象都多一个属性：$store
+})
+```
 
 1. 定义路由
 2. 注册路由
