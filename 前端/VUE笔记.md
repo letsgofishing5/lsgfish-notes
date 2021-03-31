@@ -974,8 +974,8 @@ new Vue({
 })
 ```
 
-总结：
-=======
+
+
 ### vuex
 
 #### actions
@@ -1059,6 +1059,55 @@ new Vue({
 $route.params.id
 ```
 
+#### vuex todolist
+
+1. 单独创建文件：`index.js`、`mutations.js`、`actions.js`、`getters`、`state.js`
+
+2. 在`index.js`中引入
+
+   ```js
+   import Vue from 'vue'
+   import Vuex from 'vuex'
+   import state from './state'
+   import mutations from './mutations'
+   import actions from './actions'
+   import getters from './getters'
+   
+   Vue.use(Vuex)
+   exoprt default new Vuex.Store({
+   	state,
+   	mutations,
+   	actions,
+   	getters
+   })
+   ```
+
+3. 在`main.js`中引入`store`的`index.js`文件
+
+   ```js
+   import store from './store'
+   
+   new Vue({
+       el:'#app',
+       render:h=>h(App),
+       store
+   })
+   ```
+
+4. vuex与computed配合使用
+
+   ```js
+   import {mapState} from 'vuex'
+   
+   export default{
+       computed:{
+           ...mapState(['todos'])//todos可以直接拿出来使用，todos名字要和state.js中的名字保持一致，或者通过：$store.state.todos，同样的效果
+       }
+   }
+   ```
+
+   
+
 
 
 npm install -g vue-cli
@@ -1066,3 +1115,10 @@ vue init webpack vue_ demo
 cd vue_ derno
 npm install
 npm run dev
+
+### 问题
+
+#### watch、computed、methods的区别
+
+#### export与export default区别
+
