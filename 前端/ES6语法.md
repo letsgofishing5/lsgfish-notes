@@ -303,8 +303,17 @@ console.log(youxi)
 
 ### 迭代器
 
-1. for...of遍历数组值，键值
-2. for...in遍历数组下标，键名
+**导读：**迭代器(`lterator`)是一种接口，为各种不同的数据结构提供统一的访问机制J任何数据结构只要部署`lterator`接口，就可以完成遍历操作。
+
+1. ES6创造了一种新的遍历命令for...of循环，lterator接口主要供 for...of消费 
+   1. for...of遍历数组值，键值
+   2. for...in遍历数组下标，键名
+2. 原生具备iterator接口的数据(可用for of遍历)
+   1. Array
+   2. Arguments
+   3. set
+   4. Mapstring
+   5. TypedArrayNodeList
 
 ```js
 //声明生成器函数，必须要有*号
@@ -319,6 +328,10 @@ iterator.next();
 //可以通过next方法传入实参
 iterator.next("传入参数，他会直接替代yield 111的返回值")
 ```
+
+3. 工作原理
+   a. 创建一个指针对象，指向当前数据结构的起始位置
+   b. 第一次调用对象的next方法，指针自动指向数据结构的第一个成员c)接下来不断调用next方法，指针一直往后移动，直到指向最后一个成员
 
 ### 生成器
 
