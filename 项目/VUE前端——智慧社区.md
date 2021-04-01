@@ -93,11 +93,6 @@ console.log(y);   //[11, 12, 13, 14, 15]   返回一个新的数组
 
 ## VUE
 
-#### 引入store里的js文件
-
-1. 再main.js中引入store：import store from './store';
-2. 再当前使用组件中：this.$store.state.communityId=uuid;引入需要的store中的全局状态
-
 #### 导出export、export default和导入import
 
 ```js
@@ -141,6 +136,12 @@ console.log(name,age)
 个人理解就是定义了一个js文件，用来存放一些重复率高的代码（函数，计算属性等），然后引入这个js文件，通过mixins来达到将引入的这个js文件内部所有信息全部获取，然后调用使用
 
 [推荐博客](https://blog.csdn.net/weixin_43720095/article/details/89659179)
+
+### Vuex
+
+#### 监听路由变化
+
+[推荐博客](https://blog.csdn.net/wandoumm/article/details/80167642)
 
 #### mapGetters
 
@@ -756,72 +757,92 @@ data(){
     </el-pagination>
 ```
 
+#### Cascader 级联查询，动态加载
+
+```vue
+	<el-cascader
+             v-model="viewHousesUUID"
+             :props="props"
+             :show-all-levels="true"
+             :disabled="form.id"
+             :multiple="false"
+             :emitPath="true"
+             ref="cascader"
+             clearable
+    ></el-cascader>
+```
+
+```js
+    data(){
+        return{
+            form: {
+                housesUuid: null,
+                housesAddress: null,
+                uuid: null,
+              },
+            props: {
+                lazy: true,
+                lazyLoad: this.loadCommunities,
+                value: 'uuid',
+                label: 'name',
+            },
+            viewHousesUUID1: null,
+        }
+    },
+    computed:{
+        viewHousesUUID: {
+            get() {
+                return this.viewHousesUUID1;
+            },
+                set(val) {
+                    // this.$nextTick(() => {
+                    //   let address = [];
+                    //   let node = this.$refs.cascader.getCheckedNodes();
+                    //   while (true) {
+                    //     address.unshift(node.name);
+                    //     if (!node || !node.parent) {
+                    //       break;
+                    //     }
+                    //   }
+                    //   this.form.housesAddress = address && address.length ? address.join('/') : null;
+                    // });
+                    this.form.housesUuid = val[val.length - 1];
+                    this.viewHousesUUID1 = val;
+                },
+        },
+    },
+    methods: {
+        loadCommunities(node, resolve) {
+            const { root, data } = node || {};
+            let uuid;
+            if (root) {
+                uuid = this.communityId;
+            } else {
+                uuid = data.uuid;
+            }
+            this.api({
+                url: '/community/houses/search',
+                method: 'get',
+                params: {
+                    parentUuid: uuid,
+                },
+            })
+                .then((list) => {
+                list = list.map((item) => {
+                    item.leaf = !item.isHasChild;
+                    return item;
+                });
+                // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+                resolve && resolve(list);
+            })
+                .catch((e) => console.warn(e));
+        },
+    }
+```
+
 
 
 ## 待研究的问题
 
 #### 表单验证，表单清空
-
-#### 联机查询，动态加载
-
-```vue
-<el-form-item prop="housesAddress" v-if="id==1">
-    <div class="block">
-        <el-cascader
-                     clearable
-                     :props="props"
-                     placeholder="请选择房间号"
-                     v-model="form.housesAddress"
-                     @change="handleChange"></el-cascader>
-    </div>
-</el-form-item>
-```
-
-```js
-props: {
-        lazy: true,
-        lazyLoad: this.lazyLoad
-      },
-```
-
-```js
- methods: {
-    //联机选择器回显
-    lazyLoad(node, resolve) {
-      let {value} = node
-      console.log("123123123",value)
-      this.api({
-        url:'community/houses/search',
-        method: 'get',
-        params:{
-          parentUuid:value
-        }
-      }).then(data=>{
-        let option = []
-        let obj = new Object()
-        data.forEach(val=>{
-          obj.label=val.name
-          obj.value=val.uuid
-          option.push(obj)
-        })
-        // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-        resolve(option)
-      }).catch(e=>{
-        this.$message.error(e)
-      })
-      /*let id= 0;
-      const { level } = node;
-      setTimeout(() => {
-        const nodes = Array.from({ length: level + 1 })
-            .map(item => ({
-              value: ++id,
-              label: `选项${id}`,
-              leaf: level >= 2
-            }));
-        // 通过调用resolve将子节点数据返回，通知组件数据加载完成
-        resolve(nodes);
-      }, 1000);*/
-    },
- }
-```
 
