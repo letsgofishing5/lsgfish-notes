@@ -758,5 +758,70 @@ data(){
 
 
 
+## 待研究的问题
 
+#### 表单验证，表单清空
+
+#### 联机查询，动态加载
+
+```vue
+<el-form-item prop="housesAddress" v-if="id==1">
+    <div class="block">
+        <el-cascader
+                     clearable
+                     :props="props"
+                     placeholder="请选择房间号"
+                     v-model="form.housesAddress"
+                     @change="handleChange"></el-cascader>
+    </div>
+</el-form-item>
+```
+
+```js
+props: {
+        lazy: true,
+        lazyLoad: this.lazyLoad
+      },
+```
+
+```js
+ methods: {
+    //联机选择器回显
+    lazyLoad(node, resolve) {
+      let {value} = node
+      console.log("123123123",value)
+      this.api({
+        url:'community/houses/search',
+        method: 'get',
+        params:{
+          parentUuid:value
+        }
+      }).then(data=>{
+        let option = []
+        let obj = new Object()
+        data.forEach(val=>{
+          obj.label=val.name
+          obj.value=val.uuid
+          option.push(obj)
+        })
+        // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+        resolve(option)
+      }).catch(e=>{
+        this.$message.error(e)
+      })
+      /*let id= 0;
+      const { level } = node;
+      setTimeout(() => {
+        const nodes = Array.from({ length: level + 1 })
+            .map(item => ({
+              value: ++id,
+              label: `选项${id}`,
+              leaf: level >= 2
+            }));
+        // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+        resolve(nodes);
+      }, 1000);*/
+    },
+ }
+```
 
