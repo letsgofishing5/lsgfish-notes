@@ -89,6 +89,14 @@ var y = array1.map(function(value,index){
 console.log(y);   //[11, 12, 13, 14, 15]   返回一个新的数组
 ```
 
+##### 判断类型是否是对象
+
+[推荐博客](https://blog.csdn.net/qq_39025670/article/details/110233270)
+
+```js
+val?.constructor === Object // true 代表为对象
+```
+
 
 
 ## VUE
@@ -484,7 +492,7 @@ this.communityId
 
 
 
-#### 点击当前行获取当前行信息
+#### 表格点击当前行获取当前行信息
 
 ```vue
 <template slot-scope="props">
@@ -761,15 +769,12 @@ data(){
 
 ```vue
 	<el-cascader
-             v-model="viewHousesUUID"
-             :props="props"
-             :show-all-levels="true"
-             :disabled="form.id"
-             :multiple="false"
-             :emitPath="true"
-             ref="cascader"
-             clearable
-    ></el-cascader>
+              clearable
+              :props="props"//动态加载，props是主要的
+              placeholder="请选择房间号"
+              v-model="form.housesUuid"
+              @change="handleChange"></el-cascader>
+        </div>
 ```
 
 ```js
@@ -781,8 +786,8 @@ data(){
                 uuid: null,
               },
             props: {
-                lazy: true,
-                lazyLoad: this.loadCommunities,
+                lazy: true,//开启动态加载，并通过lazyload来设置加载数据源的方法
+                lazyLoad: this.loadCommunities,//设置方法
                 value: 'uuid',
                 label: 'name',
             },
@@ -814,7 +819,9 @@ data(){
     methods: {
         loadCommunities(node, resolve) {
             const { root, data } = node || {};
-            let uuid;
+            //level: 0、loaded: true、loading: false、root: true，这是node在页面初次加载时拥有的属性和属性值。
+            //这时候root=true，data=undefined
+            let uuid;//这是请求参数
             if (root) {
                 uuid = this.communityId;
             } else {
@@ -829,7 +836,7 @@ data(){
             })
                 .then((list) => {
                 list = list.map((item) => {
-                    item.leaf = !item.isHasChild;
+                    item.leaf = !item.isHasChild;//item.isHasChild 是返回数据中的对象的属性名，他的值被取反用来判断是否加载子页面，false为加载，true为不加载。leaf 也是 item 下的一个属性名，他是用来判断是否加载子页面
                     return item;
                 });
                 // 通过调用resolve将子节点数据返回，通知组件数据加载完成
