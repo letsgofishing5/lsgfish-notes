@@ -101,6 +101,16 @@ val?.constructor === Object // true 代表为对象
 
 ## VUE
 
+#### 使用vue的ui界面构建项目
+
+```js
+npm i -g @vue/cli//执行失败，删除目录下的所有vue开头的文件，重新执行该命令
+vue -V
+vue ui//打开图形化界面
+```
+
+
+
 #### 导出export、export default和导入import
 
 ```js
@@ -508,6 +518,20 @@ this.communityId
 
 完成以上两步，即可。
 
+#### vue+element-ui之表格中如何插入图片链接
+
+```vue
+<el-table-column
+                 prop="picUrl"
+                 label="封面">
+    <template slot-scope="scope">//这里的插槽：slot-scope很关键呀
+<el-image
+          style="width: 100px; height: 100px"
+          :src="scope.row.picUrl"></el-image>
+    </template>
+</el-table-column>
+```
+
 
 
 #### 加载动画——蒙版
@@ -706,6 +730,40 @@ Element提供了两种调用Loading的方法：指令和服务。对于自定义
     <el-input type="age" v-model.number="numberValidateForm.age" autocomplete="off"></el-input>
 </el-form-item>
 ```
+
+#### 自定义表单验证
+
+```js
+data() {
+    const validateHouseUuids = (rule, value, callback) => {
+        if (this.radio==='1') {
+            if(value===null){
+                callback(new Error('请选择接收对象'));
+            } else {
+                callback();
+            }
+        } else {
+            callback();
+        }
+    };
+ return {
+     rules:{
+        houseUuids:[{
+            required:true,
+            validator:validateHouseUuids
+        }]
+     }
+   }
+}
+```
+
+#### 清除单个表单验证效果
+
+```js
+this.$refs['form'].clearValidate(['houseUuids']);//如果想要清除全部，则不填写clearValidate()括号内容即可
+```
+
+
 
 #### 设置elementUI中el-select的默认值
 

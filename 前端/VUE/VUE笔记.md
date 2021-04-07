@@ -607,7 +607,7 @@ uni-app+HBuilder
 2. 更新
 3. 死亡
 
-匿名函数直接使用=>函数，这样里面的this指向vm
+匿名函数直接使用=>函数，这样里面的this指向外层this
 
 1. beforeCreate：再创建vue后立即调用
 2. created：挂载前调用，
