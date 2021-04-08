@@ -246,3 +246,37 @@ cd existing_git_repo
 git remote add origin https://gitee.com/lets-go-fishing/dora-a-dream.git
 git push -u origin master
 ```
+
+### 问题
+
+```js
+$ git push origin  master
+To gitee.com:lets-go-fishing/markdown-notes.git
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to 'gitee.com:lets-go-fishing/markdown-notes.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+```
+
+1. 先将远程仓库修改pull
+
+   ```js
+   git checkout master
+   
+   git pull origin master
+   
+   git push -u origin master
+   ```
+
+2. 然后checkout出你的分支，假定叫AA
+
+   ```js
+   git checkout AA
+   
+   git merge master
+   ```
+
+   
