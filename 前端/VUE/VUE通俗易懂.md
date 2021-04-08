@@ -1,7 +1,7 @@
 ### 安装 vue/cli 
 
 ```js
-npm i -g @vue/cli//执行失败，删除目录下的所有vue开头的文件，重新执行该命令
+npm i -g @vue/cli//执行失败，删除目录下vue、vue.cmd、vue.ps1三个文件，重新执行该命令
 vue -V
 vue ui//打开图形化界面
 ```
