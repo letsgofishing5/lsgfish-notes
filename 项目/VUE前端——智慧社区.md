@@ -905,6 +905,50 @@ data(){
     }
 ```
 
+### Upload
+
+[推荐博客](https://blog.csdn.net/weixin_44356485/article/details/94183568)
+
+```vue
+
+<el-upload
+   class="upload-demo"
+   ref="uploadFile"//可以通过ref来使用element自带方法：clearFiles()删除图片
+   :on-change="beforeUpload"
+   :action="uploadUrl"
+   :headers="myHeader"
+   :on-remove="handleRemove"
+   :before-remove="beforeRemove"
+   :limit="1"
+   :auto-upload="false"
+   :on-exceed="handleExceed"
+>
+<el-button size="small" type="primary">选择文件</el-button>
+```
+
+```tex
+action: 是请求后端接口的路径 （必填的）
+
+header: 是配置请求头的 / 在此处带了token
+
+on-change: 文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
+
+on-remove: 是文件列表中移除文件时执行的
+
+before-remove: 删除文件之前执行的，可以用作提示用户二次确认删除
+
+limit: 是上传文件的个数
+
+auto-upload: 是控制是否自动上传的
+
+on-exceed: 上传文件个数超过限制的时候执行的
+```
+
+```js
+//删除图片
+this.$refs.upload.clearFiles();
+```
+
 
 
 ## 待研究的问题
