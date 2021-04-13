@@ -1,24 +1,10 @@
 # VUE
 
-> 网址：[VUE网址](https://vuejs.bootcss.com/guide/)
->
-> **MVVM模式**：:MVVM是前端视图层;的分层开发思想，主要是用来将每一个页面分成**M，V，VM**这三种组件。这三个组:件在前端开发中分工协作，分工明确。其中，**VM是MVVM的核心**，是因为VM是M和V之间的一个整体的**调度者**。VM该组件是为M、V进行服务的
+####  MVVM：
 
-#### el:挂载点
-
-> el（element）是用来设置Vue实例挂载（管理 ）的元素
-
-##### Vue实例的作用范围是什么？
-
-> Vue会管理el选项命中的元素及内部的**后代元素**
-
-##### 是否可以使用其他选择器？
-
-> 可以，但是建议使用**id选择器**
-
-##### 是否可以设置其他的DOM元素？
-
-> 可以，但不能使用**HTML**和**BODY**
+1. M：model（data）
+2. V：view
+3. VM：viewModel，包含DOM listener 和 Data Bindings（数据监听和数据绑定）
 
 #### data
 
@@ -310,7 +296,7 @@
 		<ul id="app">
 			<button type="button" @click="add">添加</button>
 			<button type="button" @click="remove">减少</button>
-			<li v-for="(item,index) in arr" :title="item">{{index+1}}={{item}}</li>
+			<li v-for="(item,index) in arr" :key="index" :title="item">{{index+1}}={{item}}</li>
 		</ul>
 		<script type="text/javascript">
 			var v=new Vue({
@@ -380,226 +366,7 @@
 		</script>
 ```
 
-#### 自定义事件分发
-
-$emit("自定义事件名","参数")
-
-## 组件
-
-> 将**item**和**label**属性进行绑定，组件再使用**props**绑定**label**属性即可
->
-> 这样就可以**自定义标签，进行值的操作**
-
-```html
-<div id="app">
-    <cth v-for="item in items" v-bind:label="item"></cth> 
-</div>
-<script type="text/javascript">
-    Vue.component("cth",{
-        props: ["label"],
-        template: "<li>{{label}}</li>"
-    })
-    var v=new Vue({
-        el: "#app",
-        data:{
-            items: ["java","linux","C"]
-        }
-
-    })
-</script>
-```
-
-#### 单文件组件
-
-##### 安装npm
-
-1. 安装npm，全称为Node Package Manager，是一个基于Node.js的包管理器，也是整个Node.js社区最流行、支持的第三方模块最多的包管理器
-
-2. 由于网络原因 安装 cnpm
-
-   1. npm install -g cnpm --registry=https://registry.npm.taobao.org
-
-3. 安装 vue-cli
-
-   1. cnpm install -g @vue/cli
-
-4. 安装webpack
-
-   1. cnpm install -g webpack
-   2. webpack 是 JavaScript 打包器（module bundler）
-
-5. 通过：vue ui 
-
-   可以启动一个图形化界面，
-
-6. 生成一个vue文件，里面有目录：
-
-   1. node_modules
-   2. pulic：打包之后，用于生产环境下的一个目录
-   3. src：开发的目录
-      1. assets
-      2. components：整个项目的组件目录
-      3. App.vue：项目的入口文件，完成对项目的引入工作
-      4. main.js
-   4. 一些文件
-
-##### 单文件组件格式
-
-```vue
-<template>
-模板或者试图区域
-</template>
-
-<script>
-    脚本区域
-</script>
-
-<style>
-    样式区域
-</style>
-
-```
-
-uni-app+HBuilder
-
-需要了解node知识，终端知识，npm知识
-
-
-
-#### 使用HBuilder结合uni-app开发
-
-1. 打开HBuilder，新建项目
-2. 选择uni-app，选择默认模板
-
-##### 介绍目录
-
-1. pages：用于存放业务页面文件
-   1. index
-2. static：用于存放静态资源文件
-   1. logo.png
-3. App.vue：用来配置整个应用的全局样式以及监听生命周期
-4. main.js：Vue初始化入口文件
-5. manifest.json：配置应用名称、appid、logo、版本等打包信息
-6. pages.json：配置页面路由、导航条、选项卡等页面类信息
-7. uni.scss
-8. new_file.txt
-
-## 网络通信-axios
-
-> 导入地址：
->
-> <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
->
-> <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
->
-> then方法中的回调函数会在请求成功时，触发第一个函数，失败触发第二个函数
-
-```javascript
-//	axios.get(地址).then(function(response){},function(error){});
-//	axios.post(地址,{key:value,key:value}).then(function(response){},function(error){});
-	
-<div id="app">
-    <div>
-    	{{info.name}}
-    </div>
-	<a v-bind:href="info.url">点击跳转百度网页</a>
-</div>
-<script type="text/javascript">
-    var vm = new Vue({
-        el: "#app",
-        data(){
-            return{
-                //请求返回的参数，必须和json字符串一样
-                info:{
-                    name:null,
-                    age:null,
-                    url:null
-                }
-            }
-        },
-        mounted(){//钩子函数链式编程
-            axios.get("data.json").then(response=>(this.info=response.data));
-        } 
-    })
-</script>
-//json 数据
-{
-	"url":"http://www.baidu.com",
-	"name":"成功",
-	"age":"23岁"
-}
-```
-
-### 计算属性-computed
-
-该属性，会将计算结果缓存起来，
-
-```html
-<div id="app">
-    <div>
-        {{test}}
-    </div>
-</div>
-<script type="text/javascript">
-    var vm = new Vue({
-        el: "#app",
-        computed:{
-            test: function(){
-                return Date.now();
-            }
-        }
-    })
-</script>
-```
-
 ## 尚硅谷
-
-#### 绑定监听
-
-```html
-<ul id="app">
-    <button type="button" @click="add(123,$event)">添加</button>
-</ul>
-<script type="text/javascript">
-    var v = new Vue({
-        el: "#app",
-        data: {
-            arr: ["地虎", "炎龙", "黑犀", "风鹰", "雪獒"]
-        },
-        methods: {
-            add(num,event) {//event
-                this.arr.push("未知");
-                alert(event.target.innerHTML)
-            },
-            remove: function() {
-                this.arr.shift();
-            }
-        }
-    })
-</script>
-```
-
-#### 阻止事件冒泡
-
-```html
-<div @click.stop="click">
-    
-</div>
-```
-
-#### 事件修饰符
-
-[官方文档：]([https://cn.vuejs.org/v2/guide/events.html#%E4%BA%8B%E4%BB%B6%E4%BF%AE%E9%A5%B0%E7%AC%A6](https://cn.vuejs.org/v2/guide/events.html#事件修饰符))
-
-#### 表单
-
-##### 提交表单
-
-@submit=”“
-
-##### 阻止事件默认行为
-
-.prevent
 
 #### 生命周期
 
@@ -613,56 +380,6 @@ uni-app+HBuilder
 2. created：挂载前调用，
 3. beforeMount：挂载替换挂载前调用
 4. mounted：
-
-#### 过渡与动画
-
-[官网地址：]([https://cn.vuejs.org/v2/guide/transitions.html#%E6%A6%82%E8%BF%B0](https://cn.vuejs.org/v2/guide/transitions.html#概述))
-
-#### 过滤器
-
-[官方地址：](https://cn.vuejs.org/v2/guide/filters.html)
-
-自定义过滤器：Vue.filter();
-
-#### 自定义指令
-
-##### 注册全局指令
-
-##### 注册局部指令
-
-```html
-<div id="app">
-    <p v-up-text="msg"></p>
-    <p v-lower-text="msg2"></p>
-</div>
-<script type="text/javascript">
-    //全局指令
-    Vue.directive("up-text",function(el,binding){
-        console.log(el,binding)
-        el.textContent=binding.value.toUpperCase()
-    })
-    new Vue({
-        el:"#app",
-        data:{
-            msg:"I love you~",
-            msg2:"I like You~"
-        },
-        //局部指令，只发生在当前VM中
-        directives:{
-            "lower-text":function(el,binding){
-                console.log(el,binding)
-                el.textContent=binding.value.toLowerCase()
-            }
-        }
-    })
-</script>
-```
-
-#### 插件
-
-##### 制作插件
-
-#### vue-cli
 
 #### 基于脚手架编写项目
 
@@ -680,17 +397,284 @@ uni-app+HBuilder
 2. components映射组件标签
 3. 使用组件标签
 
-#### 组件化编码
+### 组件通信
 
-1. 拆分
-2. 静态页面
-3. 动态
-   1. 初始化
-   2. 交互
+#### 子传父
 
-#### 组件通信
+##### $emit触发事件
+
+```js
+//子组件调用，get是触发事件，事件名自定义的，data是传过去的数据，
+function test(){
+	this.$emit('get',data)    
+}
+```
+
+```vue
+//父组件
+<template>
+  <div>
+ 	<pending-approve @get="pagination " v-if="key==1"></pending-approve>//使用子组件模板，声明自定义$emit需要的事件名：get,必须有@来声明，pagination是父组件方法
+  </div>
+</template>
+<script>
+export default {
+    methods: {
+      pagination(data){//data是子组件传来的值
+      this.listLoading = false;
+      const { pageNum, pageSize, total, list } = data;
+      this.listQuery.pageNum = pageNum;
+      this.listQuery.pageSize = pageSize || 10;
+      this.listQuery.page = pageNum;
+      this.listQuery.rows = pageSize;
+      this.listTotal = total || 0;
+      this.list = list || [];
+    }
+},
+</script>
+```
+
+##### $on与$emit
+
+该方法不常用
+
+```
+//父组件
+<child ref="test"/>
+mounted(){
+	this.$ref.test.$on("todo",()=>{
+		//绑定监听事件名，调用回调函数
+	})
+}
+```
+
+```vue
+//子组件
+methods:{
+	handle(){
+		$emit("todo")	
+	}
+}
+```
+
+####  父传子
+
+##### props
+
+父组件的属性值传入子组件
+
+```vue
+//父组件
+<template>
+  <div>
+    父组件:
+    <input type="text" v-model="name">
+    <br>
+    <br>
+    <!-- 引入子组件 -->
+    <child :inputName="name"></child>
+  </div>
+</template>
+<script>
+  import child from './child'
+  export default {
+    components: {
+      child
+    },
+    data () {
+      return {
+        name: ''
+      }
+    }
+  }
+</script>
+```
+
+```vue
+//子组件
+<template>
+  <div>
+    子组件:
+    <span>{{inputName}}</span>
+  </div>
+</template>
+<script>
+  export default {
+    // 接受父组件的值
+    props: {
+      inputName: String,//类型：Array,Boolean,Number,String,Object,Date,Function 
+      required: true
+    }
+  }
+</script>
+```
+
+[推荐博客](https://blog.csdn.net/lander_xiong/article/details/79018737)
+
+##### props路由传值
+
+首先我们要在需要获取参数：id 的页面这样写
+
+```js
+props:{
+    id:{
+    type:Number
+    }
+},
+```
+
+然后我们需要再路由注册中这样写
+
+```vue
+{
+    path: 'complaint',
+    name: 'workorder-complaint',
+    component: () => import(/* webpackChunkName: "page/personals" */'../views/workorder/components/repair'),
+    meta: {
+    icon: 'el-icon-document-checked',
+    	title: '投诉建议'
+    },
+//再路由注册中写上props属性，并声明id
+    props:{
+    	id:2
+    }
+}
+```
+
+#### 消息订阅与发布
+
+```js
+//第一步引入
+import PubSub from 'pubsub-js'
+//第二步,订阅消息
+PubSub.subscribe('msgname',(msg,index)=>{//第一个参数：msg没什么用，但是必须要写，他就相当于msgname，第二个是接收的参数
+    this.receive(index)
+})
+```
+
+```js
+//另外一个组件
+//第一步引入
+import PubSub from 'pubsub-js'
+//第二步，发布消息
+PubSub.publish('msgname',index)
+```
+
+#### slot通信
+
+此方式用于父组件向子组件传递`标签数据`
+
+```js
+//父组件，写模板和方法，将写好的模板，插入子组件，
+<input type='text' slot='checkAll'/>//通过slot属性赋值来达到插槽标记目的
+```
+
+```js
+//子组件，引入父组件插槽，使用name属性获取对应的插槽
+<slot name='checkAll'/>
+```
+
+#### .sync修饰符
+
+vue中我们经常会用v-bind(缩写为:)给子组件传入参数。
+或者我们会给子组件传入一个函数，子组件通过调用传入的函数来改变父组件的状态。
+
+```vue
+//父组件给子组件传入一个函数
+ <MyFooter :age="age" @setAge="(res)=> age = res">
+ </MyFooter>
+ //子组件通过调用这个函数来实现修改父组件的状态。
+ mounted () {
+      console.log(this.$emit('setAge',1234567));
+ }
+```
+
+这时子组件触发了父组件的修改函数使父组件的age修改成了1234567
+
+这种情况比较常见切写法比较复杂。于是我们引出今天的主角 .sync
+
+这时我们可以直接这样写
+
+```vue
+//父组件将age传给子组件并使用.sync修饰符。
+<MyFooter :age.sync="age">
+</MyFooter>
+//子组件触发事件
+ mounted () {
+    console.log(this.$emit('update:age',1234567));
+ }
+```
+
+这里注意我们的事件名称被换成了update:age
+update：是被固定的也就是vue为我们约定好的名称部分
+age是我们要修改的状态的名称，是我们手动配置的，与传入的状态名字对应起来
+
+这样就完成了，是不是感觉简单了很多。
+
+注意事项：
+这里我们必须在事件执行名称前加上update：的前缀才能正确触发事件。
 
 
+
+#### 非父子传值
+
+##### 事件总线
+
+1. 创建一个`bus.js`文件
+
+   ```js
+   //建立一个公共的js文件，专门用来传递消息
+   import Vue from 'vue'
+   export default new Vue
+   ```
+
+2. 在需要传递和引入消息的组件中引入
+
+   ```js
+   import bus from './bus.js'
+   ```
+
+3. 在需要传递消息的组件中自定义事件
+
+   ```js
+   bus.$emit('props','msg')//$emit用来自定义事件，props是属性名，msg是需要传递的消息
+   ```
+
+4. 在需要引入消息的组件中，监听事件
+
+   ```js
+   bus.$on('props',(val)=>{//$on用来监听事件
+       console.log(val)
+   })
+   ```
+
+##### $attrs、$listeners
+
+```js
+//用来解决多组件之间的传值问题
+首先在最外层统一传值，然后在需要接收值的组件A，而这需要在组件A的父组件上绑定：v-bind="$atters"，记住，只能是v-bind，不能是简写。然后在子组件中获取父组件中的值：this.$atters
+```
+
+```vue
+//APP
+<h2 :msg="sendMsg"></h2>
+
+```
+
+```vue
+//Parent
+<h2 v-bind="$atters">
+    
+</h2>
+```
+
+```vue
+//Children
+const atters = this.$atters
+console.log(atters)
+```
+
+### 
 
 ### 每日知识点回顾
 
@@ -705,20 +689,6 @@ uni-app+HBuilder
 4. computed是用来计算属性值的，被**computed**包裹的变量，不可再次使用**data**进行声明
 5. computed内get、set方法，分别在对应内容发生改变时调用，和在自身内容发生改变时调用。并更新相关数据
 6. 监听：watch，使用回调函数，包含了两个参数，一个newVal，一个oldVal
-7. 
-
-#### 问题
-
-1.  filter过滤： p => p.name
-
-2. ```html
-   add(event) {
-       this.arr.push("未知");
-       alert(event.target.innerHTML)
-   },
-   ```
-
-3. 
 
 ## 温故而知新
 
@@ -1107,14 +1077,6 @@ $route.params.id
    ```
 
    
-
-
-
-npm install -g vue-cli
-vue init webpack vue_ demo
-cd vue_ derno
-npm install
-npm run dev
 
 ### 问题
 
