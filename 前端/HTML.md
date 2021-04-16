@@ -1000,7 +1000,40 @@ transform-origin: x y;
 transform:translate() rotate() scale();
 ```
 
-#### 3D动画
+#### 3D
+
+##### perspective透视
+
+透视效果，需要写在父盒子上面，单位px，数值越小效果越明显
+
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.one{
+				perspective: 200px;
+			}
+			img{
+				transform: rotateY(20deg);
+				transform: rotateX(30deg);
+			}
+		</style>
+		
+	</head>
+	<body>
+		<div class="one">
+			<img src="https://p3.ssl.qhimgs0.com/dr/200_200_60/t018f65e703ff111af8.jpg" >
+		</div>
+		
+	</body>
+</html>
+
+```
+
+#### 动画
 
 ##### 一套连招带走
 
@@ -1017,7 +1050,6 @@ transform:translate() rotate() scale();
     }
 }
 div{
-
     /* 调用动画 */
     animation-name: move;
     /* 动画时间 */
