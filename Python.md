@@ -86,3 +86,175 @@ for i in range(1,10,3):
 #打印1-10的数字，以三为间隔打印
 ```
 
+### while循环
+
+```python
+count = 10
+while count<5:
+    print(count,"小于5")
+    count += 1
+else:
+    print(count,"大于或者等于5")
+```
+
+### break、continue、pass语句
+
+1. break语句可以跳出 for和while的循环体
+2. continue语句跳过当前循环，直接进行下一轮循环
+3. pass是空语句，一般用做占位语句，不做任何事情
+
+### 字符串
+
+#### 单引号
+
+```python
+z = '\'单引号'
+print(z)
+```
+
+####  双引号
+
+```python
+x = "双引号"
+print(x)
+```
+
+#### 三引号
+
+```python
+y = """
+		三引号
+		"""
+print(y)
+```
+
+#### 方法
+
+##### 截取
+
+```python
+str = 'hello python'
+print(str)
+print(str[0:5])#[起始位置:结束位置:进步值]
+print(str[0:8:2])
+print(str[:5])#0~5
+print(str[5:])#5~最后
+```
+
+##### 取消转义
+
+```python
+print(r"hello \n python")#以r开头，引号类的所有类容都会获取，不会进行转义处理
+```
+
+##### 字符串重复打印
+
+```python
+print("hello "*3)#hello hello hello
+```
+
+### 列表
+
+列表可以完成大多数集合类的数据结构实现。
+
+列表中元素的类型可以不相同，它支持数字，字符串甚至可以包含列表（所谓嵌套）。
+
+列表是写在方括号门之间、用逗号分隔开的元素列表。列表索引值以О为开始值，-1为从末尾的开始位置
+
+列表可以使用+操作符进行拼接，使用*表示重复。
+
+```python
+nameList = ["张三","李四","王二麻"]
+print(nameList[0])
+
+testList = [1,"haha"]#列表 可以存储混合类型
+print(type(testList[0]))#查看类型
+print(type(testList[1]))
+```
+
+#### 常用方法
+
+##### 追加append
+
+```python
+a = [1,2]
+a.append(3)
+```
+
+##### 逐一追加extend
+
+```python
+a = [1,2]
+b = [3,4]
+a.append(b)#[1,2,[3,4]]
+a.extend(b)#[1.2,3,4]
+```
+
+##### 插入insert
+
+```python
+a = [1,2,3]
+a.insert(1,3)#1是插入下标的位置，3是插入的元素
+print(a)
+```
+
+##### 删除del、pop、remove
+
+```python
+a = [1,2,3,4]
+del a[2]#删除下标为2的元素
+print(a)
+
+b = [1,2,3,4,5]
+b.pop()#删除末尾的一个元素
+
+c = ["张三","李四","王五"]
+c.remove("张三")#删除指定内容的元素
+print(c)
+```
+
+##### 修改
+
+指定下标重新赋值
+
+```python
+a = [1,2,3,4,5]
+a[1] = 10
+print(a)
+```
+
+##### 查找【in，not in】
+
+```python
+findName = input("请输入你要寻找的姓名：")
+nameList  = ["张三","李四"]
+if findName in nameList:
+    print("找到了相同的名字")
+else:
+    print("没有找到")
+```
+
+##### 查找返回下标 index
+
+```python
+a = [1,2,3,4,5,6,7,8]
+print(a.index(1,2,4))#第一个位置是查找的元素，第二、三个是查询的范围，左闭右开，找不到会报错
+```
+
+##### 查询列表中出现的次数
+
+```python
+a = [1,2,3,4,5,6,7,8]
+print(a.count(1))#返回1这个元素在列表中出现的次数
+```
+
+##### 排序
+
+```python
+a = [2,7,4,3,6,2,3]
+a.sort()#升序
+a.sort(reserve=True)#降序排列
+```
+
+
+
