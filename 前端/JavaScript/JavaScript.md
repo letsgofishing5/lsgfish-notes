@@ -144,7 +144,7 @@
 > 3）以构造函数的形式调用时，this是新创建的那个对象
 > 4）使用 call 和 apply 调用时，this是指定的那个对象
 
-### 构造函数
+#### 构造函数
 
 ```js
 function Person(name){
@@ -158,9 +158,67 @@ var p = new Person();
 //4.将新建的对象作为返回值返回
 ```
 
+####  原型
+
+只要是对象 就有 原型
+
+Object对象的原型没有 原型，如果在Object中依然 没有找到，则返回 undefined
+
+####  对象
+
+```js
+function Person(name,age){
+    this.name=name,
+    this.age=age
+}
+let p =  new Person("张三",23)
+console.log(p)//[object,object]
+//当我们直接在页面打印一个对象时，实际上输出的是对象的toString()方法的返回值，解决方法：重写toString()方法
+Person.prototype.toString=function(){
+    return this.name+this.age
+}
+```
+
+##### 可选链——?.
+
+```js
+let user = {}; // 一个没有 "address" 属性的 user 对象
+
+alert(user.address.street); // Error!
+```
+
+```js
+//如果可选链 ?. 前面的部分是 undefined 或者 null，它会停止运算并返回该部分。
+let user = {}; // user 没有 address 属性
+
+alert( user?.address?.street ); // undefined（不报错）
+```
+
+注意：
+
+1. 不要过度使用可选链
+
+2. `?.`前的变量必须已声明
+
+3. 我们可以使用 `?.` 来安全地读取或删除，但不能写入
+
+   ```js
+   delete user?.name; // 如果 user 存在，则删除 user.name
+   let user = null;
+   
+   user?.name = "John"; // Error，不起作用
+   // 因为它在计算的是 undefined = "John"
+   ```
+
 
 
 #### 数组（Array）
+
+数组也是对象
+
+##### Array.from
+
+将一个类数组转换成一个真正的数组
 
 ##### 声明数组：
 
@@ -188,7 +246,7 @@ var p = new Person();
 
 #### call 与 apply
 
-这两个方法都是函数对象的方法，需要通过函数来调用，当函数调用call() 和 apply() 都会调用函数执行
+这两个方法都是**函数对象的方法**，需要通过函数来调用，当函数调用call() 和 apply() 都会调用函数执行
 
 ```js
 function fun(){
@@ -201,12 +259,12 @@ var obj = {
 fun.apply();
 fun.call();
 fun();
-//这三个效果都是一样的，但是call与apply，他们可以通过第一个参数，来指定对象
+//这三个效果都是一样的，但是call与apply，他们可以通过第一个参数，来指定this对象是谁
 fun.call();//[object window]
 fun.call(obj)//[object object]
 //this的指向发生变化
 
-//call()方法可以将实参在对象之后一次传递
+//call()方法可以将实参在对象之后一次传递	
 function t(a,b){
     console.log("a="+a);
     console.log("b="+b);
@@ -257,6 +315,8 @@ Math.random()*10，生成一个0~10之间的数字，不为0,10
 > 3）Math.random（）；生成一个0-1之间的随机数，生成一个0-X之间的的数，则Math.random()*X
 
 #### 包装类
+
+可以通过包装类将基本数据类型转换成对象，
 
 > String
 >
