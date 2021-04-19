@@ -256,5 +256,111 @@ a.sort()#升序
 a.sort(reserve=True)#降序排列
 ```
 
+### 元组 tuple
 
+```python
+tup = (1,)#声明一个元组
+print(type(tup))
+
+tup = (1,2,3,4,5,6)
+print(tup[0])
+```
+
+##### 增
+
+```python
+tup1 = (1,)
+tup2 = (2,)
+tup = tup1+tup2
+print(tup)
+```
+
+##### 删除
+
+```python
+tup1 = (1,2,3,4)
+del tup1 #直接删除了tup1，整个元组
+```
+
+#### 字典 dict
+
+1. 字典是无序的对象集合，使用键-值( key-value )存储，具有极快的查找速度。
+2. 键(key)必须使用不可变类型。
+3. 同一个字典中，键(key)必须是唯一的。
+
+```python
+info = {"name":"张三丰","age":123}
+print(info["age"])
+print(info.get("name"))#如果键不存在，返回None
+print(info.get("name","默认值"))#如果键不存在，返回：默认值
+```
+
+##### 增
+
+```python
+info = {"name":"张三丰"}
+info["age"]=23
+```
+
+##### 删
+
+```python
+del info["name"] #删除键值对
+
+info.clear() #清空
+```
+
+##### 查
+
+```python
+info.keys() #获取所有key
+info.values() #获取所有的value 
+info.items() #获取所有项，每一键值对都是一个元组
+```
+
+#### 数据类型总结
+
+|           | 是否有序 | 是否可变类型       |
+| --------- | -------- | ------------------ |
+| 列表   [] | 有       | 可变类型           |
+| 元组（）  | 有       | 不可变类型         |
+| 字典  {}  | 无       | key不可变，val可变 |
+| 集合  {}  | 无       | 可变类型（不重复） |
+
+### 函数
+
+#### 定义函数
+
+```python
+def 函数名():
+    代码
+```
+
+#### Demo
+
+```python
+def fun():
+    print("hello python")
+    
+fun()
+```
+
+##### 带参函数
+
+```python
+def add(a,b):
+    print(a)
+    return a+b
+```
+
+##### 返回多个值的函数
+
+```python
+def divid(a,b):
+    shang =  a//b
+    yushu = a%b
+    return shang,yushu #返回多个值
+
+sh,yu =  divid(11,12) #接收多个值
+```
 

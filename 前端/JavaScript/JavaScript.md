@@ -210,6 +210,21 @@ alert( user?.address?.street ); // undefined（不报错）
    // 因为它在计算的是 undefined = "John"
    ```
 
+#### Map与Set
+
+1. [Map](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Map) 是一个带键的数据项的集合，就像一个 `Object` 一样。 但是它们最大的差别是 `Map` 允许任何类型的键（key）。
+2. 每一次 `map.set` 调用都会返回 map 本身，所以我们可以进行“链式”调用
+3. 可以使用`forEach`、`for……of`遍历
+4. Map与Set的entries()方法都会遍历并返回所有实体
+
+##### 总结
+
+```js
+set.entries()、map.entries()、array.entries()他们的目的都是返回所有的实体，而返回的实体的数据结构都符合Map，只要通过new Map(set.entries())即可获取Map类型数据，
+返回0: {key => val} 数据结构
+包括Object.entries()也是如此，但是Object.entries()返回一个包含该对象所有 [key, value] 键值对的数组。
+```
+
 
 
 #### 数组（Array）
@@ -316,7 +331,7 @@ Math.random()*10，生成一个0~10之间的数字，不为0,10
 
 #### 包装类
 
-可以通过包装类将基本数据类型转换成对象，
+可以通过包装类**将基本数据类型转换成对象**，
 
 > String
 >
