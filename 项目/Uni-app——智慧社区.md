@@ -206,5 +206,27 @@ Vue.prototype.formateTime=formatTime
 在script中 this.formatTime(this.time,“hh:mm:ss”)
 ```
 
+### 字体图标
 
+[推荐博客，uni-icons中添加自定义图标](https://blog.csdn.net/qq_42514643/article/details/106025226)
+
+[推荐博客](https://blog.csdn.net/rfalcon/article/details/109009648?)
+
+#### uni app 引入阿里icon
+
+https://www.iconfont.cn/
+
+下载所需的icon后，解压，点击demo.html查看使用详情
+
+记得引入到全局或者局部组件中
+
+```html
+//这是全局引用，在App.vue中引入
+<style>
+	/*每个页面公共css */
+	@import "plug/colorui/icon.css";
+	@import "plug/colorui/main.css";
+	@import "common/iconfont.css";
+</style>
+```
 
