@@ -364,3 +364,44 @@ def divid(a,b):
 sh,yu =  divid(11,12) #接收多个值
 ```
 
+### 文件操作
+
+Python打开或者创建一个新的文件
+
+```python
+f = open('test.txt','w') #w:打开
+
+#关闭文件
+f.close()
+```
+
+### 捕获异常
+
+```python
+try:
+    print("异常发生了，进行捕获")
+except IOError:#捕获的异常需要一致
+    pass
+
+try:
+    print("异常发生了，进行捕获")
+except (IOError,NameError):#捕获的异常需要一致
+    pass
+
+try:
+    print("异常发生了，进行捕获")
+except (IOError,NameError) as result:#捕获的异常需要一致
+    pass
+	print(result)
+    
+try:
+    print("异常发生了，进行捕获")
+except Exception as result:#捕获所有的异常
+    pass
+	print(result)
+    
+    
+```
+
+### 爬虫
+
