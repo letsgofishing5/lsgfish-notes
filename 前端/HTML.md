@@ -364,7 +364,7 @@ text-shadow: 10px 10px 2px gray;
 
 ##### 浮动存在的问题
 
-1. 父元素没有设置高度时，子元素设置浮动，这是父元素则没有高度
+1. 父元素没有设置高度时，子元素设置浮动，这时父元素则没有高度
 
 ##### 清除浮动本质
 
@@ -725,6 +725,20 @@ display:block;
    /*3.文字用省略号替代超出的部分*/
    text-overflow: ellipsis;
    ```
+
+###### 取消滚动条
+
+```css
+.div{
+  overflow: auto
+}
+ 
+.div::-webkit-scrollbar{
+    display: none;
+}
+```
+
+
 
 #### 多行文本溢出省显示略号
 
