@@ -1,6 +1,26 @@
 #  JavaScript
 
+JavaScript宝藏级别的资源：https://zh.javascript.info/
+
 ### 常见知识点
+
+##### 严格模式
+
+```js
+"use strict"//放在第一行
+```
+
+```html
+<script type="module">
+    function f2(){
+        console.log(this)//严格模式下是undefined，非严格模式下是Window
+        console.log(arguments)
+    }
+    f2(1)
+</script>
+```
+
+
 
 ##### 标识符
 
@@ -511,7 +531,7 @@ reg.test("abc");//false
 
 #### forEach使用
 
-forEach() 方法对数组的每个元素执行一次提供的函数。总是返回undefined；
+forEach() 方法对**数组**的每个元素执行一次提供的函数。总是返回undefined；
 
 forEach方法中的function回调有三个参数：
 第一个参数是遍历的数组内容，
@@ -537,15 +557,22 @@ arr.forEach(function(value,index,array){
 console.log(sum); //结果为 10
 ```
 
+#### 闭包
+
+1. JavaScript 中的所有函数都是闭包的
+
 ### ES6
 
 #### 箭头函数
 
-[推荐博客](https://blog.csdn.net/u012149969/article/details/80261081?ops_request_misc=&request_id=&biz_id=102&utm_term=ES6%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-5-80261081.pc_search_result_before_js)
+1. 箭头函数没有this，箭头函数中声明的this是包裹箭头函数的this
+2. 箭头函数也没有 `arguments` 变量。
+
+[推荐博客](https://blog.csdn.net/u012149969/article/details/80261081?)
 
 #### fetch
 
-[推荐博客](https://blog.csdn.net/qq_36754767/article/details/89645041?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522161495369716780266263445%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=161495369716780266263445&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-89645041.pc_search_result_before_js&utm_term=fetch)
+[推荐博客](https://blog.csdn.net/qq_36754767/article/details/89645041?)
 
 ### VUE
 
