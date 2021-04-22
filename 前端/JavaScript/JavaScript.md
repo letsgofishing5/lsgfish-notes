@@ -133,7 +133,7 @@ JavaScript宝藏级别的资源：https://zh.javascript.info/
 >
 > for...in，取出来的是下标
 >
-> for...of，取出来的是内容
+> for...of，取出来的是内容，不可遍历普通的对象
 
 ####  作用域
 
@@ -230,6 +230,37 @@ alert( user?.address?.street ); // undefined（不报错）
    // 因为它在计算的是 undefined = "John"
    ```
 
+#### Object.entries()、Object.keys()、Object.values()
+
+```js
+set.entries()、map.entries()、array.entries()他们的目的都是返回所有的实体，而obj.entries()返回的实体的数据结构都符合Map，只要通过new Map(obj.entries())即可获取Map类型数据，
+返回0: {key => val} 数据结构
+包括Object.entries()也是如此，但是Object.entries()返回一个包含该对象所有 [key, value] 键值对的类数组，可以通过Array.from()来变成真正的数组。
+也可以通过如下：Object.fromEntries()获取一个对象类型数据
+let obj = Object.fromEntries(map.entries()); // 创建一个普通对象（plain object）(*)
+
+// 完成了！
+// obj = { banana: 1, orange: 2, meat: 4 }
+
+```
+
+##### Object.entries()遍历
+
+```js
+for(let [key,value] of Object.entries(obj)){ //这里是解构赋值
+    console.log(key,value)
+}
+
+let map = new Map();
+map.set(1,"暂时")
+map.set(66,"暂的时")
+for(let [key,value] of map){ //这里是解构赋值
+    console.log(key,value)
+}
+```
+
+
+
 #### Map与Set
 
 1. [Map](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Map) 是一个带键的数据项的集合，就像一个 `Object` 一样。 但是它们最大的差别是 `Map` 允许任何类型的键（key）。
@@ -240,9 +271,14 @@ alert( user?.address?.street ); // undefined（不报错）
 ##### 总结
 
 ```js
-set.entries()、map.entries()、array.entries()他们的目的都是返回所有的实体，而返回的实体的数据结构都符合Map，只要通过new Map(set.entries())即可获取Map类型数据，
+set.entries()、map.entries()、array.entries()他们的目的都是返回所有的实体，而obj.entries()返回的实体的数据结构都符合Map，只要通过new Map(obj.entries())即可获取Map类型数据，
 返回0: {key => val} 数据结构
-包括Object.entries()也是如此，但是Object.entries()返回一个包含该对象所有 [key, value] 键值对的数组。
+包括Object.entries()也是如此，但是Object.entries()返回一个包含该对象所有 [key, value] 键值对的类数组，可以通过Array.from()来变成真正的数组。
+也可以通过如下：Object.fromEntries()获取一个对象类型数据
+let obj = Object.fromEntries(map.entries()); // 创建一个普通对象（plain object）(*)
+
+// 完成了！
+// obj = { banana: 1, orange: 2, meat: 4 }
 ```
 
 
@@ -426,15 +462,15 @@ reg.test("abc");//false
 
 1. document.getElementById()
 
-   通过id属性获取一个元素节点
+   通过**id属性**获取一个元素节点
 
 2. document.getElementsByTagName()
 
-   通过标签名获取**一组**元素节点
+   通过**标签名**获取**一组**元素节点
 
 3. document.getElementsByName()
 
-   通过name属性获取**一组**元素节点对象
+   通过**name属性**获取**一组**元素节点对象
 
 ##### 操作元素
 
