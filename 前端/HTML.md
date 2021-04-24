@@ -146,11 +146,61 @@ CTRL+0，恢复浏览器大小
 
 HBuilder使用：CTRL+K
 
+### 选择器
+
 #### 复合选择器
+
+3. div,p，并集选择器
+2. div.class，交集选择器，要同时满足div与.class两个条件
+
+#### 关系选择器
 
 1. ol li，后代选择器
 2. ol>li，子选择器
-3. div,p，并集选择器
+3. .one + .two，兄弟选择器，前后关系，一个兄弟
+4. .one ~ .two，选择后边的所有兄弟
+
+#### 属性选择器
+
+1. `div[title]`，选中所有 `p `元素中有` title `属性的 
+2. `[title="one"]`，选中属性名`title="one" `的元素
+3. `[title^="one"]`，选中属性名`title`以`one`开头的元素
+4. `[title$="one"]`，选中属性名`title`以`one`结尾的元素
+5. `[title*="one"]`，选中属性名`title`有`one`的元素
+
+#### 伪类选择器
+
+伪类 ，即不存在的类，特殊的类，一般情况下都是使用`:`开头 
+
+```html
+<div>
+    <div class="one">第一个子元素</div>
+    <div class="one"></div>
+    <div class="one"></div>
+</div>
+```
+
+
+
+```css
+.one:first-child{
+    选中.one类的第一个子元素
+}
+.one:last-child{
+    选中.one类的最后一个子元素
+}
+.one:nth-child(1){
+    选中.one类的第一个子元素
+}
+特殊值 ：
+	n第n个 n的范围e到正无穷
+	2n或even表示选中偶数位的元素
+	2n+1或odd表示选中奇数位的元素
+```
+
+
+
+
 
 #### 链接伪类选择器
 

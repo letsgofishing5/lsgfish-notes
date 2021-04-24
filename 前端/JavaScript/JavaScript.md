@@ -431,6 +431,8 @@ reg.test("abc");//false
 
 #### DOM对象
 
+DOM对象是Window对象的一部分
+
 1. DOM，全称Document Object Model文档对象模型。
 2. JS中通过DOM来对HTML文档进行操作。只要理解了DOM就可以随心所欲的操作WEB页面。
 3. 文档-
@@ -504,15 +506,18 @@ reg.test("abc");//false
    alert(b.offsetLeft)//计算元素偏移量
    ```
 
-   
 
-#### 取消事件冒泡
+##### 取消事件冒泡
 
 > event.cancelBulle=true；如此设置即可取消事件冒泡
 > 事件绑定
 > 	div.addEventListener("click",function(){})
 > 取消事件（null）
 > document.mousemove=null；取消鼠标移动事件
+
+#### BOM对象
+
+
 
 #### 定时器
 
