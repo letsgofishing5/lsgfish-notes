@@ -291,6 +291,18 @@ let obj = Object.fromEntries(map.entries()); // 创建一个普通对象（plain
 
 将一个类数组转换成一个真正的数组
 
+##### arr.map
+
+通过return返回结果，参数：（index，value，array）
+
+##### arr.forEach
+
+参数：（index，value，array）
+
+##### arr.filter
+
+参数：（index，value，array）
+
 ##### 声明数组：
 
 > 1）var arr = new Array(10)；声明数组，数组长度为10
