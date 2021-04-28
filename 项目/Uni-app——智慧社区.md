@@ -230,3 +230,22 @@ https://www.iconfont.cn/
 </style>
 ```
 
+### uni app
+
+#### 下拉刷新
+
+page.json中设置："enablePullDownRefresh"：true
+
+开启下拉刷新功能
+
+使用页面生命周期：onPullDownRefresh
+
+#### 页面上拉触底
+
+page.json中设置："onReachBottomDistance"："50"
+
+默认值：50
+
+开启上拉触底距离
+
+使用页面生命周期：onReachBottom
