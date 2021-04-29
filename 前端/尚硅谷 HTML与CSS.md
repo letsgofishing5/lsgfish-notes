@@ -341,3 +341,101 @@ after生成的元素时行内元素，需要设置成块级元素
    1. 固定定位永远参照于浏览器的视口进行定位
 5. sticky开启元素的粘滞定位
 
+#### 文本对齐
+
+1. text-align:center；水平居中
+2. vertical-align:middle；垂直居中
+
+##### 图片布局
+
+img布局时，会沿着自己的基线对齐，导致下边框有空隙，解决办法：vertical:top/bottom
+
+##### 文本常用属性
+
+```css
+text-decoration:underline/line-through/overline
+下划线/删除线/上划线
+
+white-space设置网页如何处理空白
+	可选值：
+		1.normal：正常
+		2.nowrap：不换行
+		3.pre：保留空白，预处理格式
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;//溢出的内容设置成省略号
+```
+
+### 背景
+
+```css
+设置背景的范围
+background-clip
+可选值:
+border-box默认值，背景会出现在边框的下边
+padding-box背景不会出现在边框，只出现在内容区和内边距content-box背景只会出现在内容区
+```
+
+```css
+background-origin背景图片的偏移量计算的原点
+padding-box默认值，background-position从内边距处开始计算content-box背景图片的偏移量从内容区处计算
+border-box背景图片的变量从边框处开始计算
+```
+
+```css
+background-size设置背景图片的大小
+第一个值表示宽度
+第二个值表示高度
+-如果只写一个，则第二个值默认是 auto
+cover图片的比例不变，将元素铺满
+contain图片比例不变，将图片在元素中完整显示
+```
+
+如果是简写形式，没有顺序，但是`background-size`一定要写到`background-position`后面，用斜杠隔开
+
+```css
+background:url() red center center/contain  no-repeat;
+```
+
+`background-origin`和`background-clip`，`origin`在前，`clip`在后
+
+```css
+background:url() red origin clip;
+```
+
+#### 线性渐变
+
+线性渐变，颜色沿着一条直线发生变化 
+
+`linear- gradient()`
+
+`linear-gradient(red,yellow)`红色在开头，黄色在结尾，中间是过渡区域
+
+线性渐变的开头，我们可以指定一一个渐变的方向
+
+1. `to left`
+2. `to right`
+3. `to bottom`
+4. `to top`
+5. `deg` ` deg`表示度数
+6. `.5turn`
+   表示圈
+
+#### 径向渐变
+
+语法:
+`radial-gradient(大小 at 位置，颜色 位置,颜色  位置,颜色 位置)`
+大小:
+
+1. circle 圆形
+2. ellipse  椭圆
+3. closest-side近边
+4. closest-corner近角
+5. farthest-side远边
+6. farthest-corner远角
+
+位置
+`top right left center bottom !`
+
+### 表格 
+
