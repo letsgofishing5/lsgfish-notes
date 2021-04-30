@@ -228,10 +228,6 @@ Vue.prototype.formateTime=formatTime
 
 ### 字体图标
 
-[推荐博客，uni-icons中添加自定义图标](https://blog.csdn.net/qq_42514643/article/details/106025226)
-
-[推荐博客](https://blog.csdn.net/rfalcon/article/details/109009648?)
-
 #### uni app 引入阿里icon
 
 https://www.iconfont.cn/
@@ -249,6 +245,26 @@ https://www.iconfont.cn/
 	@import "common/iconfont.css";
 </style>
 ```
+
+#### 使用阿里图标字体库
+
+##### 1.选择字体图标
+
+地址：https://www.iconfont.cn/
+
+<img src="Uni-app——智慧社区/image-20210430143726685.png" alt="image-20210430143726685"  />
+
+<img src="Uni-app——智慧社区/image-20210430144343966.png" alt="image-20210430144343966"  />
+
+<img src="Uni-app——智慧社区/image-20210430145112740.png" alt="image-20210430145112740"  />
+
+<img src="Uni-app——智慧社区/image-20210430152722007.png" alt="image-20210430152722007"  />
+
+<img src="Uni-app——智慧社区/image-20210430152916131.png" alt="image-20210430152916131"  />
+
+<img src="Uni-app——智慧社区/image-20210430153254004.png" alt="image-20210430153254004"  />
+
+
 
 ### uni app
 
