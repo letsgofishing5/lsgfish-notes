@@ -222,10 +222,11 @@ L：亮度，颜色的亮度（0%-100%）
 
 #### 行内元素盒模型
 
-1. 行内元素不支持设置 宽高
-2. 行内元素可以设置padding，但是垂直方向padding不影响页面的布局
-3. 行内元素可以设置border，垂直方向的border不会影响页面的布局
-4. 可以设置margin，垂直方向margin不会影响布局
+1. 行内元素**不支持设置宽高**
+2. 行内元素的margin只对水平方向有用，
+3. 行内元素可以设置padding，但是垂直方向padding不影响页面的布局
+4. 行内元素可以设置border，垂直方向的border不会影响页面的布局
+5. 可以设置margin，垂直方向margin不会影响布局
 
 display用来设置元素显示的类型
 
@@ -375,6 +376,14 @@ overflow:hidden;
 text-overflow:ellipsis;//溢出的内容设置成省略号
 ```
 
+#### 元素层级
+
+z-index
+
+如果元素的层级一样，则优先显示靠下的元素
+
+祖先的元素的层级再高也不会盖住后代元素
+
 ### 背景
 
 ```css
@@ -446,14 +455,107 @@ background:url() red origin clip;
 位置
 `top right left center bottom !`
 
-### 表格 
+### 表格
 
-=======
-#### 元素层级
+可以将一个表格分成三个部分:
 
-z-index
+1. 头部thead
+2. 主体tbody
+3. 底部tfoot
 
-如果元素的层级一样，则优先显示靠下的元素
+```html
+<table>
+    <thead>
+    	<tr>
+        	<td>头部</td>
+        </tr>
+    </thead>
+    <tbody>
+    	<tr><td>身体</td></tr>
+    </tbody>
+    <tfoot>
+    	<tr><td>底部</td></tr>
+    </tfoot>
+</table>
+```
 
-祖先的元素的层级再高也不会盖住后代元素
->>>>>>> fc2d2cc2fb9db168bcafcb4a72c55556d7f7bb52
+##### 边框
+
+1. border-spacing：指定边框之间的距离
+2. border-collapse：collapse；设置边框合并
+
+两个属性可以达到同样的表现效果
+
+如果表格中没有使用tbody而是直接使用tr, 那么浏览器会自动创建一个tbody, 并且将tr全都放到tbody中，所以tr不是table的子元素
+
+##### 表格中的td
+
+表格中的`td`默认是垂直居中的，`td`内部的元素都是被默认垂直居中
+
+```css
+td{
+    /*默认情况下，元素在td中是垂直居中的，可以通过vertical-align来设置*/
+    vertical-align:top;
+}
+div:{
+    display:table-cell;//将元素设置为单元格 td，
+    vertical-align：middle;设置垂直居中
+}
+```
+
+### 表单
+
+```html
+<form action="地址">
+    <input type="text"/>
+    <input type="submit"/>
+</form>
+```
+
+##### 数据提交
+
+表单的数据提交，必须要为元素指定一个`name`属性值
+
+```html
+<form action="地址">
+    <input type="text" name="name"/>
+    <input type="submit"/>
+</form>
+```
+
+##### 单选按钮
+
+单选按钮必须要设置相同的name属性，才能达到单选的效果
+
+##### 多选框checkbox
+
+多选框`name`属性要相同，值`value`不同
+
+```html
+<input type="text" name="more" value="1"/>
+<input type="text" name="more" value="2"/>
+<input type="text" name="more" value="3"/>
+<input type="text" name="more" value="4"/>
+```
+
+##### 下拉列表
+
+```html
+<select name="xz">
+    <option value="1">选项1</option>
+    <option value="2" selected>选项2</option>
+    <option value="3">选项3</option>
+</select>
+```
+
+#### 表单补充
+
+```html
+<input type="text" autocomplete="off"/>关闭自动补全，可以写在form中，form中的input都会遵守该属性
+<input type="text" readonly/>表单设置为只读，数据会被提交
+<input type="text" disabled/>设置为禁用，数据不会被提交
+<input type="text" autofocus/>获取焦点
+```
+
+
+
