@@ -111,7 +111,7 @@ a: active	选择活动链接(鼠标按下未弹起的链接)
 ```css
 p::first-letter 表示第一个字母
 P::first-line 表示第一行
-P::selectino 表示选中的内容
+P::selection 表示选中的内容
 P::before 元素的开始
 p::after 元素的最后
 	before和after必须结合content属性来使用
@@ -163,7 +163,7 @@ L：亮度，颜色的亮度（0%-100%）
 
 网页是一个多层的结构，一层摞着一层
 
-通过css可以分别为每一层来设 置样式
+通过css可以分别为每一层来设置样式
 
 作为用户来讲只能看到最顶上一层
 
@@ -238,7 +238,9 @@ display用来设置元素显示的类型
 4. table将元素设置为一个表格
 5. none元素不在页面中显示
 
-visibility用来设置元素的显示状态
+   ​		用来设置元素的显示状态
+
+visibility:hidden/visible
 
 可选值:
 
@@ -254,16 +256,16 @@ box-sizing
 
 可选值:
 
-1. content - box
+1. `content - box`
    默认值，宽度和高度用来设置内容区的大小
-2. borderbox宽度和高度用来设置整个盒子可见框的大小
+2. `border-box`宽度和高度用来设置整个盒子可见框的大小
 3. width和height 指的是内容区和内边距和边框的总大小
 
 #### 轮廓阴影与圆角
 
 #####  轮廓
 
-outline，不会影响到整体布局
+`outline`，不会影响到整体布局
 
 ```css
 outline:1px solid red;//用法与 border一模一样
@@ -271,7 +273,7 @@ outline:1px solid red;//用法与 border一模一样
 
 ##### 阴影
 
-box-shadow：x  y 浓度 范围 颜色
+`box-shadow`：x  y 浓度 范围 颜色
 
 ```css
 box-shadow:10px 10px 10px 10px red;
@@ -301,7 +303,7 @@ border-radius:50%;
 2.开启BFC的元素子元素和父元素外边距不会重叠
 3.开启BFC的元素可以包含浮动的子元素
 
-设置overflow :hidden，开启BFC ，防止 高度塌陷
+设置`overflow :hidden`，开启BFC ，防止 高度塌陷
 
 #### clear 清除浮动
 
@@ -350,15 +352,14 @@ after生成的元素时行内元素，需要设置成块级元素
    1. 固定定位永远参照于浏览器的视口进行定位
 5. sticky开启元素的粘滞定位
 
-<<<<<<< HEAD
 #### 文本对齐
 
-1. text-align:center；水平居中
-2. vertical-align:middle；垂直居中
+1. `text-align:center；`水平居中
+2. `vertical-align:middle；`垂直居中
 
 ##### 图片布局
 
-img布局时，会沿着自己的基线对齐，导致下边框有空隙，解决办法：vertical:top/bottom
+img布局时，会沿着自己的基线对齐，导致下边框有空隙，解决办法：`vertical:top/bottom`
 
 ##### 文本常用属性
 
@@ -555,6 +556,292 @@ div:{
 <input type="text" readonly/>表单设置为只读，数据会被提交
 <input type="text" disabled/>设置为禁用，数据不会被提交
 <input type="text" autofocus/>获取焦点
+```
+
+### 过渡
+
+**transition**
+
+`transition-timing-function:`过渡的时序函数
+指定过渡的执行的方式
+
+可选值;
+
+1. ease默认值，慢速开始，先加速，再减速linear匀速运动
+2. ease-in 加速运动ease-out 减速运动
+3. ease-in-out先加速后减速cubic-bezier()来指定时序函数
+4. steps()分步执行过渡效果
+   1. steps(2,start)，10秒钟分两次执行，在开始计算5秒前执行
+   2. steps(2,end)，10秒钟分两次执行，在计算5秒后执行
+
+### 动画
+
+```css
+div{
+    animation: cartoon 2s;
+}
+@keyframes cartoon{
+    from{
+        //动画开始
+    }
+    to{
+        //动画结束
+    }
+}
+animation-direction:动画执行方向
+可选值：
+	1.normal 默认值，从from到to
+	2.reverse 从 to 到from 运行，每次都是
+	3.alternate 从from到to运行，重复执行动画时会反向执行
+	4.alertnate-reverse 从 to 向 from 运行，重复执行动画时反向执行
+
+animation-iteration-count:动画执行的次数
+可选值：
+	1.数字，1则代表执行一次，2代表执行两次
+	2.infinity 无穷大，执行无数次
+
+animation-play-state:设置动画的执行状态可选值;
+	running默认值动画执行
+	paused动画暂停
+	animation-play-state: paused;
+
+animation-fill. mode:动画的填充模式
+可选值:
+	1.none
+	默认值动画执行完毕元素回到原来位置
+	2.forwards
+	动画执行完毕元素会停止在动画结束的位置
+	3.backwards动画延时等待时，元素就会处于开始位置
+	4.both，结合了forward 和 backwards
+```
+
+animation简写，除了动画时间和延迟时间有前后顺序，其他的没有
+
+```css
+animation: cartoon 2s 2 1s alternate;调用cartoon动画，用时两秒，延迟1秒钟开始，执行两次，如果动画重复播放则会反向执行
+```
+
+#### 练习动画
+
+百度搜索：sprite animation 图片，获取素材
+
+### 变形
+
+变形就是指通过CCS来改变元素的形状或位置
+变形不会影响到页面的布局
+`transform`用来设置元素的变形效果
+
+平移:
+
+translateX()沿着x轴方向平移
+
+translateY()沿着y轴方向平移
+
+translateZ()沿着z轴方向平移
+
+##### 设置视距
+
+perspective，通常设置在html元素中
+
+```css
+html{
+    perspective:500px;
+}
+.test{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width:100px;
+    height:100px;
+    background:red;
+    transition:2s;
+}
+html:hover .test{
+    transform:translateZ(100px)
+}
+```
+
+##### 变形原点
+
+```css
+transform-origin:center;默认值
+transform-origin:0 0;
+```
+
+
+
+#### 旋转
+
+```css
+transform:rotateY(90deg);Y轴旋转90deg
+backface-visibility:hidden;设置背面不可见
+```
+
+#### 缩放
+
+```css
+transform:scale(2);长宽等比例放大两倍
+transform:scaleY(.5);垂直方向缩小1倍
+transform:scaleX(.5);水平方向缩小1倍
+```
+
+## Less
+
+#### 原生CSS设置变量
+
+```css
+html{
+    --color:#ff0;//设置变量
+}
+div{
+    background:var(--color);//引用变量
+}
+```
+
+#### 计算函数calc
+
+```css
+div{
+    width:calc(200px*2)
+}
+```
+
+但是计算函数和原生变量设置的兼容性不是很好，所有出现了Less/Sass
+
+#### 安装Less/Sass插件
+
+在编译器中安装对应的插件即可
+
+#### 变量
+
+```scss
+Sass变量
+$color:red;
+```
+
+```less
+Less变量
+@color:red;
+```
+
+#### 父元素和扩展
+
+##### &
+
+```scss
+div{
+    &:hover{
+        &表示div
+    }
+}
+```
+
+##### extend
+
+```scss
+.p1{
+    width:100px;
+    height:100px;
+}
+.p2:extend(.p1){//:extend()对当前选择器扩展指定选择器样式（分组选择器）
+    color:red;
+}
+```
+
+#### mixin混合函数
+
+### 弹性盒子
+
+**flex(弹性盒、伸缩盒)**
+
+是css中的又一种布局手段，它主要用来代替浮动来完成页面的布局，flex可以使元素具有弹性，让元素可以跟随页面的大小的改变而改变-弹性容器
+
+要使用弹性盒，必须先将一个元素设置为弹性容器，我们通过display来设置弹性容器
+
+1. `display : flex`设置为块级弹性容器
+2. `display :inline-flex`设置为行内的弹性容器
+
+**弹性元素**
+
+弹性容器的子元素是弹性元素（弹性项)，一个元素可以同时是弹性容器和弹性元素
+
+##### 轴方向
+
+1. 主轴：弹性元素排列的方向成为主轴
+2. 侧轴：与主轴方向垂直的称为侧轴
+
+##### 弹性盒
+
+1. `flex-direction`：指定容器中弹性元素的排列方式
+
+   1. `row`：默认值，横向排列
+   2. `column`：纵向排列
+   3. `row-reserve`：横向反向排列
+
+2. `flex-warp`：弹性元素是否在容器中自动换行
+
+   1. `nowrap`：默认值，不换行
+   2. `wrap`：换行
+   3. `wrap-flow`：反向换行
+
+3. `flex-flow`：是`wrap`与`direction`的简写属性
+
+   1. `flex-flow:wrap row;`
+
+4. `justify-content`：分配主轴上的元素分布
+
+   可选值：
+
+   - `flex-start`：元素沿着主轴起边排列
+   - `flex-end`：元素沿着主轴终边排列
+   - `center`：元素居中排列
+   - `space-around` ：空白分布到元素两侧
+   - `space-evenly`：空白分布到元素的两侧
+
+5. `align-item`：元素在辅轴上如何对齐
+
+   可选值：
+
+   - `stretch`：如果项目未设置高度或设为auto，将占满整个容器的高度。
+   - `flex-start`：元素不会拉伸，沿着辅轴起边对齐
+   - `flex-end`：沿着辅轴终边对齐
+   - `center`：居中对齐
+   - `baseline`：基线对齐
+
+设置弹性元素居中对齐方式
+
+```css
+div{
+    display:flex;
+    justify-content:center;
+    align-item:center;
+}
+```
+
+6. `align-content`：辅轴空白空间的分布，用来操控空白空间的，操作值同`justify-content`
+
+
+
+##### 弹性元素
+
+1. `flex-grow`：指定弹性元素的**增长**系数，当父元素有剩余的空间时，会按照系数比例分配
+
+2. `flex-shrink`：指定弹性元素的**收缩**系数，当父元素中的空间不足以容纳所有的子元素时，如果对子元素进行收缩
+
+   1. `flex-shrink:0;`表示不会收缩
+
+3. `flex-basis`：指定的是元素在主轴上的基础长度。如果主轴是横向的则该值指定的就是元素的宽度如果主轴是纵向的则该值指定的是就是元素的高度。
+
+   默认值是auto，表示参考元素自身的高度或宽度
+
+4. `order`：决定弹性元素的排列顺序
+
+##### flex元素属性简写
+
+```css
+item{
+    flex:1 1 auto;//flex:增长 缩减 基础长度。有固定顺序
+}
 ```
 
 
