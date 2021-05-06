@@ -83,6 +83,11 @@ watch:{
 }
 ```
 
+#### target与currentTarget
+
+1. target指向的是触发事件
+2. currentTarget指向的是捕获事件的元素
+
 ## 各组件
 
 ### 极简Tab

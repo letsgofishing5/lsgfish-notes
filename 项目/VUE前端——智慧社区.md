@@ -290,7 +290,7 @@ methods:{
 ```js
 props:{
     id:{
-    type:Number
+    	type:Number
     }
 },
 ```

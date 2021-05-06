@@ -25,9 +25,9 @@
       console.log(undefined==='undefined')//false
       ```
 
-      不能判断：`null`与`object`，`object`与`array`
+      不能判断：`null`与`object`，`object`与`array`，因为他们都是object类型
 
-   2. `instanceof`：判断对象的具体类型
+   2. `instanceof`：判断对象的**具体类型**
 
    3. ===：全等，不但要内容相等，类型也有一致
 
