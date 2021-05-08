@@ -33,10 +33,22 @@ https://www.w3school.com.cn/jsref/prop_node_nodetype.asp
 html标签的预定义和自定义属性我们统称为attribute
 js原生对象的直接属性，我们统称为property
 
+#### 对于attribute与property操作
+
+```javascript
+//对attribute操作
+let input = document.querySelector("input")
+input.setAttribute("属性名","属性值")
+//对property操作
+input.属性名
+```
+
+
+
 #### 什么是布尔属性，什么是非布尔属性
 
 property的属性值为布尔类型的我们统称为布尔值属性
-property的属性值为非布尔类型的我们统称为非布尔值属性
+property的属性值为非布尔类型的我们统称为非布尔值s属性
 
 #### attribute与property同步关系
 
@@ -56,3 +68,42 @@ property的属性值为非布尔类型的我们统称为非布尔值属性
 ### 实用功能
 
 通过`classList`，一个类数组结构来操作`class`
+
+#### classList常用
+
+1. classList.toggle("切换class")；如果有则删除，没有则添加
+
+#### 自定义属性值dataset
+
+```html
+<input type="text" data-id="123"/>
+//自定义属性值可以通过 data-自定义属性名 来赋值，通过dataset来获取值
+<script>
+	let input = document.querySelector("input")
+    console.log(input.dataset.id)
+</script>
+```
+
+#### div内容可编辑
+
+```html
+<div contenteditable="true">//这里值只能设置为true
+    
+</div>
+```
+
+### H5
+
+##### meta
+
+```html
+<meta charset="UTF-8">
+表示通知浏览器使用UTF-8编码格式来解析
+```
+
+##### DOCTYPE
+
+告诉浏览器以什么模式来渲染我，可以通过`document.compatMode`来查看当前渲染模式，返回值有两种，
+
+1. `CSS1Compat`正常模式
+2. `BackCompat`怪异模式
