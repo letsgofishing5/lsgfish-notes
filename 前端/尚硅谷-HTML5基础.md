@@ -107,3 +107,13 @@ property的属性值为非布尔类型的我们统称为非布尔值s属性
 
 1. `CSS1Compat`正常模式
 2. `BackCompat`怪异模式
+
+### canvas画布
+
+canvas是H5 新增的元素，可用于通过使用JavaScript中的脚本来绘制图形。
+
+使用canvas时，
+
+- 标签要成对出现
+- canvas有默认的高宽：300*150
+
