@@ -117,3 +117,30 @@ canvas是H5 新增的元素，可用于通过使用JavaScript中的脚本来绘�
 - 标签要成对出现
 - canvas有默认的高宽：300*150
 
+实际上，<canvas>标签只有两个属性—— width和height。这些都是可选的。当没有设置宽度和高度的时候，canvas会初始化宽度为300像素和高度为150像素。
+
+##### 画布画画
+
+渲染上下文
+```text
+<canvas>元素只是创造了一个固定大小的画布，要想在它上面去绘制内容，我们需要找到它的渲染上下文
+<canvas>元素有一个叫做getContext() 的方法，这个方法是用来获得渲染上下文和它的绘画功能。getContext()只有一个参数，下文的格式
+获取方式
+    var canvas = document.getElementById('canvas')
+    var ctx = canvas.getContext('2d')
+支持检查性
+    var canvas = document.getElementById('canvas')
+    if(canvas.getContext){
+     	var ctx = canvas.getContext('2d')
+	}
+```
+
+
+
+```js
+var testNode = document.querySelector("canvas")
+if(testNode.getContext){//判断是否有画笔
+    var ctx = testNode.getContext('2d')
+}
+```
+
