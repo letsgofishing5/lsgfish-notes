@@ -232,6 +232,8 @@ alert( user?.address?.street ); // undefined（不报错）
 
 #### Object.entries()、Object.keys()、Object.values()
 
+三剑客返回值都是数组类型，而数组类型数据则可以通过`new Map(array)`的形式转换为`map`类型数据
+
 ```js
 set.entries()、map.entries()、array.entries()他们的目的都是返回所有的实体，而obj.entries()返回的实体的数据结构都符合Map，只要通过new Map(obj.entries())即可获取Map类型数据，
 返回0: {key => val} 数据结构
