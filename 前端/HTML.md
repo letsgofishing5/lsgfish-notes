@@ -295,8 +295,6 @@ L：亮度，颜色的亮度（0%-100%）
 
 
 
-
-
 ### 工具FastStone
 
 ### 小工具Snipaste
@@ -844,9 +842,9 @@ vertical: middle;
 
 ```css
 /*方式一（推荐）*/
-vertical: bottom;
+vertical-align: bottom;
 /*方式二*/
-vertical: middle;
+vertical-align: middle;
 /*第三种方式：图片转块级元素*/
 display:block;
 ```
