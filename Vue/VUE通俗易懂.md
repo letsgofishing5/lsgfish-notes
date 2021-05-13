@@ -299,6 +299,10 @@ router.beforeEach((to,from,next)=>{
 
 ### Vuex
 
+1. Vuex集中管理共享数据，易于开发和后期维护
+2. 能够高效地实现组件之间的数据共享，提高开发效率
+3. 存储Vuex中的数据都是响应式的，能实时保持数据与页面的同步
+
 用来存储公共数据的仓库
 
 1. **Actions：**可以进行异步操作，`actions`中默认有一个参数`context`，该参数与`store`实例具有相同的方法和属性，因此可以通过`context.commit`提交一个`mutation`，或者通过一个`context.state`和`context.commit`来获取`state`和`getters`
@@ -356,12 +360,4 @@ methods:{
 ```
 
 
-
-### Element
-
-
-
-## 每日待解决问题
-
-#### vue命令规范
 
