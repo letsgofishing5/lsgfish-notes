@@ -402,7 +402,7 @@ Getter不会修改Store中的数据，只是起到一个包装的作用，类似
 
 ```js
 //第一种方式
-this.%store.getters.名称
+this.$store.getters.名称
 //第二种方式
 import { mapGetters } from 'vuex'
 
@@ -410,6 +410,56 @@ computed:{
     ...mapGetters(['test'])
 }
 ```
+
+#### 模块化 module
+
+module是Store的一个属性，与Action，State，Getter，Mutation同级别。
+
+用来管理Store的子模块的
+
+```js
+const Store = new Vuex.Store({
+    module:{
+        user:{
+            state:{
+                token:"123"
+            }
+        },
+        animal:{
+            state:{
+                token:"456"
+            }
+        }
+    }
+})
+```
+
+```js
+//取值
+$store.state.user.token
+$store.state.user.state.token
+//两种方式都可以
+```
+
+##### 模块化中的命名空间
+
+给子模块添加`namespaced:true`
+
+###### 触发子模块方式
+
+```js
+//第一种方式
+this.$store.dispatch('user/updateToken')//直接调用
+//第二种方式
+methods:{
+    ...mapMutation(['user/updateToken'])
+}
+//第三种方式
+import { createNamespaceHelpers }
+const { mapMutation } = createNamespaceHelpers('user')
+```
+
+
 
 ### 配置文件
 
