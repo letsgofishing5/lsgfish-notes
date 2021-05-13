@@ -303,61 +303,71 @@ router.beforeEach((to,from,next)=>{
 2. 能够高效地实现组件之间的数据共享，提高开发效率
 3. 存储Vuex中的数据都是响应式的，能实时保持数据与页面的同步
 
-用来存储公共数据的仓库
-
-1. **Actions：**可以进行异步操作，`actions`中默认有一个参数`context`，该参数与`store`实例具有相同的方法和属性，因此可以通过`context.commit`提交一个`mutation`，或者通过一个`context.state`和`context.commit`来获取`state`和`getters`
-2. **Mutations：**只能进行同步操作，类似于`methods`，`vuex`默认`mutations`中有一个参数：`state`，可以通过这个`state`来获取State中的数据
-3. **State：**用来存储公共数据
-
-#### 使用Vuex的数据方式
-
-1. 通过`computed`属性获取数据，`computed`属性可以追踪数据的变化
-
-   ```js
-   computed:{
-       count(){
-           return this.$store.state.count
-       }
-   }
-   ```
-
-   
-
-2. 通过辅助函数获取
-
-   ```js
-   //从vuex中引入辅助函数
-   import {mapState} from 'vuex'
-   
-   export default{
-        computed:{
-           ...mapState(['todos'])//todos可以直接拿出来使用，todos名字要和state.js中的名字保持一致，或者通过：$store.state.todos，同样的效果
-       }
-   }
-   ```
-
-   ```js
-   //改变state数据
-   methods:{
-       add(){
-           this.$store.commit('add')//通过commit来触发Mutations中的add方法，从而改变数据
-       }
-   }
-   ```
-
-#### Vuex——getters
+```
+#安装
+npm install vuex -S
+```
 
 ```js
-//通过getters计算，然后通过获取getters来获取
-getters(state){
-    state.count++
+import Vuex from 'vuex'
+Vue.use(Vuex)
+```
+
+```js
+const store = new Vuex.Store({
+    //store 中存放的就是全局共享数据
+    state：{count:0}
+})
+
+new Vue({
+    el:'#app',
+    store//挂载到Vue实例中
+})
+```
+
+#### State
+
+提供唯一的公共数据源
+
+##### 组件中访问State中数据的方式
+
+```js
+//第一种方式
+this.$store.state.全局数据名称
+//第二种方式
+import { mapState } from 'vuex'
+//通过导入 mapState 函数，将当前组件需要的全局数据，映射为当前组件的computed计算属性
+computed:{
+    ...mapState(['count'])
 }
+```
+
+#### Mutation
+
+Mutation 用于变更Store中的数据
+
+1. 只能通过 mutation 变更 Store 数据，不可以直接操作 Store 中的数据
+2. 通过这种方式虽然操作起来稍微繁琐了点，但是可以集中监控所有的数据变化
+
+##### 触发Mutation方式
+
+```js
+//第一种方式
+this.$store.commit('函数名')
+//第二种方式
+import { mapMutations } from 'vuex'
+
 methods:{
-    getter(){
-        return this.$store.getters.add()
+    ...mapMutation(['add','addN'])
+    test(){
+        this.add()
     }
 }
 ```
 
+##### 调用Mutation传参
 
+```js
+this.$store.commit('函数名',参数)
+```
 
