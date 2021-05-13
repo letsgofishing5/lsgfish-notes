@@ -28,6 +28,10 @@ vue ui//打开图形化界面
 
 #### 父子传值
 
+父子组件传值需要在父组件中用短横线形式命名，子组件用驼峰命名法
+
+props是单向数据控制
+
 1. props、$emit
 2. $parent、$children
 
@@ -35,7 +39,7 @@ vue ui//打开图形化界面
 
 ##### 事件总线
 
-1. 创建一个`bus.js`文件
+1. 创建一个`bus.js`文件（只要是一个公共的栈点即可，如一个公共的实例等）
 
    ```js
    //建立一个公共的js文件，专门用来传递消息
@@ -89,114 +93,202 @@ const atters = this.$atters
 console.log(atters)
 ```
 
+#### 组件插槽
+
+##### 具名插槽
+
+
+
 ### v-router
 
 路由就是用来切换组件的
 
-##### 基本配置
+#### window监听hash路由
 
 ```js
-import Vue from 'vue'
-import Router from 'vue-router'
+//监听 window 的 onhashchange 事件，根据获取到的最新的 hash 值，切换要显示的组件名称
+window.onhashchange = function(){
+    //通过 localtion.hash 获取最新的 hash值
+    console.log(localtion.hash);
+    
+}
+```
 
-VUe.use(Router)
-export default new Router({
-	routes:[
-		{
-			path:'/'
-			component:()=>import('组件路径')
-		}
-	]
+#### 基本使用
+
+##### 配置路由规则
+
+```js
+//创建路由实例对象
+var router = new VueRouter({
+    // 是路由规则数组
+    routes:[
+        //每个路由规则都是一个配置对象，其中至少包含path、component两个属性
+        //path：表示当前的路由规则匹配到的 hash 地址
+        //component：表示当前路由规则对应要展示的组件
+        {path:'/user',component:User}
+    ]
 })
 ```
 
-```vue
-//APP.vue
-<template>
-	<div id="#app">
-        <router-view></router-view>//入口组件中，必须要有这个才可以显示路由切换的组件
-    </div>
-</template>
-```
-
-##### 路由跳转
-
-```vue
-//1.链接跳转
-<router-link to='/home'>home</router-link>
-<router-view></router-view>
-//2.编程式跳转
-<button @click="to">
-    跳转组件
-</button>
-
-<script>
-	export default{
-        data(){
-            return {
-                
-            }
-        },
-        methods:{
-            to(){
-                this.$router.push('/home')
-            }
-        }
-    }
-</script>
-```
-
-##### 动态路由
+##### 挂载到vue实例对象上
 
 ```js
-import Vue from 'vue'
-import Router from 'vue-router'
-
-VUe.use(Router)
-export default new Router({
-	routes:[
-		{
-			path:'/home/:id',//这里给他绑定一个id，是固定格式
-			component:()=>import('组件路径')
-		}
-	]
+new Vue({
+    el:'#app',
+    router
 })
 ```
 
-```vue
-<template>
-	<div>
-        {{$route.params.id}}//获取动态路由传递过来的参数
-    </div>
-</template>
+##### 路由重定向
+
+路由重定向指的是：用户访问A页面时，会被强制跳到C地址上，从而展示C组件
+
+```js
+var router = new VueRouter({
+    {path:'/',redirect:'/user'},
+    {path:'/user',component:User}
+})
 ```
 
 ##### 嵌套路由
 
+1. 要有子级路由模板
+2. 要有子级路由填充位置
+
+##### 动态路由匹配
+
 ```js
-export default new Router{
+var router = new VueRouter({
     routes:[
-		{
-			path:'/home,
-            name:'home'//定义路由的名字
-			component:()=>import('组件路径'),
-            children:{
-            	path:'/son',
-            	component:()=>import('组件路径')
-        	}
-		}
-	]
+        //动态路径参数，以冒号开头
+        {path:'/user/:id',component:User}
+    ]
+})
+```
+
+```js
+//路由组件中通过 $route.params获取路由参数
+$route.params.id
+```
+
+###### 路由组件传递参数
+
+$route与对应路由形成高度耦合，不够灵活，所以可以使用props将组件和路由解耦
+
+**props是布尔值类型，动态参数**
+
+```js
+var router = new VueRouter({
+    routes:[
+        //如果 props 被设置位 true，route.params 将会被设置为组件属性
+        {
+            path：'/user/:id',
+            component:User,
+            props:true
+        }
+    ]
+})
+```
+
+```js
+export default{
+    props:[
+        id,//使用props接收路由参数
+    ]
 }
+```
+
+**props的值是对象，传递的是静态参数，不可更改**
+
+```js
+const router = new VueRouter({
+    routes:[
+        {
+            path:'/user/:id',
+            component:User,
+            props:{
+                uname:'lisi',
+                age:23
+            }
+        }
+    ]
+})
+```
+
+```js
+export default{
+    props:[
+        uname,age//id无法通过props传参
+    ]
+}
+```
+
+**props的值是函数类型，参数是动态和静态都可以**
+
+```js
+const router = new VueRouter({
+    routes:[
+        //如果 props 是一个函数，则这个函数接收 route 对象为自己的形参
+        {
+            path:'/user/:id',
+            component:User,
+            props:route => ({
+                uname:'zs',
+                age:20,
+                id:route.params.id
+            })
+        }
+    ]
+})
+```
+
+```js
+export default{
+    props:[
+        uname,age//id无法通过props传参
+    ]
+}
+```
+
+##### 命名路由的配置规则
+
+为了更加方便的表示路由的路径，可以给路由规则起一个别名，即"命名路由"
+
+```js
+const router = new VueRouter({
+    routes:[
+        path:'/user/:id',
+        name:'user',
+        component:User
+    ]
+})
 ```
 
 ```vue
-fun(){
-	this.$router.push({path:'/home/son',query:{id:123}})//query 搭配 path
-	this.$router.push({name:'/home/son',query:{id:123}})//params 搭配 name 路由的名字
-}
+<router-link :to="{name:'user',params:{id:123}}">
+	user
+</router-link>
+
+router.push({name:'user',params:{id:123}})
 ```
 
-##### 路由守卫
+#### 导航的两种方式
+
+##### 声明式导航
+
+- 通过点击连接实现导航的方式，叫声明式导航，例如 a 链接
+
+##### 编程式导航
+
+- 通过调用Javascript形式的API实现导航的方式，叫做编程式导航，例如：location.href
+
+```js
+this.$router.push('hash地址')//前进
+this.$router.go(-1)//后退
+```
+
+#### 路由守卫
 
 ```vue
 router.beforeEach((to,from,next)=>{
