@@ -392,5 +392,32 @@ methods:{
 }
 ```
 
+#### Getter
 
+Getter 用于对 Store 中的数据进行加工处理形成新的数据。
+
+Getter不会修改Store中的数据，只是起到一个包装的作用，类似与计算属性。Store中的数据发生变化，Getter的数据也会跟着变化
+
+##### getter的触发方法
+
+```js
+//第一种方式
+this.%store.getters.名称
+//第二种方式
+import { mapGetters } from 'vuex'
+
+computed:{
+    ...mapGetters(['test'])
+}
+```
+
+### 配置文件
+
+```js
+//.prettierrc
+{
+    "semi":false,
+    "singleQuote":true
+}
+```
 
