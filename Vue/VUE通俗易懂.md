@@ -349,6 +349,8 @@ Mutation 用于变更Store中的数据
 1. 只能通过 mutation 变更 Store 数据，不可以直接操作 Store 中的数据
 2. 通过这种方式虽然操作起来稍微繁琐了点，但是可以集中监控所有的数据变化
 
+注意：mutation不能执行异步操作
+
 ##### 触发Mutation方式
 
 ```js
@@ -368,6 +370,27 @@ methods:{
 ##### 调用Mutation传参
 
 ```js
-this.$store.commit('函数名',参数)
+this.$store.commit('函数名','参数')
 ```
+
+#### Action
+
+专门用来处理异步任务，如果通过异步操作变更数据，必须通过Action，不能使用Mutation，但是在Action种还是要触发Mutation的方式间接变更数据
+
+##### 触发Action方式
+
+```js
+//第一种方式
+this.$store.dispatch('函数名','参数')
+//第二种方式
+import { mapActions } from 'vuex'
+methods:{
+    ...mapActions(['addASync','addNASync'])
+    test(){
+        this.addASync()
+    }
+}
+```
+
+
 
