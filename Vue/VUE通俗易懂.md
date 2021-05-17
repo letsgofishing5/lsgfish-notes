@@ -451,6 +451,7 @@ $store.state.user.state.token
 //第一种方式
 this.$store.dispatch('user/updateToken')//直接调用
 //第二种方式
+import { mapActions } from 'vuex'
 methods:{
     ...mapMutation(['user/updateToken'])
 }
