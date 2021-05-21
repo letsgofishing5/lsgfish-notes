@@ -8,7 +8,7 @@
 
 第二位代表功能增加
 
-第三位表示bug修复
+第三位表示bug修复次数
 
 每次高位数字变更，低位数字需要清零
 
@@ -33,6 +33,14 @@ package.json 文件中，有一个 dependencies 节点，专门用来记录您�
 npm i 包名 -D
 //完整写法
 npm install 包名 --save-dev
+```
+
+##### 下载指定版本包
+
+下载指定的axios3.3.0版本
+
+```bash
+npm i axios@3.3.0
 ```
 
 #### 解决包下载慢问题
@@ -107,7 +115,7 @@ npm i express
 const express = require("express")
 //创建web服务
 const app = express()
-//调用 app.listen(端口号，启动成功后的回调函数)，启动服务器
+//调用 app.listen(端口号，启动服务成功后的回调函数)，启动服务器
 app.listen(80,()=>{
     console.log("服务已启动：http://localhost:8080")
 })
@@ -181,7 +189,7 @@ app.use("/test",express.static('./public'))
 http://localhost:1998/test/index.html
 ```
 
-### nodemon
+#### nodemon
 
 它是一个工具，能够 监听项目的变动，当代码被修改后，nodemon会自动帮我们重启项目，方便开发和调试
 
@@ -195,6 +203,30 @@ npm i nodemon -g
 //启动项目命令
 nodemon app.js
 //改变项目，保存时，会自动重启项目
+```
+
+#### 路由
+
+在Express中，路由指的是客户端的请求与服务器处理函数之间的映射关系
+
+Express  中的路由分成 3 部分，分别是请求的类型，请求的URL地址、处理函数，格式如下
+
+```js
+app.METHOD(PATH,HANDLER)//METHOD:请求方式，PATH:请求地址URL，HANDLER:回调函数
+```
+
+##### 路由匹配规则
+
+1. 按照定义的先后顺序
+2. 请求类型和请求的URL同时匹配成功，才会调用对应的处理函数
+
+##### 注册路由模块
+
+```js
+//1.导入路由模块
+const userRouter = require('/router/user.js')
+//2.使用 app.use()注册路由模块
+app.use(userRouter)
 ```
 
 
