@@ -1,4 +1,4 @@
-## npm
+### npm
 
 #### 包的版本号规则
 
@@ -84,6 +84,120 @@ nrm use taobao
    3. 补全 .json 扩展名
    4. 补全 .node 扩展名
    5. 加载失败，终端报错
+
+### Express
+
+Express是基于Node.js平台，快速、开放、极简的Web开发框架
+
+通俗的理解：Express 的作用和 Node.js 内置的 http 模块类似，是专门用来创建Web服务器的。
+
+Express的本质：就是一个npm上的第三方包，提供了快速创建的Web服务器的便捷方法
+
+Express的中文官网地址：http://www.expressjs.com.cn/
+
+#### 使用
+
+```
+//安装
+npm i express
+```
+
+```js
+//导入
+const express = require("express")
+//创建web服务
+const app = express()
+//调用 app.listen(端口号，启动成功后的回调函数)，启动服务器
+app.listen(80,()=>{
+    console.log("服务已启动：http://localhost:8080")
+})
+```
+
+##### 监听get/post请求
+
+```js
+//req:请求对象
+//res:响应对象
+app.get(url,(req,res)=>{
+    console.log("监听get请求")
+})
+app.post(url,(req,res)=>{
+    console.log("监听post请求")
+})
+
+//通过res.send("请求成功")，将处理好的内容，响应给客户端
+```
+
+##### 获取URL中携带的参数
+
+```js
+//req.query，访问客户端查询字符串的形式，发送到服务器的参
+//req.query 默认是一个空对象，
+//客户端使用 ?name=zs&age=20 这种查询字符串形式，发送到服务器的参数
+//可以通过 req.query 对象访问到，例如：
+//req.query.name 
+app.get('/',(req,res)=>{
+    console.log(req.query)
+})
+```
+
+##### 获取URL中携带的动态参数
+
+```js
+//通过req.params对象，可以访问到URL中，通过 : 匹配到的动态参数
+app.get('/user/:id',(req,res)=>{
+    console.log(req.params)
+})
+```
+
+##### express.static
+
+```js
+//通过如下代码，可以将public目录下的图片、css文件、JavaScript文件对外开放访问
+app.use(express.static('public'))
+//这样就可以通过以下路径访问public目录中的所有文件了
+http://localhost:3000/images/bg.jpg
+http://localhost:3000/css/style.css
+http://localhost:3000/js/login.js
+//Express在指定的静态目录中查找文件，并对外提供资源的访问路径，因此，存放静态文件的目录名不会出现在URL中
+```
+
+如果需要托管多个静态资源目录，请多次调用express.static() 函数：
+
+```js
+app.use(express.static('static'))
+app.use(express.static('public'))
+```
+
+访问静态资源文件时，express.static() 函数会根据目录的添加顺序查找所需要的文件，比如static和public目录下都有index.html文件，则会优先在static中查找
+
+##### 挂载路径前缀
+
+如果希望在托管的静态资源访问路径之前，挂载路径前缀，则可以使用如下的方式
+
+```js
+app.use("/test",express.static('./public'))
+//访问public目录下的文件
+http://localhost:1998/test/index.html
+```
+
+### nodemon
+
+它是一个工具，能够 监听项目的变动，当代码被修改后，nodemon会自动帮我们重启项目，方便开发和调试
+
+```
+npm i nodemon -g
+```
+
+##### 使用
+
+```
+//启动项目命令
+nodemon app.js
+//改变项目，保存时，会自动重启项目
+```
+
+
 
 #### 跨域
 
