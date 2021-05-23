@@ -95,9 +95,173 @@ console.log(atters)
 
 #### 组件插槽
 
+##### 匿名插槽
+
+```html
+  <div id="app">
+    <!-- 这里的所有组件标签中嵌套的内容会替换掉slot  如果不传值 则使用 slot 中的默认值  -->  
+    <alert-box>有bug发生</alert-box>
+    <alert-box>有一个警告</alert-box>
+    <alert-box></alert-box>
+  </div>
+
+  <script type="text/javascript">
+    /*
+      组件插槽：父组件向子组件传递内容
+    */
+    Vue.component('alert-box', {
+      template: `
+        <div>
+          <strong>ERROR:</strong>
+		# 当组件渲染的时候，这个 <slot> 元素将会被替换为“组件标签中嵌套的内容”。
+		# 插槽内可以包含任何模板代码，包括 HTML
+          <slot>默认内容</slot>
+        </div>
+      `
+    });
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        
+      }
+    });
+  </script>
+</body>
+</html>
+
+```
+
 ##### 具名插槽
 
+- 具有名字的插槽 
+- 使用 <slot> 中的 "name" 属性绑定元素
 
+```HTML
+  <div id="app">
+    <base-layout>
+       <!-- 2、 通过slot属性来指定, 这个slot的值必须和下面slot组件得name值对应上
+				如果没有匹配到 则放到匿名的插槽中   --> 
+      <p slot='header'>标题信息</p>
+      <p>主要内容1</p>
+      <p>主要内容2</p>
+      <p slot='footer'>底部信息信息</p>
+    </base-layout>
+
+    <base-layout>
+      <!-- 注意点：template临时的包裹标签最终不会渲染到页面上     -->  
+      <template slot='header'>
+        <p>标题信息1</p>
+        <p>标题信息2</p>
+      </template>
+      <p>主要内容1</p>
+      <p>主要内容2</p>
+      <template slot='footer'>
+        <p>底部信息信息1</p>
+        <p>底部信息信息2</p>
+      </template>
+    </base-layout>
+  </div>
+  <script type="text/javascript" src="js/vue.js"></script>
+  <script type="text/javascript">
+    /*
+      具名插槽
+    */
+    Vue.component('base-layout', {
+      template: `
+        <div>
+          <header>
+			###	1、 使用 <slot> 中的 "name" 属性绑定元素 指定当前插槽的名字
+            <slot name='header'></slot>
+          </header>
+          <main>
+            <slot></slot>
+          </main>
+          <footer>
+			###  注意点： 
+			###  具名插槽的渲染顺序，完全取决于模板，而不是取决于父组件中元素的顺序
+            <slot name='footer'></slot>
+          </footer>
+        </div>
+      `
+    });
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        
+      }
+    });
+  </script>
+</body>
+</html>
+
+```
+
+##### 作用域插槽
+
+- 父组件对子组件加工处理
+- 既可以复用子组件的slot，又可以使slot内容不一致
+
+```html
+  <div id="app">
+    <!-- 
+		1、当我们希望li 的样式由外部使用组件的地方定义，因为可能有多种地方要使用该组件，
+		但样式希望不一样 这个时候我们需要使用作用域插槽 
+		
+	-->  
+    <fruit-list :list='list'>
+       <!-- 2、 父组件中使用了<template>元素,而且包含scope="slotProps",
+			slotProps在这里只是临时变量   
+		---> 	
+      <template slot-scope='slotProps'>
+        <strong v-if='slotProps.info.id==3' class="current">
+            {{slotProps.info.name}}		         
+         </strong>
+        <span v-else>{{slotProps.info.name}}</span>
+      </template>
+    </fruit-list>
+  </div>
+  <script type="text/javascript" src="js/vue.js"></script>
+  <script type="text/javascript">
+    /*
+      作用域插槽
+    */
+    Vue.component('fruit-list', {
+      props: ['list'],
+      template: `
+        <div>
+          <li :key='item.id' v-for='item in list'>
+			###  3、 在子组件模板中,<slot>元素上有一个类似props传递数据给组件的写法msg="xxx",
+			###   插槽可以提供一个默认内容，如果如果父组件没有为这个插槽提供了内容，会显示默认的内容。
+					如果父组件为这个插槽提供了内容，则默认的内容会被替换掉
+            <slot :info='item'>{{item.name}}</slot>
+          </li>
+        </div>
+      `
+    });
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        list: [{
+          id: 1,
+          name: 'apple'
+        },{
+          id: 2,
+          name: 'orange'
+        },{
+          id: 3,
+          name: 'banana'
+        }]
+      }
+    });
+  </script>
+</body>
+</html>
+
+```
+
+
+
+###  购
 
 ### v-router
 
