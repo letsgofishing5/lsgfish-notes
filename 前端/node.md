@@ -229,7 +229,189 @@ const userRouter = require('/router/user.js')
 app.use(userRouter)
 ```
 
+#### 中间件
 
+当一个请求到达Express的服务器之后，可以连续调用多个中间件，从而对这次请求进行**预处理**
+
+Express中间件，本质上就是一个 **function处理函数**，格式如下:
+
+```js
+const express = require('express')
+const app = express()
+app.get('/user',(req,res,next)=>{
+    next()
+})
+```
+
+注意 ：中间件函数的形参列表中，必须包含next参数。而路由处理函数中之包含req和res
+
+##### next作用
+
+next函数是实现多个中间件连续调用的关键，他表示把流转关系转交到下一个中间件或路由
+
+##### 定义中间件
+
+```js
+const mv = function(req,res,next){
+    console.log("这是一个简单的中间件函数")
+    next()
+}
+```
+
+##### 注册全局中间件
+
+```js
+const express = require('express')
+const app = express()
+app.listen(80,()=>{
+    
+})
+//中间件函数
+const mv = function(req,res,next){
+    next()
+}
+//全局注册中间件
+app.use(mv)
+```
+
+注意，中间件代码位置要放在**路由前面**，否则不生效
+
+##### 错误级别中间件
+
+```js
+const mv = function(err,req,res,next){
+    console.log(err)
+    res.send(err)
+}
+app.use(mv)
+```
+
+注意，错误中间件代码位置要放在**所有路由后面**，否则不生效
+
+####  内置中间件
+
+##### express.static
+
+快速托管静态资源的内置中间件
+
+##### express.json
+
+解析JSON格式的请求体数据
+
+##### express.urlencoded
+
+解析URL-encoded 格式的请求体数据
+
+##### 接收不同格式数据
+
+1. 接收JSON格式数据
+
+   ```js
+   //服务端通过 req.body 来接收JSON格式数据，但是如果 没有注册全局 express.json 中间件，则 req.body 默认值是 undefined
+   app.use(express.json())
+   ```
+
+2. 接收urlencoded格式数据 
+
+   ```js
+   app.use(express.urlencoded({extend:false}))
+   ```
+
+   
+
+#### 第三方中间件
+
+##### body-parser
+
+解析请求体中的数据
+
+```bash
+npm i body-parser
+const parser = require('body-parser')
+app.use(parser.urlencoded({extend:false}))
+```
+
+####  自定义中间件
+
+1. 定义中间件
+
+2. 监听 req.data 事件
+
+   ```js
+   let str = ""
+   req.on('data',(chunk)=>{
+       str += chunk
+   })
+   ```
+
+   
+
+3. 监听 req.end 事件
+
+   ```js
+   req.on('end'()=>{
+       //str中存放的是完整的请求体数据，解析成对象格式
+       console.log(str)
+   })
+   ```
+
+   
+
+4. 使用 querystring 模块解析请求体数据 
+
+   ```js
+   const querystring = require('querystring')
+   const querystring.parse(str)
+   ```
+
+   
+
+5. 将解析出来的数据挂载到 req.body
+
+   ```js
+   req.on('end',()=>{
+       const body = qs.parse(str)
+       req.body = body
+       console.log("req.body",req.body)
+       next()
+   })
+   ```
+
+   
+
+6. 将自定义中间件封装为模块
+
+#### 总结Express
+
+1. 创建express服务器
+
+   ```js
+   const express = require('express')
+   const app = express()
+   app.listen(端口,()=>{
+       console.log("服务器已启动")
+   })
+   ```
+
+   
+
+2. 使用app.use()进行注册，自定义
+
+   ```js
+   //自定义
+   app.use((req,res,next)=>{
+       console.log("自定义中间件")
+       next()//必须要有，负责数据无法下放共享
+   })
+   
+   //注册
+   const err = function(err,req,res,next){
+       res.send("404页面")
+   }
+   app.use(err)
+   ```
+
+   
 
 #### 跨域
 
@@ -290,4 +472,21 @@ res.setHeader('Access-Control-Allow-Methods','*')
 2. 请求头中 包含自定义头部字段
 3. 向服务器发送了 application/json 格式的数据
 
-在浏览器与服务器正式通信前，浏览器会发送OPTION请求进行预检，以获得服务器是否真正允许该实际请求，所以这一所次的OPTION请求称为"预检请求"，服务器成功响应预检请求后，才会发送真正的请求，并且携带真是数据
+在浏览器与服务器正式通信前，浏览器会发送OPTION请求进行预检，以获得服务器是否真正允许该实际请求，所以这一所次的OPTION请求称为"预检请求"，服务器成功响应预检请求后，才会发送真正的请求，并且携带真实数据
+
+#### JWT
+
+安装JWT相关包
+
+```bash
+npm i jsonwebtoken express-jwt
+```
+
+- jsonwebtoken 用于 生成 JWT 字符串
+- express-jwt 用于将 JWT 字符串解析还原成JSON对象
+
+```js
+const jwt = require('jsonwebtoken')
+const expressJWT = require('express-jwt')
+```
+
