@@ -490,3 +490,51 @@ const jwt = require('jsonwebtoken')
 const expressJWT = require('express-jwt')
 ```
 
+###  web服务器
+
+#### 初始化项目
+
+```bash
+npm init -y
+npm i express
+```
+
+```js
+const express = require('express')
+const app = express()
+app.use((req,res,next)=>{
+	console.log("中间件执行了")
+	next()
+})
+app.get('/',(req,res)=>{
+	console.log("get请求响应了")
+})
+
+app.listen(1998,()=>{
+	console.log("服务已启动，http://localhost:1998")
+})
+
+app.use((err,req,res,next)=>{
+	res.send("404")
+})
+```
+
+#### 配置跨域
+
+```bash
+npm i cors
+```
+
+
+
+```js
+const cors = require('cors')
+app.use(cors)
+```
+
+#### 配置解析表单数据的中间件
+
+```js
+app.use(express.urlencoded({extended:false}))
+```
+
