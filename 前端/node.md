@@ -525,8 +525,6 @@ app.use((err,req,res,next)=>{
 npm i cors
 ```
 
-
-
 ```js
 const cors = require('cors')
 app.use(cors)
@@ -536,5 +534,33 @@ app.use(cors)
 
 ```js
 app.use(express.urlencoded({extended:false}))
+```
+
+```js
+const express = require('express')
+const cors = require('cors')
+
+const app = express()
+app.use(cors())
+app.use(express.urlencoded({extended:false}))
+app.use((req,res,next)=>{
+	console.log("中间件执行了")
+	res.setHeader('Access-Control-Allow-Headers','Content-Type,X-Custom-Header')
+	res.setHeader('Access-Control-Allow-Methods','POST,GET,DELETE,HEAD')
+	res.setHeader('Access-Control-Allow-origin','*')
+	next()
+})
+app.get('/',(req,res)=>{
+	console.log("get请求响应了")
+	res.send("响应")
+})
+
+app.listen(1998,()=>{
+	console.log("服务已启动，http://localhost:1998")
+})
+
+app.use((err,req,res,next)=>{
+	res.send("404")
+})
 ```
 
