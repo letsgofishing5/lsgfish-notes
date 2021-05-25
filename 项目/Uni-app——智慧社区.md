@@ -58,7 +58,7 @@ https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html
 
 小米：https://blog.csdn.net/qingciking/article/details/94467202
 
-#### 调用拨打电话功能
+#### 调用拨打电话功能失效
 
 https://blog.csdn.net/weixin_45803990/article/details/112801057
 

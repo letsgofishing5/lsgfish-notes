@@ -388,7 +388,28 @@ age是我们要修改的状态的名称，是我们手动配置的，与传入�
 
 
 
-#### 生命周期函数
+### Vue.js
+
+#### 监听屏幕宽度
+
+```js
+data(){
+    return {
+        screenWidth:null,
+    }
+}
+//（created()的时候不行，因为此时document还没有生成）
+mounted() {
+    this.screenWidth = document.body.clientWidth;
+    window.onresize = () => {
+        return (() => {
+            this.screenWidth = document.body.clientWidth;
+        })();
+    };
+}
+```
+
+
 
 ### Vuex
 
@@ -605,6 +626,32 @@ Element提供了两种调用Loading的方法：指令和服务。对于自定义
       return row.userType==1?'普通会员':'高级会员'
     }
 }
+
+#### 表格日期格式化
+
+通过`:formatter`来操作
+
+```vue
+<el-table-column
+                 prop="createTime"
+                 sortable
+                 :formatter="dataFormat"
+                 label="创建时间">
+</el-table-column>
+```
+
+```js
+dataFormat(row,column){
+    let data = row[column.property]
+    if(data!=null)
+    {
+        return this.formateTime(data,"YYYY-MM-DD hh:mm:ss")
+    }
+    return ""
+},
+```
+
+
 
 #### 获取表单input值
 
