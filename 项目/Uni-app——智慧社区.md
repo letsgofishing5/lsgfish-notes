@@ -96,93 +96,27 @@ watch:{
 1. target指向的是触发事件
 2. currentTarget指向的是捕获事件的元素
 
-## 各组件
+#### 操作dom
 
-### 极简Tab
+##### 获取元素高度
 
-##### 导入：
-
-```javascript
-复制代码import aloysTab from "@/components/aloys-tab/aloys-tab.vue"
+```js
+let query=uni.createSelectorQuery();//创建选择器
+let dom=query.select(".card")//选择需要操作的dom选择器
+dom.boundingClientRect(function(data) { //data - 各种参数
+    console.log(data.height)  // 获取元素高度
+}).exec()
 ```
 
-##### 属性 attribute
+#### 动态设置title
 
-| 属性名 | 类型  |                             介绍                             | 默认值 |
-| :----: | :---: | :----------------------------------------------------------: | :----: |
-|  tabs  | Array | 数组元素为Object，obj.title属性为标签显示名, 示例：[{ title: 'tab1' }, { title: 'tab2' }] |   []   |
-
-##### 事件 events
-
-|    事件名     | 传参  |                 说明                 |
-| :-----------: | :---: | :----------------------------------: |
-|    change     | index | tab页切换触发，返回切换后的tab index |
-| onReachBottom | index |   滚动到底部触发，返回切tab index    |
-
-##### 示例代码
-
-##### template
-
-```
-复制代码<template>
-    <view class="content">
-        <aloys-tab :tabs="tabs" @change="onTabChange">
-          <view slot="content0" class="xxx">A</view>
-          <view slot="content1" class="xxx">B</view>
-          <view slot="content2" class="xxx">C</view>
-        </aloys-tab>
-    </view>
-</template>
+```js
+uni.setNavigationBarTitle({
+  title:"成员编辑"
+})
 ```
 
-##### script
-
-```
-复制代码
-import aloysTab from "@/components/aloys-tab/aloys-tab.vue"
-
-export default {
-  components: { aloysTab },
-  data() {
-    return {
-      tabs: [{
-        title: 'tabA'
-      },{
-        title: 'tabB'
-      },{
-        title: 'tabC'
-      }]
-    }
-  },
-  onLoad() {
-
-  },
-  methods: {
-    onTabChange(index) {
-      uni.showToast({
-        title: '切换至tab：' + index
-      })
-    }
-  }
-}
-```
-
-##### css
-
-```
-复制代码<style>
-.content{
-  position: absolute;
-  height: 100%;
-}
-.xxx{
-  font-size: 42rpx;
-  font-weight: bold;
-  padding: 100rpx 0;
-  text-align: center;
-}
-</style>
-```
+## 组件
 
 ### 时间格式化
 
