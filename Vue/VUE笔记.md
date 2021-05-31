@@ -131,3 +131,48 @@ is 的作用就是将原本的标签给替换成模板里的标签
 
 ### 组件传值
 
+#### 总线传值
+
+```js
+<div id="app">
+    <a1></a1>
+<a2></a2>
+<a3></a3>
+</div>
+<script type="text/javascript">
+    Vue.prototype.$bus = new Vue()
+new Vue({
+    el:"#app",
+    components:{
+        "a1":{
+            template:`<span @click="click">{{msg}}</span>`,
+            data(){
+                return {
+                    msg:"你好"
+                }
+            },
+            methods:{
+                click(){
+                    console.log("执行了")
+                    this.$bus.$emit("change",this.msg)
+                }
+            }
+        },
+        "a2":{
+            template:`<span>{{msg}}</span>`,
+            data(){
+                return {
+                    msg:"我是a2"
+                }
+            },
+            mounted(){
+                this.$bus.$on("change",item=>{
+                    this.msg=item
+                })
+            }
+        }
+    }
+})
+</script>
+```
+
