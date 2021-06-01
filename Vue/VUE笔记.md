@@ -5,7 +5,7 @@
 3. 数据双向绑定
    1. 只有data中注册的数据才是响应式的，data中的数据都会转绑给VM实例对象
 
-##  指令
+### 指令
 
 #### 计算属性
 
@@ -175,4 +175,40 @@ new Vue({
 })
 </script>
 ```
+
+### 动画
+
+动画中的六个动作，其中`v-leave`是装饰品，没有任何作用
+
+### 过滤器
+
+```js
+filter:{
+    testFilter(val){
+        return "test"
+    }
+}
+```
+
+#### 日期格式化插件
+
+moment
+
+### vue2.0脚手架
+
+#### 卸载、安装
+
+卸载其他脚手架：npm uninstall @vue/cli  -g
+
+清除缓存：npm cache clean --force
+
+安装脚手架：npm i vue-cli -g
+
+查看脚手架版本：vue -V
+
+#### 使用脚手架搭建项目
+
+vue list：列出官方提供的模板
+
+vue init 模板名称 项目名称：使用**模板，生成项目
 
