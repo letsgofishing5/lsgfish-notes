@@ -64,6 +64,23 @@ computed:{
 
 data是函数，他返回回来的对象才是真正意义上的数据的存储仓库，是为了让每个组件之间的数据都是独立的，互不影响
 
+#### class
+
+#### 使用绝对定位来设置水平居中
+
+```css
+div{
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+}
+```
+
+
+
 ### 组件
 
 #### 属性
@@ -180,6 +197,16 @@ new Vue({
 
 动画中的六个动作，其中`v-leave`是装饰品，没有任何作用
 
+v-enter：从隐藏到显示的第一帧
+
+v-enter-active：定义显示的过渡动画
+
+v-enter-to：显示时的状态
+
+v-leave-active：定义隐藏的过渡动画
+
+v-leave-to：隐藏时的状态
+
 ### 过滤器
 
 ```js
@@ -192,7 +219,28 @@ filter:{
 
 #### 日期格式化插件
 
-moment
+moment，去bootCDN查询
+
+### 指令
+
+```html
+<div id="app">
+    <input type="text" v-focus>
+    <!--当使用了v-focus指令被解析成功，挂载到DOM上时，inserted会被自动执行-->
+</div>
+<script type="text/javascript">
+    // 注册一个全局自定义指令 `v-focus`
+    Vue.directive('focus', {
+        // 当被绑定的元素插入到 DOM 中时……
+        inserted: function (el) {//el是使用了v-focus指令的节点
+            // 聚焦元素
+            el.focus()
+        }
+    })
+</script>
+```
+
+
 
 ### vue2.0脚手架
 
@@ -211,4 +259,6 @@ moment
 vue list：列出官方提供的模板
 
 vue init 模板名称 项目名称：使用**模板，生成项目
+
+### 插槽
 
