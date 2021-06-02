@@ -232,3 +232,45 @@ page.json中设置："onReachBottomDistance"："50"
 开启上拉触底距离
 
 使用页面生命周期：onReachBottom
+
+## 发送请求
+
+https://www.cnblogs.com/zly123/p/10853049.html
+
+### 请求格式Content-Type
+
+#### application/x-www-form-urlencoded
+
+该请求以：key/value 格式发送参数
+
+前端使用POST请求，通过**application/x-www-form-urlencoded**的方式传递数据（注意，form表单默认也是使用这种格式），会将表单的每个数据以key/value的形式传递，form标签的name属性对应key，f表单中的值对应value，这些key/value的数据存储是以xx=xx&xx=xx的方式在请求的body中
+
+这种情况也是用@RequestParam来处理
+
+#### application/json
+
+该请求以：json 格式发送参数
+
+前端使用POST请求，通过**application/json**的方式传递数据。传递的数据以json的格式存放在请求的body中
+
+这时候就需要用@RequestBody来处理
+
+#### @RequestBody：
+
+作用：
+
+主要用来接收**前端传递给后端**的**json字符串中的数据的**(请求体中的数据的)；
+
+ 
+
+要求：
+
+GET方式无请求体，所以使用@RequestBody接收数据时，前端不能使用GET方式提交数据，而是用POST方式进行提交。
+
+在后端的同一个接收方法里，@RequestBody与@RequestParam()可以同时使用，@RequestBody最多只能有一个，而@RequestParam()可以有多个。
+
+简言之：
+
+一个请求——》只有一个@RequestBody；
+
+一个请求——》可以有多个@RequestParam。
