@@ -64,23 +64,6 @@ computed:{
 
 data是函数，他返回回来的对象才是真正意义上的数据的存储仓库，是为了让每个组件之间的数据都是独立的，互不影响
 
-#### class
-
-#### 使用绝对定位来设置水平居中
-
-```css
-div{
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    margin: auto;
-}
-```
-
-
-
 ### 组件
 
 #### 属性
@@ -261,4 +244,92 @@ vue list：列出官方提供的模板
 vue init 模板名称 项目名称：使用**模板，生成项目
 
 ### 插槽
+
+插槽也是用来进行数据传递的，但是插槽传递的是`HTML`片段
+
+组件标签内部的代码是**父组件传递给子组件**的标签
+
+#### 具名插槽
+
+作用域插槽要用`template`包裹着，不然作用域插槽容易解析失败
+
+如果`slot`标签没有给`name`值，则使用`#default`
+
+```html
+<div id="app">
+    <t-t>
+        <template slot="aa" slot-scope="obj">
+            {{obj.a}}
+        </template>
+        <template v-slot:cc="obj">
+            {{obj.c}}
+        </template>
+        <template #bb="obj">
+            {{obj.b}}
+        </template>
+    </t-t>
+</div>
+<script type="text/javascript">
+    new Vue({
+        el: "#app",
+        components: {
+            "t-t": {
+                template: `
+<div>
+<slot name="bb" b="a from son"></slot>
+<slot name="cc" c="c from son"></slot>
+<slot name="aa" a="a from son"></slot>
+    </div>`
+            }
+        }
+    })
+</script>
+```
+
+### v-router
+
+#### 嵌套路由
+
+嵌套路由，就是父子路由，子路由只能在父组件中进行展示
+
+```js
+{
+    path:"/hone",
+    component:home,
+    children:[
+        {
+             path:'news',
+             component:news
+        }
+    ]
+}
+```
+
+#### 动态路由
+
+动态路由就是把某种模式匹配到的所有路由，全部都隐射到同一个组件。例如我们有个 `user` 组件，对于所有 ID  不同的用户，都要使用这个组件来渲染
+
+```js
+{
+    path:"/user/:id",//这里必须加 : 然后跟上id
+    component:user,
+}
+//第二种写法，这里不同于第一种写法，第二种写法需要加载两个组件，而第一种写法只加载一个组件
+{
+    path:"/user",
+    component:home,
+    children:[
+        {
+             path:':id',//这里必须加 : 然后跟上id
+             component:userDetail
+        }
+    ]
+}
+```
+
+使用动态路由，当我们 需要查询路由参数时，需要通过params查询 
+
+```js
+this.$route.params[id]
+```
 
