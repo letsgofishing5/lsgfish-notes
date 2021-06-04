@@ -56,6 +56,19 @@ npm config set registry=https://registry.npm.taobao.org/
 npm config get registry
 ```
 
+### npm常用命令
+
+```bash
+npm i 包; npm i 包 --save; npm i 包 -S ：局部安装生产环境
+npm i 包 --save-dev; npm i 包 -D ：局部安装开发环境的包
+npm uninstall 包 -g : 卸载全局安装包
+
+npm init -y : 生产项目的package.json文件
+
+```
+
+
+
 #### nrm
 
 安装nrm工具，利用nrm提供的终端命令，可以快速查看和切换下包的镜像源
