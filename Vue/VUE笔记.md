@@ -327,9 +327,134 @@ vue init 模板名称 项目名称：使用**模板，生成项目
 }
 ```
 
-使用动态路由，当我们 需要查询路由参数时，需要通过params查询 
+使用**动态路由**，当我们需要查询路由参数时，需要通过params查询 ，**只有动态路由有params**
 
 ```js
 this.$route.params[id]
 ```
+
+动态路由创建方式就两种，一种是一级路由，一种是嵌套路由
+
+#### 动态路由组件复用
+
+动态路由组件复用，所有生命周期钩子都不会得到调用，为了能在动态路由切换时，可以做到响应，可以使用`watch`监听
+
+#### 路由组件传参
+
+布尔值：只能传递params值
+
+对象：传递值固定
+
+函数：功能最强大
+
+```js
+{
+    path:"/user",
+    component:home,
+    children:[
+        {
+             path:':id',//这里必须加 : 然后跟上id
+             component:userDetail,
+             props:true,//当props为true时，path中的id可以通过props属性接收，只能传递params值
+        }
+    ]
+}
+//第二种，对象
+{
+    path:"/user",
+    component:home,
+    children:[
+        {
+             path:':id',//这里必须加 : 然后跟上id
+             component:userDetail,
+             props:{id:1,name:"张三"},//当props为对象时，组件可以通过props属性接收，但是数据都是死的
+        }
+    ]
+}
+//第三种，函数
+{
+    path:"/user",
+    component:home,
+    children:[
+        {
+             path:':id',//这里必须加 : 然后跟上id
+             component:userDetail,
+             props:(route)=>{//这里参数名固定，route
+             	id:route.params.id,
+                name:route.query.name
+             },//当props为函数时，组件可以通过props属性接收动态数据，
+    ]
+}
+```
+
+动态路由时，使用`$route.params`接收参数
+
+```js
+$router.push({
+    path:'/user',
+    query:{
+        name:"张三"
+    }
+})
+$router.push({
+    name:'user',
+    params:{
+        name:"张三"
+    }
+})
+```
+
+
+
+#### 路由跳转
+
+##### 声明式跳转
+
+```vue
+<router-link to="address"></router-link>
+```
+
+##### 编程式跳转
+
+```vue
+通过$router.push()跳转
+```
+
+#### 路由器&路由配置
+
+##### 路由
+
+```
+path:
+component:
+children:
+props:
+name:
+redirect:
+```
+
+##### 路由配置
+
+```
+routes:注册路由
+mode:
+	类型：string
+	默认值："hash"
+	可选值："hasn"|"history"
+	配置路由模式:
+		hash: 使用URL hash值来作为路由。支持所有浏览器，包括不支持HTML5 History API
+		history:依赖HTML5 History API 和服务器配置。
+linkActiveClass:"linkActiveClass",//模糊匹配添加类名
+linkExactActiveClass:"linkExactActiveClass"//精确匹配添加类型
+```
+
+在使用router-lint标签时，不管是hash模式还是history模式，都不会刷新页面
+
+###### hash模式
+
+不会刷新页面，因为#后面的内容变化，浏览器捕捉不到，所以不会发生http请求；所有很多数据都到不了后台
+
+###### history模式
+
+会刷新页面，但是在使用**router-lint**标签时，不管是hash模式还是history模式，都不会刷新页面
 
