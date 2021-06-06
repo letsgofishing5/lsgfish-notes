@@ -582,60 +582,89 @@ DOM对象是Window对象的一部分
 > ```
 >
 
-## 零散成长笔记
 
-#### forEach使用
 
-forEach() 方法对**数组**的每个元素执行一次提供的函数。总是返回undefined；
+# JavaScript高级
 
-forEach方法中的function回调有三个参数：
-第一个参数是遍历的数组内容，
-第二个参数是对应的数组索引，
-第三个参数是数组本身
+## 数据类型
 
-foreach 语法：
+1. 分类
 
-```js
-forEach(function(value,index,array){
-　
-});
-var arr = [1,2,3,4];
-var sum =0;
-arr.forEach(function(value,index,array){
+   1. 基本类型
+      1. String：任意字符串
+      2. Number：任意数字
+      3. Boolean：true/false
+      4. undefined：undefined
+      5. null：null
+   2. 对象类型
+      1. Object：任意对象
+      2. function：一种特别的对象（可以执行）
+      3. Array：一种特别的对象（数值下标，内部数据是有序的）
 
- array[index] == value; //结果为true
+2. 判断
 
- sum+=value; 
+   1. `typeof`：返回**数据类型的字符串表达式**
 
- });
+      ```js
+      var a
+      console.log(a,typeof a)//'undefined'
+      console.log(undefined==='undefined')//false
+      ```
 
-console.log(sum); //结果为 10
-```
+      不能判断：`null`与`object`，`object`与`array`，因为他们都是object类型
 
-#### 闭包
+   2. `instanceof`：判断对象的**具体类型**
 
-1. JavaScript 中的所有函数都是闭包的
+   3. ===：全等，不但要内容相等，类型也有一致
 
-### ES6
+## 对象
 
-#### 箭头函数
+#### 什么是对象
 
-1. 箭头函数没有this，箭头函数中声明的this是包裹箭头函数的this
-2. 箭头函数也没有 `arguments` 变量。
+1. 多个数据的封装体
+2. 用来保存多个数据的容器
+3. 一个 对象代表现实世界中的一个事物
 
-[推荐博客](https://blog.csdn.net/u012149969/article/details/80261081?)
+#### 为什么要用对象
 
-#### fetch
+1. 统一管理多个数据
 
-[推荐博客](https://blog.csdn.net/qq_36754767/article/details/89645041?)
+####  对象的组成
 
-### VUE
+1. 属性
+2. 方法：一种特殊的属性
 
-#### 生命周期
+## this指向
 
-### node.js
 
-#### 全局变量
 
-1. __filename：当前文件名
-2. __dirname：当前目录名
+## 函数高级
+
+#### 函数的prototype属性
+
+1. 每个函数都有一个`prototype`属性，它默认指向一个`Object`空对象（即称为：原型对象）。原型对象中有一个属性`constructor`，他指向函数对象
+2. 给原型对象添加属性（一般都是方法）
+   1. 作用：函数的所有实例对象自动拥有原型中的属性（方法）
+
+#### 显示原型与隐式原型
+
+1. 显示：`prototype`
+2. 隐式：`__ proto__ `
+
+#### 原型链
+
+原型链本质是隐式原型链
+
+作用：查找对象的属性
+
+#### instanceof
+
+顺着隐式原型链进行对比，只要在一条链上，就是true
+
+## 闭包
+
+1. 如何产生一个闭包？
+   1. 当一个嵌套函数的内部（子）函数引用了嵌套的外部（父）函数的变量（函数）时，就产生了 闭包
+2. 闭包产生的条件
+   1. 函数嵌套
+   2. 内部函数引用了外部函数的 数据（变量/函数）
