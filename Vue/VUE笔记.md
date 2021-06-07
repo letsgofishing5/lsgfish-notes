@@ -458,3 +458,93 @@ linkExactActiveClass:"linkExactActiveClass"//精确匹配添加类型
 
 会刷新页面，但是在使用**router-lint**标签时，不管是hash模式还是history模式，都不会刷新页面
 
+### axios
+
+#### config配置
+
+```js
+url:地址
+method:(get,post,delete,patch,put)
+data:（请求需要的数据：put、post、patch）
+headers:存请求体（一般情况下要满足http协议的规范）
+```
+
+请求配置可写在
+
+- 发送请求时
+
+  ```js
+  axios({
+      url,
+      method
+  })
+  ```
+
+- 创建实例
+
+  ```js
+  const axios  = axios.create({
+      baseURL,
+      headers
+  })
+  ```
+
+- 全局配置
+
+  ```js
+  axios.default.baseURL = ""
+  ```
+
+#### 拦截器
+
+```js
+// 添加请求拦截器
+axios.interceptors.request.use(function (config) {
+    // 在发送请求之前做些什么
+    return config;
+}, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+});
+
+// 添加响应拦截器
+axios.interceptors.response.use(function (response) {
+    // 2xx 范围内的状态码都会触发该函数。
+    // 对响应数据做点什么
+    return response;
+}, function (error) {
+    // 超出 2xx 范围的状态码都会触发该函数。
+    // 对响应错误做点什么
+    return Promise.reject(error);
+});
+```
+
+
+
+### vuex
+
+Vuex中的存储状态是响应式的
+
+Vuex中传参，如果是 一个参数直接传，如果是多个参数则封装成一个对象传递
+
+Vuex中的所有操作都是通过`$store`来操作
+
+#### getters
+
+getters 相当于 计算属性
+
+为了代码统一规范，组件上统一使用`action` ，然后在`action`中提交`mutation`
+
+####  辅助函数
+
+1. `store`中的`state`，`getters`数据在组件中应该有一个计算属性与之对应
+2. `store`中的`action`与`mutation`在组件中应该有一个方法与之对应
+
+```js
+import { mapState,mapGetters,mapActions,mapMutations } from 'vuex'
+mapState({})  或 mapState([])
+mapGetters({})  或 mapGetters([])
+mapActions({})  或 mapActions([])
+mapMutations({})  或 mapMutations([])
+```
+
