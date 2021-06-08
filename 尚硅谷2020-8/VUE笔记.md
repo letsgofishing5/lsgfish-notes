@@ -548,3 +548,17 @@ mapActions({})  或 mapActions([])
 mapMutations({})  或 mapMutations([])
 ```
 
+###  数据传递
+
+函数之间数据传递：通过JS属性
+
+页面之间数据传递：一般通过LocalStorage
+
+组件间数据传递：通过vuex，通过props，通过pubsub,通过url 
+
+前后端数据传递：
+
+- 通过URL的query数据
+- 通过URL的params数据
+- 通过请求体（body）
+- 通过请求头（header）
