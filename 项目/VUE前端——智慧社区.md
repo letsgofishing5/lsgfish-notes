@@ -621,11 +621,19 @@ Element提供了两种调用Loading的方法：指令和服务。对于自定义
 
 在methods里调用
 
- methods: {
-    userTypeList (row) {
-      return row.userType==1?'普通会员':'高级会员'
+```js
+userTypeList(row,column){
+    console.log("上门时间：",row,column)
+    let data = row[column.property]
+    if(data!=null)
+    {
+        return moment(data).format("YYYY-MM-DD hh:mm:ss")
     }
-}
+    return ""
+},
+```
+
+
 
 #### 表格日期格式化
 
