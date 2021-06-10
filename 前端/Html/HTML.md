@@ -328,7 +328,7 @@ background-attachment: fixed;
 ##### 一套连招带走，无固定顺序
 
 ```css
-background:red url(img_flwr.gif) right bottom no-repeat fixed;
+background:red url(img_flwr.gif) right/cover bottom no-repeat fixed;
 /*背景颜色，背景图片地址，位置：右下，不平铺，背景附着固定背景图片*/
 ```
 
