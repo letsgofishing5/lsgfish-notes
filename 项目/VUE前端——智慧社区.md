@@ -161,14 +161,6 @@ console.log(name,age)
 
 [推荐博客](https://blog.csdn.net/wandoumm/article/details/80167642)
 
-#### mapGetters
-
-#### mutations
-
-#### actions
-
-#### getters
-
 #### input输入框
 
 1. 使用`clearable`属性即可得到一个可清空的输入框，可清空的意思就是在文本框内输入文字后，文本框会出现要给清空图标按钮，点击即可清空
