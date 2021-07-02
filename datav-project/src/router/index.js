@@ -1,0 +1,18 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Index from '../views/bigScreen'
+Vue.use(VueRouter)
+
+const routes = [
+  {
+    path: '/',
+    name: 'bigScreen',
+    component: Index
+  }
+]
+
+const router = new VueRouter({
+  routes
+})
+
+export default router
