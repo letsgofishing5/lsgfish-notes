@@ -4,9 +4,11 @@
       <div class="header_sider">
         <dv-decoration-10 class="auto_grow elongate" style="width:100%;height:.0625rem;margin-bottom: 20px;"/>
         <div class="d_flex">
-          <dv-decoration-11 class="small_handle" @click.native="test()" style="width:200px;height:60px;">dv-decoration-11</dv-decoration-11>
-          <dv-decoration-11 class="small_handle" @click.native="test" style="width:200px;height:60px;">dv-decoration-11</dv-decoration-11>
-          <dv-decoration-7 class="small_handle" @click.native="test" style="width:150px;height:30px;">Decoration</dv-decoration-7>
+<!--          <dv-decoration-11 class="small_handle" @click.native="test()" style="width:200px;height:60px;">dv-decoration-11</dv-decoration-11>-->
+<!--          <dv-decoration-11 class="small_handle" @click.native="test" style="width:200px;height:60px;">dv-decoration-11</dv-decoration-11>-->
+<!--          <dv-decoration-7 class="small_handle" @click.native="test" style="width:150px;height:30px;">Decoration</dv-decoration-7>-->
+          <dv-decoration-3 style="width:100%;height:30px;" :color="['#516b91', '#59c4e6', '#edafda', '#93b7e3', '#a5e7f0', '#cbb0e3']" />
+          <dv-decoration-3 style="width:100%;height:30px;" :color="['#516b91', '#59c4e6', '#edafda', '#93b7e3', '#a5e7f0', '#cbb0e3']" />
         </div>
       </div>
     </div>
@@ -20,9 +22,12 @@
       <div class="header_sider">
         <dv-decoration-10 class="auto_grow elongate" style="width:100%;height:.0625rem;margin-bottom: 20px;transform: rotate(180deg)"/>
         <div class="d_flex">
-          <dv-decoration-7 class="small_handle" @click.native="test" style="width:150px;height:30px;">Decoration</dv-decoration-7>
+<!--          <dv-decoration-7 class="small_handle" @click.native="test" style="width:150px;height:30px;">Decoration</dv-decoration-7>
           <dv-decoration-11 class="small_handle" style="width:200px;height:60px;">dv-decoration-11</dv-decoration-11>
-          <dv-decoration-11 class="small_handle" style="width:200px;height:60px;">dv-decoration-11</dv-decoration-11>
+          <dv-decoration-11 class="small_handle" style="width:200px;height:60px;">dv-decoration-11</dv-decoration-11>-->
+          <dv-decoration-3 style="width:100%;height:30px;" :color="['#516b91', '#59c4e6', '#edafda', '#93b7e3', '#a5e7f0', '#cbb0e3']" />
+          <dv-decoration-3 style="width:100%;height:30px;" :color="['#516b91', '#59c4e6', '#edafda', '#93b7e3', '#a5e7f0', '#cbb0e3']" />
+
         </div>
       </div>
     </div>

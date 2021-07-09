@@ -10,6 +10,7 @@
   "dependencies": {
     "@jiaminghi/data-view": "^2.10.0",
     "core-js": "^3.6.5",
+    "echarts": "^5.1.2",
     "sass": "^1.35.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
@@ -21,6 +22,7 @@
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "@vue/composition-api": "^1.0.0-rc.13",
     "@vue/eslint-config-standard": "^5.1.2",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",

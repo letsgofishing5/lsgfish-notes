@@ -99,6 +99,20 @@ val?.constructor === Object // true 代表为对象
 
 
 
+## HTML
+
+#### 画一个平行四边形
+
+```css
+transform: skew(-20deg);
+```
+
+
+
+
+
+
+
 ## VUE
 
 #### 使用vue的ui界面构建项目
