@@ -123,6 +123,12 @@ vue -V
 vue ui//打开图形化界面
 ```
 
+#### 打开新窗口跳转页面
+
+```js
+
+```
+
 
 
 #### 导出export、export default和导入import

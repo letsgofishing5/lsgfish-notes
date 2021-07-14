@@ -33,3 +33,13 @@ option = {
 };
 ```
 
+#### 图表自适应
+
+```js
+window.addEventListener('resize',function(){
+    myEchart.resize()
+})
+```
+
+
+
