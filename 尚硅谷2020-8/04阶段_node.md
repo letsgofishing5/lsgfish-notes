@@ -171,6 +171,32 @@ const server = http.createServer((request, response) => {
 })
 ```
 
+##### 处理请求体的数据
+
+```js
+const server = http.createServer((request,response)=>{
+    let body = ''
+    //data事件，接收流
+    request.on('data',chunk=>{
+        body += chunk
+    })
+    //end结束事件，
+    request.on('end',()=>{
+        console.log(body)
+    })
+})
+```
+
+##### 设置响应报文
+
+```js
+const server = http.createServer((request,response)=>{
+    response.statusCode = 200//状态码
+    response.statusMessage = OK//状态信息
+    response.setHeader('content-type','text/html;charset=utf8')
+})
+```
+
 
 
 ### npm
@@ -189,11 +215,14 @@ const server = http.createServer((request, response) => {
 
 #### 初始化package.json
 
-```
-npm init -y
+```bash
+npm init;  //npm init -y;生成默认的一些信息
 ```
 
-注意：上述命令只能在项目文件夹的名称使用英文命名，不要使用中文，不能出现空格
+- 包名不可是中文
+- 包名不可大写
+
+生产一个 `package.json` 文件
 
 ##### dependencies
 
@@ -209,6 +238,16 @@ npm i 包名 -D
 //完整写法
 npm install 包名 --save-dev
 ```
+
+#### 搜索
+
+```bash
+npm search 包名
+```
+
+
+
+
 
 ##### 下载指定版本包
 
