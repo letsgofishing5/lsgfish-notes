@@ -38,6 +38,10 @@ Buffer 是一个和数组类似的对象，不同是 Buffer 是专门用来保�
 - 不安全创建 `Buffer.allocUnsafe()`
 - 通过数组和字符串创建 `Buffer.from()`
 
+##### 读取Buffer
+
+- 使用 [] 配合索引
+
 #### 文件读写
 
 ```js
@@ -60,6 +64,10 @@ fs.unlinkSync()
 //文件、目录重命名/移动位置
 fs.rename()
 fs.renameSync()
+//目录操作,
+fs.mkdir()//创建目录
+fs.readdir()//读取目录内容
+fs.rmdir()//删除目录
 ```
 
 ##### 读取文件路径
@@ -67,6 +75,100 @@ fs.renameSync()
 ```js
 console.log(__dirname)//绝对文件目录路径
 console.log(__filename)//绝对文件名
+```
+
+#### 流操作
+
+```js
+const rs = fs.createReadStream(绝对路径)//创建读取流
+const ws = fs.createWriteStream(绝对路径)//创建写入流
+rs.on('data',chunk=>{//监听data事件，获取读取数据 
+    console.log(chunk)
+})
+ws.write('写入内容')
+```
+
+##### 管道操作 
+
+```js
+rs.pipe(ws)//读取流 直接 流入 写入流 中（实现大文件操作）
+```
+
+##### 其他操作
+
+```js
+fs.access()//判断文件是否存在
+```
+
+#### Http网络协议
+
+##### 端口号
+
+0-1023是公认端口号，而  1024-65535 ，用户可以自己定义这些端口的作用
+
+##### Http协议
+
+http协议也叫 **超文本传输协议**，是一种基于 TCP/IP 的应用层通信协议，这个协议详细规定了浏览器和万维网服务器之间互相通信的规则。
+
+协议主要规定了两方面的内容：
+
+1. 客户端向服务器发送数据，称之为**请求报文**。
+2. 服务器向客户端返回数据，称之为**响应报文**。
+
+#### node创建web服务
+
+```js
+//导入 http 模块
+const http = require('http')
+//创建 http 服务
+const server = http.createServer((request, response) => {
+  //当有人请求这个服务时，函数被调用
+  //响应请求
+  response.end('hello world')
+
+})
+server.listen(1998, () => {
+  console.log("1998端口被访问")
+})
+```
+
+##### 响应内容设置字符集编码
+
+```js
+const server = http.createServer((request, response) => {
+    //设置字符集编码
+    response.setHeader('Content-Type', 'text/html;charset=utf8')
+})
+```
+
+##### 杀死进程
+
+```cmd
+netstat -ano | findstr 8080
+找到资源管理器，杀死进程
+```
+
+##### 获取请求头和请求行信息
+
+```js
+const server = http.createServer((request, response) => {
+  //当有人请求这个服务时，函数被调用
+  console.log(request.httpVersion)//协议版本
+  console.log(request.method)
+  console.log(request.url)
+  //获取请求头信息
+  console.log(request.headers)
+})
+```
+
+##### 处理url
+
+```js
+const urlTool = require('url')
+const server = http.createServer((request, response) => {
+  let url = urlTool.parse(request.url,true)
+  console.log(url)
+})
 ```
 
 
