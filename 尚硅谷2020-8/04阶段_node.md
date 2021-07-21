@@ -197,9 +197,7 @@ const server = http.createServer((request,response)=>{
 })
 ```
 
-
-
-### npm
+## npm
 
 #### 包的版本号规则
 
@@ -245,10 +243,6 @@ npm install 包名 --save-dev
 npm search 包名
 ```
 
-
-
-
-
 ##### 下载指定版本包
 
 下载指定的axios3.3.0版本
@@ -280,6 +274,95 @@ npm uninstall 包 -g : 卸载全局安装包
 npm init -y : 生产项目的package.json文件
 
 ```
+
+## 模块化
+
+模块化指的就是将一个大的功能拆分为一个一个小的模块，通过不同的模块的组合来实现一个大功能。
+
+1. 在node中一个 js 文件就是一个模块
+2. 模块内部代码对于外部来说都是不可见的，可以通过两种方式向外部暴露
+
+#### 创建模块
+
+```js
+function test(){
+    console.log('test');
+}
+
+// 对外暴露数据
+module.exports = test;
+```
+
+**模块内对外暴露数据注意以下几点：**
+
+1）模块内如果没有暴露数据，引人模块的时候会得到一个空对象。
+
+2）`module.exports` 可以暴露任意数据。
+
+```js
+module.exports = true;
+module.exports = 5211314;
+module.exports = "ilovemingge";
+module.exports = function(){
+    console.log(123456);
+}
+```
+
+3）可以使用 `module.exports` 暴露多个数据。
+
+```js
+// 1. 直接暴露一个对象
+module.exports =  {
+    school: "克莱登大学",
+      name: "铭哥",
+      age: 100
+}
+
+//2. 或者，使用 exports.xxx 语法暴露数据
+module.exports.isNB = true;
+module.exports.msg = 'hahaha';
+```
+
+4）`exports` 也可以暴露数据，不过不能使用 `exports = xxx` 的形式。
+
+```js
+exports.isNB = true;
+exports.msg = "old man";
+exports.fn = function(){
+    console.log("OK");
+}
+
+// 但是不能直接给 exports 赋值，这样是没法导出数据的
+exports = "测试";
+```
+
+#### 引入模块
+
+使用 require 引入文件即可
+
+```js
+var test = require('./test.js');
+```
+
+**引入模块需要注意以下几点：**
+
+1）如果没有加文件后缀，会按照以下后缀加载文件：
+
+- `.js` fs 模块同步读取文件编译执行。
+- `.json` fs 模块同步读取文件，用 `JSON.parse()` 解析返回结果。
+- `.node` 这是 c/c++ 编写的扩展文件，通过 `dlopen()` 方法编译。
+
+2）其他扩展名，文件内容会被当做 JavaScript 代码去解析。
+
+3）如果是文件夹则会默认加载该文件夹下 package.json 文件中 main 属性对应的文件，如果 main 属性对应的文件不存在，则自动找 `index.js` 、 `index.json`。
+
+4）如果是**内置模块**或者是 **npm 安装的模块**，直接使用包名字即可，报名前面无需加 `./` 等路径。
+
+5）npm 引入包时，如果当前文件夹下的 node_modules 没有，则会自动向上上级目录中的 node_modules 查找，一直到根目录。
+
+## 静态资源服务器包
+
+
 
 
 
