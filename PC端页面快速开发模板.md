@@ -13,10 +13,6 @@
       </el-col>
     </el-row>
     <inspection-point :communityId="communityUuid" v-if="attr==='inspection-point'"/>
-    <inspection-path :communityId="communityUuid" v-if="attr==='inspection-path'"/>
-    <inspection-plan :communityId="communityUuid" v-if="attr==='inspection-plan'"/>
-    <inspection-task :communityId="communityUuid" v-if="attr==='inspection-task'"/>
-    <inspection-detail :communityId="communityUuid" v-if="attr==='inspection-detail'"/>
 
   </div>
 </template>
@@ -24,25 +20,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import InspectionPoint from './components/InspectionPoint';
-import InspectionPath from './components/InspectionPath';
-import InspectionPlan from './components/InspectionPlan';
-import InspectionTask from './components/InspectionTask';
-import InspectionDetail from './components/InspectionDetail';
 export default {
   name: 'Index',
   components:{
-    InspectionDetail,
-    InspectionTask,
-    InspectionPoint,InspectionPath,InspectionPlan
   },
   data(){
     return {
       header: {
         'inspection-point': '巡检点',
-        'inspection-path': '巡检路线',
-        'inspection-plan': '巡检计划',
-        'inspection-task': '巡检任务',
-        'inspection-detail': '巡检明细',
       },
       attr: 'inspection-point',
       communityUuid:null,
@@ -100,6 +85,13 @@ export default {
                 <el-option label="区域二" value="beijing"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item prop="test">
+              <el-date-picker
+                  v-model="listQuery.test"
+                  type="datetime"
+                  placeholder="请选择打卡时间">
+              </el-date-picker>
+            </el-form-item>
             <el-form-item>
               <el-button type="success" icon="el-icon-search" @click="getList">查询</el-button>
               <el-button @click="resetForm('listQuery')">重置</el-button>
@@ -122,6 +114,7 @@ export default {
                 v-loading="loading"
                 style="width: 100%">
               <el-table-column
+                  align="center"
                   prop="feeName"
                   label="巡检点ID">
               </el-table-column>
@@ -153,7 +146,7 @@ export default {
         width="30%"
         :before-close="cancel"
         :close-on-click-modal="false">
-      <el-form ref="form" :rules="rules" :model="form" label-width="80px" v-loading="loading">
+      <el-form ref="form" label-position="left" :rules="rules" :model="form" label-width="80px" v-loading="loading">
 
         <el-form-item label="巡检点名称" label-width="25%" prop="feeName">
           <el-input v-model="form.feeName" placeholder="必填，请填写巡检点名称"></el-input>
@@ -187,7 +180,7 @@ export default {
   props: {
     communityId: {
       type: Number,
-      default: ''
+      default: 0
     }
   },
   data() {
@@ -217,9 +210,9 @@ export default {
       this.resetForm('form');
     },
     getList() {
-      /*this.loading=true
+      this.loading=true
       this.api({
-        url:'/community/property/page',
+        url:'',
         params:this.listQuery
       }).then(data=>{
         console.log("表格返回值：",data)
@@ -227,7 +220,7 @@ export default {
         this.tableData=data.list
       }).finally(()=>{
         this.loading=false
-      })*/
+      })
     },
     handleAdd() {
       this.dialogVisible = true;
@@ -267,5 +260,27 @@ export default {
     }
 }
 
+```
+
+### 常用方法
+
+```js
+cancel(){
+    this.dialogVisible=false
+    this.resetForm('form')
+},
+handleClose(form) {
+    if (this.$refs[form]!==undefined) {
+        console.log("清空表单：",this.$refs[form])
+        this.$refs[form].resetFields();
+        let keys = Object.keys(this.$refs[form].model)
+        keys.forEach(item=>{
+            if (item!='communityUuid' && item!="pageSize" && item !='pageNum')
+            {
+                this.$refs[form].model[item]=""
+            }
+        })
+    }
+},
 ```
 
