@@ -360,31 +360,63 @@ var test = require('./test.js');
 
 5）npm 引入包时，如果当前文件夹下的 node_modules 没有，则会自动向上上级目录中的 node_modules 查找，一直到根目录。
 
-## 静态资源服务器包
+## HTTP 数据压缩介绍
 
+1）HTTP压缩是指在 Web 服务器和浏览器间传输压缩文本内容的方法。
 
+2）通过开启服务器端的HTTP压缩功能，也可以提高网站的浏览速度，对优化Ext库文件的传输也不失为一种好的方法。只是该方法会提高服务器 CPU 的负荷。如果服务器CPU本身负荷就大，就需要好好地斟酌了。
 
+3）HTTP压缩的原理是服务器接收到客户端的HTTP请求后，检查浏览器是否支持HTTP压缩，如果支持，则根据配置压缩相应的网页文件，压缩文件下载到客户端后，由浏览器解压文件后再浏览。
 
+4）HTTP压缩的比较通用的算法是 GZIP，所以开启服务端的HTTP压缩功能一般是指开启服务器端的GZIP功能。
 
-#### nrm
+####  2 HTTP 数据压缩实现流程
 
-安装nrm工具，利用nrm提供的终端命令，可以快速查看和切换下包的镜像源
+1）请求报文中的请求头 Accept-Encoding，会告知服务器客户端支持的压缩方式。
 
+2）响应报文中的响应头 Content-Encoding，会告知客户端响应数据所使用的压缩方式。
+
+####  3. 常用压缩方式及 Node 中的实现
+
+#### 3.1 gzip
+
+gzip 的实现算法是在 deflate 格式上增加了文件头和文件尾，
+
+gzip 是最常用的压缩算法，比较推荐。
+
+```js
+const zlib = require('zli');
+
+zlib.gzip(data, (err, d) => {
+
+});
 ```
-# 通过npm 包管理器，将nrm 安装为全局可用的工具
-npm i nrm -g
-# 查看所有可用的镜像源
-nrm ls
-# 将下包的镜像源切换为 Taobao 镜像
-nrm use taobao
+
+#### 3.3 defalte
+
+deflate是同时使用了LZ77算法与哈夫曼编码的一个无损数据压缩算法,deflate压缩与解压的源代码可以在自由,通用的压缩库zlib上找到算法实现。
+
+```js
+const zlib = require('zli');
+
+zlib.deflate(data, (err, d) => {
+
+});
 ```
 
-#### 包分类
+#### 3.3 br
 
-- 项目包（node_modules）
-  - 开发依赖包（DevDependencies，开发期间会用到。命令：npm i 包名 -D）
-  - 核心依赖包（dependencies，开发和上线期间都会用到。命令：npm i 包名）
-- 全局包（执行 npm install 命令时，提供了 -g 参数）
+br 全称 brotliCompress，适合压缩较大的文件。
+
+```js
+const zlib = require('zli');
+
+zlib.brotliCompress(data, (err, d) => {
+
+});
+```
+
+
 
 #### 规范的包结构
 
@@ -392,18 +424,7 @@ nrm use taobao
 
 更多详情：https://yarnpkg.com/zh-Hans/docs/package-json
 
-#### 模块加载机制
-
-1. 内置模块与第三方模块同名时，加载的是内置模块
-2. 自定义模块加载时，必须以 ./ 或 ../ 开头的路径标识符。如果没有指定 ./ ../ 这样的路径标识符，则node会把他当做内置模块或第三方模块进行加载
-3. 在引入自定义模块时，如果省略了文件的扩展名，则 node.js 会按顺序分别尝试加载以下的文件
-   1. 按照确切的文件名加载
-   2. 补全 .js 扩展名
-   3. 补全 .json 扩展名
-   4. 补全 .node 扩展名
-   5. 加载失败，终端报错
-
-### Express
+## Express
 
 Express是基于Node.js平台，快速、开放、极简的Web开发框架
 
