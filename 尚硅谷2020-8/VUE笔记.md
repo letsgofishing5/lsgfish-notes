@@ -197,6 +197,8 @@ new Vue({
 
 ### 动画
 
+1. 要被`transition`标签包裹
+
 动画中的六个动作，其中`v-leave`是装饰品，没有任何作用
 
 v-enter：从隐藏到显示的第一帧
@@ -244,25 +246,11 @@ moment，去bootCDN查询
 
 
 
-### vue2.0脚手架
-
-#### 卸载、安装
-
-卸载其他脚手架：npm uninstall @vue/cli  -g
-
-清除缓存：npm cache clean --force
-
-安装脚手架：npm i vue-cli -g
-
-查看脚手架版本：vue -V
-
-#### 使用脚手架搭建项目
-
-vue list：列出官方提供的模板
-
-vue init 模板名称 项目名称：使用**模板，生成项目
-
 ### 插槽
+
+**父组件给子组件传递 HTML 片段**
+
+**子组件给父组件传递 值**
 
 插槽也是用来进行数据传递的，但是插槽传递的是`HTML`片段
 
