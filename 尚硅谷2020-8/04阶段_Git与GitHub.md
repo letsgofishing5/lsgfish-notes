@@ -133,6 +133,8 @@ css/  //忽略css目录，包括目录下的所有文件
 
 - git branch -r：列出所有远程分支
 - git branch 分支名：新建分支，但是停留在当前分支上
+- git branch -b 分支名：新建分支，并切换到新建分支上
+- git switch -c  分支名：同上
 - git branch -d 分支名：删除分支
 - git push origin –delete 分支名：删除远端分支
 
@@ -159,6 +161,28 @@ css/  //忽略css目录，包括目录下的所有文件
 ##### 5、分支合并冲突
 
 ​		协商处理
+
+##### 6、新建本地库并推送到远程
+
+​		git push origin 本地分支名
+
+##### 7、删除远程分支
+
+​		git push -d origin 分支名
+
+#### 远程库操作
+
+##### 1、git配置远程地址
+
+git remote add origin url ，其中url为远程仓库地址。
+
+##### 2、git删除远程地址
+
+git remote rm origin
+
+##### 3、查看远程仓库地址信息
+
+git remote -v 
 
 ### 连接远程仓库
 
