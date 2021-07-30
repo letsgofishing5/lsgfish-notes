@@ -528,6 +528,18 @@ http://localhost:1998/test/index.html
 npm i nodemon -g
 ```
 
+#### 使用报错
+
+**Error：nodemon : 无法加载文件 因为在此系统上禁止运行脚本报错解决**
+
+打开powershell，以管理员身份运行，输入
+
+```bash
+set-ExecutionPolicy RemoteSigned
+```
+
+一路 Y 即可
+
 ##### 使用
 
 ```

@@ -452,7 +452,7 @@ mode:
 		hash: 使用URL hash值来作为路由。支持所有浏览器，包括不支持HTML5 History API
 		history:依赖HTML5 History API 和服务器配置。
 linkActiveClass:"linkActiveClass",//模糊匹配添加类名
-linkExactActiveClass:"linkExactActiveClass"//精确匹配添加类型
+linkExactActiveClass:"linkExactActiveClass"//精确匹配添加类名
 ```
 
 在使用router-lint标签时，不管是hash模式还是history模式，都不会刷新页面
@@ -530,7 +530,7 @@ axios.interceptors.response.use(function (response) {
 
 ### vuex
 
-Vuex中的存储状态是响应式的
+Vuex中的存储状态（state）是响应式的，对应着vue组件的data，
 
 Vuex中传参，如果是 一个参数直接传，如果是多个参数则封装成一个对象传递
 
