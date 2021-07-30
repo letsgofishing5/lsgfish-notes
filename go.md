@@ -10,7 +10,7 @@
 1. go env
 2. go run
 3. go build
-4. 
+4. go build -o hello.exe  //给编译后的文件重命名
 
 ### go开发目录
 
@@ -26,3 +26,9 @@
 
 ![image-20210729173757561](go_img/image-20210729173757561.png)
 
+## IDE -vsCode
+
+### 插件
+
+1. Go
+2. 
