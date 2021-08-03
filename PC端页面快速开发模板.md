@@ -100,7 +100,7 @@ export default {
     </el-card>
     </el-col>
     </el-row>
-    
+
     <el-row :gutter="20">
         <el-col>
             <el-card class="box-card">
@@ -185,9 +185,9 @@ export default {
             }
         },
         data() {
-            var validatePointObjId = (rule, value, callback) => {
-                if (value === '' && this.inspectionType==='1001') {
-                    callback(new Error('请选择巡检设备'));
+            var validateFiled = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请添加字典编码'));
                 } else {
                     callback();
                 }
