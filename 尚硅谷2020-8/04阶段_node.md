@@ -1,3 +1,7 @@
+## 入门推荐
+
+http://nodejs.cn/learn/the-npx-nodejs-package-runner
+
 ## node安装
 
 ```
