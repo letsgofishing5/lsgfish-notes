@@ -208,7 +208,7 @@ export default {
                 },
                 rules: {
                     pointObjId: [
-                        { required: true, validator: validatePointObjId, trigger: 'blur' },
+                        { required: true, validator: validateFiled, trigger: 'blur' },
                     ],
                     inspectionName: [
                         { required: true, message: '请输入巡检点名称', trigger: 'blur' },
