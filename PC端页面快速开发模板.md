@@ -258,7 +258,6 @@ export default {
     methods:{
         resetForm(formName) {
             this.$refs[formName].resetFields();
-            this.handleClose(formName)
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
@@ -284,19 +283,6 @@ export default {
 cancel(){
     this.dialogVisible=false
     this.resetForm('form')
-},
-handleClose(form) {
-    if (this.$refs[form]!==undefined) {
-        console.log("清空表单：",this.$refs[form])
-        this.$refs[form].resetFields();
-        let keys = Object.keys(this.$refs[form].model)
-        keys.forEach(item=>{
-            if (item!='communityUuid' && item!="pageSize" && item !='pageNum')
-            {
-                this.$refs[form].model[item]=""
-            }
-        })
-    }
 },
     //dialog提交或修改信息
 onSubmit(){
