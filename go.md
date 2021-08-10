@@ -71,3 +71,15 @@ var (
 
 1. 八进制：0开头
 2. 十六进制：0x开头
+
+格式化输出进制数字
+
+```go
+fmt.Printf("%d",n)//输出十进制
+fmt.Printf("%b",n)//输出二进制
+fmt.Printf("%o",n)//输出八进制
+fmt.Printf("%x",n)//输出十六进制
+fmt.Printf("%T",n)//类型检查
+
+```
+
