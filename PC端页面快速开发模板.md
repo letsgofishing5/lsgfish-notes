@@ -7,7 +7,7 @@
       <el-col>
         <el-card class="box-card">
           <div class="title">
-            {{ header[attr] }}
+            {{ $route.meta.title }}
           </div>
         </el-card>
       </el-col>
@@ -26,9 +26,6 @@ export default {
   },
   data(){
     return {
-      header: {
-        'inspection-point': '巡检点',
-      },
       attr: 'inspection-point',
       communityUuid:null,
     }
@@ -38,9 +35,7 @@ export default {
   },
   created() {
     this.communityUuid=this.communityId['data']
-    console.log("社区id:",this.communityId['data'])
     this.attr = this.$route.path.split('/')[2];
-    console.log('路由信息：', this.attr);
   },
 };
 </script>
