@@ -245,30 +245,121 @@ export default {
 
 ```js
 export default {
-    data(){
-        return {
-
-        }
+  data() {
+    return {
+      listQuery: {
+        pageSize: 10,
+        pageNum: 1
+      },
+      total: 0
+    };
+  },
+  methods: {
+    /**
+     * 重置表单
+     * @param formName
+     */
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     },
-    methods:{
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.onSubmit()
-                } else {
-                    return false;
-                }
-            });
-        },
-        handlePageChange(pageNum){
-            this.listQuery.pageNum=pageNum
-            this.getList()
-        },
+    /**
+     *  提交表单，进行校验
+     * @param formName
+     */
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.onSubmit();
+        } else {
+          return false;
+        }
+      });
+    },
+    /**
+     * 获取字典表数据
+     * @param fileds 是一个字符串类型，以逗号分隔
+     */
+    getDictValue(fileds) {
+      this.uniApi.getDictValue(fileds).then(data => {
+        data.forEach(item => {
+          if (item.filed === '38') {
+            this.punchType = item.parent;
+          }
+        });
+      });
+    },
+    /**
+     * 点击取消时关闭模态窗口和重置表单
+     * @param dialog 模态窗口关闭时时需要控制的变量
+     * @param formName 需要清空的表单名
+     */
+    cancel(dialog, formName) {
+      this[dialog] = false;
+      this.resetForm(formName);
+    },
+    /**
+     * 点击编辑按钮时打开模态窗口，并且给表单赋值
+     * @param row 点击的表格行，整行数据
+     * @param dialog 模态窗口打开的变量
+     */
+    handleEdit(row, dialog) {
+      this.title = '修改';
+      this.$nextTick(() => {
+        for (const i in row) {
+          this.form[i] = row[i];
+        }
+      });
+      this[dialog] = true;
+    },
+    /**
+     * 删除
+     * @param row
+     * @param funcName
+     */
+    handleDel(row, funcName) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.loading = true;
+        this.uniApi.clocking[funcName](row).then(() => {
+          this.loading = false;
+          this.$message.success('删除成功');
+          this.getList('intelligentGetList');
+        }).catch(() => {
+          this.loading = false;
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    /**
+     * 分页查询
+     * @param pageNum
+     */
+    handlePageChange(funcName, pageNum) {
+      this.listQuery.pageNum = pageNum;
+      this.getList(funcName);
+    },
+    /**
+     * 获取当前页表格总信息
+     * @param funcName
+     */
+    getList(funcName) {
+      this.loading = true;
+      this.uniApi.clocking[funcName](this.listQuery).then(data => {
+        this.tableData = data.list;
+        this.total = data.total;
+      }).finally(() => {
+        this.loading = false;
+      });
     }
-}
+  }
+};
 
 ```
 
