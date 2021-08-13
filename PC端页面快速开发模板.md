@@ -323,7 +323,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true;
-        this.uniApi.clocking[funcName](row).then(() => {
+        this.uniApi.切换自己的名字[funcName](row).then(() => {
           this.loading = false;
           this.$message.success('删除成功');
           this.getList('intelligentGetList');
@@ -351,7 +351,7 @@ export default {
      */
     getList(funcName) {
       this.loading = true;
-      this.uniApi.clocking[funcName](this.listQuery).then(data => {
+      this.uniApi.切换自己的名字[funcName](this.listQuery).then(data => {
         this.tableData = data.list;
         this.total = data.total;
       }).finally(() => {
