@@ -329,7 +329,7 @@ moment，去bootCDN查询
 
 作用域插槽要用`template`包裹着，不然作用域插槽容易解析失败
 
-如果`slot`标签没有给`name`值，则使用`#default`
+如果`slot`标签没有给`name`值，则使用`#default`，插槽直接传值通过属性进行传值
 
 ```html
 <div id="app">
@@ -498,16 +498,17 @@ $router.push({
 
 #### 路由器&路由配置
 
-##### 路由
+#####  概念
 
-```
-path:
-component:
-children:
-props:
-name:
-redirect:
-```
+**前端路由**
+
+1. 不需要发送请求给服务器，请求路由核心库
+2. 相应路由：vue-router
+
+**后端路由**
+
+1. 需要发送请求至服务器
+2. 相应路由：服务器端
 
 ##### 路由配置
 
@@ -533,6 +534,28 @@ linkExactActiveClass:"linkExactActiveClass"//精确匹配添加类名
 ###### history模式
 
 会刷新页面，但是在使用**router-lint**标签时，不管是hash模式还是history模式，都不会刷新页面
+
+##### 路由传参
+
+1. params
+   1. 注册路由的时候需要占位符
+   2. 示例：/path/:占位符
+2. query
+   1. 携带多参数
+3. meta
+   1. 用来描述信息本身的信息
+4. props
+
+##### 笔试题
+
+$route与$router的区别
+
+1. $route
+   1. 路由对象
+   2. 包含当前路由下的所有的路由信息
+2. $router
+   1. 路由器
+   2. 包含了路由跳转的方法：push，replace
 
 ### axios
 
@@ -638,3 +661,4 @@ mapMutations({})  或 mapMutations([])
 - 通过URL的params数据
 - 通过请求体（body）
 - 通过请求头（header）
+
