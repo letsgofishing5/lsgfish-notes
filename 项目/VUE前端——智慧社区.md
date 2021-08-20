@@ -29,31 +29,6 @@ let result2 = function(){
 
 ### 常用规则语法
 
-#### Object
-
-[推荐博客](https://blog.csdn.net/yexudengzhidao/article/details/98517515)
-
-#### Object.assign
-
-[推荐博客](https://blog.csdn.net/dwb123456123456/article/details/83316471)
-
-Object.assign方法用来将源对象（source）的所有可枚举属性，复制到目标对象（target）。它至少需要两个对象作为参数，第一个参数是目标对象，后面的参数都是源对象。
-
-```js
-
-let targetObj1 = { a: 1 };
-let sourceObj1 = { b: 1 };
-let sourceObj11 = { c: 3 };
-Object.assign(targetObj1, sourceObj1, sourceObj11);
-console.log(targetObj1);//将sourceObj1,sourceObj11都复制到targetObj1
-//注：如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性
-```
-
-1. 如果目标对象与源对象有同名属性，或多个源对象有同名属性，则后面的属性会覆盖前面的属性
-2. 如果只有一个参数，Object.assign会直接返回该参数。
-3.  如果该参数不是对象，则会先转成对象，然后返回。
-4. 注意：如果非对象参数出现在源对象的位置（即非首参数），那么处理规则有所不同。首先，这些参数都会转成对象，如果无法转成对象，就会跳过。这意味着， 如果undefined和null不在首参数，就不会报错。其他类型的值（即数值、字符串和布尔值）不在首参数，也不会报错。但是，除了字符串会以数组形式，拷贝入目标对象，其他值都不会产生效果。
-
 #### Object.keys
 
 返回一个数组，包含对象的所有属性的键名
