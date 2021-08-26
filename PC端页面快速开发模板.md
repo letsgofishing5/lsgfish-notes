@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.inspection {
+.container {
   margin: 26px;
 
   .title {
@@ -159,7 +159,7 @@ export default {
             <el-input type="textarea" v-model="form.remark" placeholder="选填，请填写备注"></el-input>
         </el-form-item>
         <el-form-item label-width="25%">
-            <el-button type="success" @click="submitForm('form')">{{ status }}</el-button>
+            <el-button type="success" @click="submitForm('form')">确定</el-button>
             <el-button @click="cancel">取消</el-button>
         </el-form-item>
     </el-form>
@@ -188,8 +188,7 @@ export default {
                 }
             };
             return {
-                title: '添加巡检计划',
-                status: '确定',
+                title: '添加',
                 loading: false,
                 dialogLoading:false,
                 total: 0,
@@ -198,8 +197,7 @@ export default {
                 listQuery: {
                     pageSize: 10,
                     pageNum: 1,
-                    test: '',
-                    communityUuid: this.communityId
+                    test: ''
                 },
                 rules: {
                     pointObjId: [
@@ -351,7 +349,7 @@ export default {
      */
     getList(funcName) {
       this.loading = true;
-      this.uniApi.切换自己的名字[funcName](this.listQuery).then(data => {
+      this.uniApi.切换自己模块的名字[funcName](this.listQuery).then(data => {
         this.tableData = data.list;
         this.total = data.total;
       }).finally(() => {
