@@ -115,6 +115,24 @@ JavaScript 中，数据类型分两大类：
    console.log(1 ?? 21)
    ```
 
+#### 常用的数字类型内置方法
+
+```js
+let num = 111
+//固定输出两位小数
+num.toFixed(2)
+//以其他进制输出
+num.toString(2)//2进制输出，最高32进制
+//其他进制转十进制
+parseInt(num,8)//num以八进制身份输入，十进制身份输出
+//比较NaN是否相等
+Object.is(NaN,NaN)//true
+//字符串中提取数字，整数/浮点数
+parseInt/parseFloat
+//生成范围内的随机数
+Math.random()*5//生成一个小于5的随机数
+```
+
 
 
 ### 流程控制语句
@@ -194,7 +212,9 @@ let bag = {
 
 #### 检测对象是否存在某个属性
 
-请注意，`in` 的左边必须是 **属性名**。通常是一个带引号的字符串。
+请注意，`in` 的左边必须是 **属性名**。通常是一个带引号的字符串。`in` 会顺着原型链找
+
+`Object.prototype.hasOwnProperty()` 也可以检查对象是否存在某个属性，但是不会顺着原型链找
 
 ```js
 let user = { name: "John", age: 30 };
@@ -202,6 +222,8 @@ let user = { name: "John", age: 30 };
 alert( "age" in user ); // true，user.age 存在
 alert( "blabla" in user ); // false，user.blabla 不存在。
 ```
+
+
 
 ### 垃圾回收
 
@@ -218,3 +240,34 @@ alert( "blabla" in user ); // false，user.blabla 不存在。
    - 优点：不会内存泄漏
    - 缺点：深度递归，定时的标记定时清除
 
+## 模块
+
+1. 浏览器中引入模块，使用type=module
+
+```html
+<script type='module'>
+	import {test} from './test.js'
+</script>
+```
+
+2. 模块始终默认使用 `use strict`，
+3. 每个模块都有自己的顶级作用域
+4. 模块代码仅在第一次导入时被解析
+   1. 如果同一个模块被导入到多个其他位置，那么它的代码仅会在第一次导入时执行，然后将导出（export）的内容提供给所有的导入（importer）。
+   2. 如果某个导入地方修改了 导入模块的值，其他的模块也能看到这个修改。
+5. 在一个模块中，`this` 是 undefined
+6. 下载外部模块脚本 `<script type="module" src="...">` 不会阻塞 HTML 的处理，它们会与其他资源并行加载。
+7. 模块脚本会等到 HTML 文档完全准备就绪（即使它们很小并且比 HTML 加载速度更快），然后才会运行。
+8. 保持脚本的相对顺序：在文档中排在前面的脚本先执行
+
+### 导入导出
+
+export有两种导出方式
+
+1. export
+2. export default
+   1. 默认导出一个模块只能使用一次
+
+import（）
+
+`import(module)` 表达式加载模块并返回一个 promise，该 promise resolve 为一个包含其所有导出的模块对象。我们可以在代码中的任意位置调用这个表达式。
