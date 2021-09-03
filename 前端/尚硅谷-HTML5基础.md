@@ -119,8 +119,6 @@ canvas是H5 新增的元素，可用于通过使用JavaScript中的脚本来绘�
 
 实际上，<canvas>标签只有两个属性—— width和height。这些都是可选的。当没有设置宽度和高度的时候，canvas会初始化宽度为300像素和高度为150像素。
 
-##### 画布画画
-
 渲染上下文
 ```text
 <canvas>元素只是创造了一个固定大小的画布，要想在它上面去绘制内容，我们需要找到它的渲染上下文
@@ -144,3 +142,13 @@ if(testNode.getContext){//判断是否有画笔
 }
 ```
 
+#### 常用画图api
+
+1. fillStyle
+2. fillRect
+3. strokeStyle
+4. stroke
+5. clearRect
+6. lineWidth
+7. lineCap
+8. save与restore

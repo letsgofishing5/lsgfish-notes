@@ -1,57 +1,135 @@
-# Promise
+#  promise
 
-### 什么是promise
+基本介绍请看文档
 
-1. `promise`是`ES6`推出的新的异步编程解决方案，用来解决回调地狱的问题，
-2. 它与`async/await`相互配合，从而更好的解决回调地狱问题
-3. `promise`可以通过`.then()、.cathc()`的语法链式调用，每次`.then()、.cathc()`语法都会返回一个新的`Promise`对象
-4. `promise`对象有三个状态：`pending`（初始状态）、`resolved/fulfilled` （成功状态）、`rejected`（失败状态）
-5. `promise`可以通过`resolve`('传递信息')/`reject`('传递信息')改变状态传递信息，传递的信息在`.then()、.cathc()`语法中直接接收到
+[promise](https://www.runoob.com/w3cnote/javascript-promise-object.html)
 
-### promise使用语法
+[async](https://www.runoob.com/w3cnote/es6-async.html)
 
-```js
-//1，通过构造函数
-let promise1 = new Promise((resolve,reject)=>{
-    resolve('success')
-    reject('error')
-})
-//2，通过静态方法
-let promise2 = Promise.resolve('success')
-let promise3 = Promise.reject('error')
-```
+### 总结
 
-### Promise使用需要注意
+1. `Promise`构造器中的代码是同步的，只有回调是异步的（微任务）
 
-1. `.then()、.cathc()` 方法会返回一新的`Promise`对象的**状态**根据`.then()、.cathc()`语法的**返回值**和有无抛出**异常**决定
-   - resolved/fulfilled状态
-     - return Promise.resolve('')
-     - return 其他任何值（非Promise.reject('')）
-     - 没有显式返回值（自动返回undefined）
-   - rejected
-     - return Promise.reject('')
-     - 抛出异常
-2. `.then()`语法中的参数，必须是一个**函数**，不能是其他的，否则会直接跳过（忽略）该`.then()`语法，并延续上一个`promise`状态
-3. `.finally()`语法，并不会影响到`Promise`执行链，他也不会接收到任何参数
+   ```js
+   let res = new Promise((resolve,reject) => {
+       console.log('promise内部代码，执行resolve之前')
+       resolve('succ')
+       console.log('promise内部代码，执行resolve之后')
+   })
+   res.then(data => {
+       console.log(data)
+   })
+   console.log("执行结束")
+   ```
 
-### 题目
+   
 
-从网上拷来的题目，请思考最终的输出结果
+2. `promise`的`then`、`catch`都会返回一个新的`promise`，而`finally`不接收任何参数，也不返回`promise`，同时也不会影响到`Promise`执行链向后执行
 
-##### 1
+   ```js
+   let res = new Promise((resolve,reject)=>{
+       resolve('succ')
+   })
+   res.then(data=>{
+       throw new Error("err")
+   }).catch(err=>{
+       console.log(err)
+       throw new Error("抛出异常")
+   }).finally(()=>{
+       console.log("finally执行了")
+   }).then(data=>{
+       console.log("finally后面的then执行了",data)
+   }).catch(err=>{
+       console.log("捕捉 到异常了",err)
+   })
+   ```
 
-```js
-Promise.resolve(1)
-.then(() => 2)
-.then(3)
-.then((value) => value * 3)
-.then(Promise.resolve(4))
-.then(data=>{
-  console.log(data)
-})
-```
+   
 
-##### 2
+3. `then、catch`中的参数必须是函数，不能是其他的，如果省略两个参数或提供非函数参数，那么当前`then、catch`则将被忽略，但不会产生任何错误。同时也不会打断promise执行链继续向下执行
+
+   ```js
+   Promise.resolve(1)
+       .then(() => 2)
+       .then(3)
+       .then((value) => value * 3)
+       .then(Promise.resolve(4))
+       .then(data => {
+       console.log(data)
+   })
+   ```
+
+   
+
+4. `async`修饰的函数返回一个`promise`
+
+   ```js
+   async function test(){
+       
+   }
+   let res = tes()
+   console.log(res)
+   ```
+
+   
+
+5. `async`修饰的函数、`then`、`catch`如果没有返回值，则默认返回`resolve(undefined)`状态。如果抛出异常或者主动调用`Promise.reject('err')`，则返回`reject('err')`
+
+   ```js
+   async function test() {
+   
+   }
+   let res = test()
+   res.then(data => {
+       return 'succ'
+   }).then(()=>{}).then(data => {
+       console.log(data)
+   })
+   console.log(res)
+   async function test2(){
+       throw new Error("error")
+   }
+   let res2 = test2()
+   console.log(res2)
+   res2.catch(()=>{
+       
+   }).then(data=>{
+       console.log(data)
+   })
+   ```
+
+   
+
+6. async中的await，会等待一个promise的状态，他只为等待返回一个promise的状态，至于其中的异步操作一概不管，并且返回值是promise对象则解析他，如果不是则直接返回对应的值
+
+   ```js
+   async function test(){
+       setTimeout(()=>{
+           console.log("test异步任务setTimeout")
+       },1000)
+       return 'test'
+   }
+   async function test2(){
+       return new Promise((resolve,reject)=>{
+           setTimeout(()=>{
+               console.log("test2异步任务执行了setTimeout")
+               resolve('test2')
+           },1000)
+       })
+   }
+   async function test3(){
+       let res1 = await test()
+       console.log(res1)
+   
+       let res2 = await test2()
+       console.log(res2)
+   }
+   test3()
+   ```
+
+   
+
+### 最后的练习
 
 ```js
 Promise.resolve(1)
@@ -79,10 +157,5 @@ Promise.resolve(1)
 })
 ```
 
-
-
-答案：拷贝代码运行一遍，答案自现
-
 # 请斧正
 
-如果文章有写的不对的地方，请斧正，谢谢
