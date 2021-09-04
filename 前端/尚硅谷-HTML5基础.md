@@ -144,11 +144,14 @@ if(testNode.getContext){//判断是否有画笔
 
 #### 常用画图api
 
-1. fillStyle
-2. fillRect
-3. strokeStyle
-4. stroke
-5. clearRect
-6. lineWidth
-7. lineCap
-8. save与restore
+##### 填充
+
+`fill`开头
+
+##### 描边
+
+`stroke`开头
+
+##### 样式
+
+`Style`结尾
