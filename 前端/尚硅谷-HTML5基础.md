@@ -144,14 +144,70 @@ if(testNode.getContext){//判断是否有画笔
 
 #### 常用画图api
 
-##### 填充
+[`fillRect(x, y, width, height)`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/fillRect)
 
-`fill`开头
+绘制一个填充的矩形
 
-##### 描边
+[`strokeRect(x, y, width, height)`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/strokeRect)
 
-`stroke`开头
+绘制一个矩形的边框
 
-##### 样式
+[`clearRect(x, y, width, height)`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/clearRect)
 
-`Style`结尾
+```
+beginPath()
+```
+
+新建一条路径，生成之后，图形绘制命令被指向到路径上生成路径。
+
+```
+moveTo(x,y)
+```
+
+将笔触移动到指定的坐标x以及y上。
+
+```js
+lineTo(x, y)
+```
+
+绘制一条从当前位置到指定x以及y位置的直线。
+
+```
+closePath()
+```
+
+闭合路径之后图形绘制命令又重新指向到上下文中。
+
+```
+stroke()
+```
+
+通过线条来绘制图形轮廓。
+
+```
+fill()
+```
+
+通过填充路径的内容区域生成实心的图形。
+
+#### 圆弧
+
+绘制圆弧或者圆，我们使用`arc()`方法。当然可以使用`arcTo()`，不过这个的实现并不是那么的可靠，所以我们这里不作介绍。
+
+- [`arc(x, y, radius, startAngle, endAngle, anticlockwise)`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/arc)
+
+  画一个以（x,y）为圆心的以radius为半径的圆弧（圆），从startAngle开始到endAngle结束，按照anticlockwise给定的方向（默认为顺时针）来生成。
+
+- [`arcTo(x1, y1, x2, y2, radius)`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/arcTo)
+
+  根据给定的控制点和半径画一段圆弧，再以直线连接两个控制点。
+
+这里详细介绍一下arc方法，该方法有六个参数：`x,y`为绘制圆弧所在圆上的圆心坐标。`radius`为半径。`startAngle`以及`endAngle`参数用弧度定义了开始以及结束的弧度。这些都是以x轴为基准。参数`anticlockwise`为一个布尔值。为true时，是逆时针方向，否则顺时针方向。
+
+**注意：`arc()`函数中表示角的单位是弧度，不是角度。角度与弧度的js表达式:**
+
+**弧度=(Math.PI/180)\*角度。**
+
+#### 总结1
+
+除了矩形时填充的，不需要moveTo()，其他都需要moveTo()
