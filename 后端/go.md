@@ -85,7 +85,7 @@ fmt.Printf("%f",n)//输出浮点数
 fmt.Printf("%s",n)//输出字符串
 fmt.Printf("%v",n)//输出值，不管任何类型
 fmt.Printf("%#v",n)//输出值，并表示类型，如果是字符串类型，会给字符串加个双引号
-fmt.Printf("%T",n)//类型检查
+fmt.Printf("%T",n)//输出值的类型
 
 ```
 

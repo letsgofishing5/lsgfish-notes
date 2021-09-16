@@ -77,11 +77,13 @@ let p :Person = {
 
 使用 `[propName: string]:any` 定义了任意属性属性名为 `string` 类型，属性值为`any`类型。
 
-这个任意属性，可以输入**任意数量**、**任意属性名称**，类型为`any`的属性
+这个任意属性，可以输入**任意数量**、**任意属性名称**，属性值类型为`any`的属性
 
-也可以不输入属性名称，即不使用
+一旦确认了**任意属性的类型**，那么接口中的其他**已确认类型**的**属性**，他们的类型必须是**任意属性**的类型的**子集**。可以给任意属性使用**联合属性**来解决这个问题
 
 可以声明多个类型：`[propName: string]:number | string`
+
+`propName`字段可以随意起名，写index、prop等等，都是可以的
 
 ```ts
 interface Person {
@@ -115,5 +117,103 @@ let p :Person = {
 p.id = 24   //error TS2540: Cannot assign to 'id' because it is a read-only property.
 ```
 
-### 数组
+###  函数
 
+```ts
+function sum(x: number, y: number): number {
+    return x + y;
+}
+sum(1, 2, 3);
+```
+
+#### 接口定义函数
+
+```ts
+interface SearchFunc {
+    (source: string, subString: string): boolean;
+}
+
+let mySearch: SearchFunc;
+mySearch = function(source: string, subString: string) {
+    return source.search(subString) !== -1;
+}
+```
+
+#### 可选参数
+
+前面提到，输入多余的（或者少于要求的）参数，是不允许的。那么如何定义可选的参数呢？
+
+与接口中的可选属性类似，我们用 `?` 表示可选的参数：
+
+```ts
+function buildName(firstName: string, lastName?: string) {
+    if (lastName) {
+        return firstName + ' ' + lastName;
+    } else {
+        return firstName;
+    }
+}
+let tomcat = buildName('Tom', 'Cat');
+let tom = buildName('Tom');
+```
+
+需要注意的是，可选参数必须接在必需参数后面。换句话说，**可选参数后面不允许再出现必需参数了**
+
+#### 可变参数（剩余参数）
+
+`items` 是一个数组。所以我们可以用数组的类型来定义它：
+
+```ts
+function push(array: any[], ...items: any[]) {
+    items.forEach(function(item) {
+        array.push(item);
+    });
+}
+
+let a = [];
+push(a, 1, 2, 3);
+```
+
+#### 参数默认值
+
+```ts
+function buildName(firstName: string, lastName: string = 'Cat') {
+    return firstName + ' ' + lastName;
+}
+let tomcat = buildName('Tom', 'Cat');
+let tom = buildName('Tom');
+```
+
+#### 重载
+
+重载允许一个函数接受不同数量或类型的参数时，作出不同的处理。
+
+比如，我们需要实现一个函数 `reverse`，输入数字 `123` 的时候，输出反转的数字 `321`，输入字符串 `'hello'` 的时候，输出反转的字符串 `'olleh'`。
+
+利用联合类型，我们可以这么实现：
+
+```ts
+function reverse(x: number | string): number | string | void {
+    if (typeof x === 'number') {
+        return Number(x.toString().split('').reverse().join(''));
+    } else if (typeof x === 'string') {
+        return x.split('').reverse().join('');
+    }
+}
+```
+
+**然而这样有一个缺点，就是不能够精确的表达，输入为数字的时候，输出也应该为数字，输入为字符串的时候，输出也应该为字符串。**
+
+这时，我们可以使用重载定义多个 `reverse` 的函数类型：
+
+```ts
+function reverse(x: number): number;
+function reverse(x: string): string;
+function reverse(x: number | string): number | string | void {
+    if (typeof x === 'number') {
+        return Number(x.toString().split('').reverse().join(''));
+    } else if (typeof x === 'string') {
+        return x.split('').reverse().join('');
+    }
+}
+```
