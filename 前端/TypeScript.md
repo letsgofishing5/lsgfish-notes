@@ -40,7 +40,11 @@ let bool = true
 console.log(typeof bool)
 ```
 
+
+
 ### 接口
+
+#### 接口与对象
 
 ```ts
 //定义接口
@@ -56,6 +60,36 @@ let p :Person = {
 ```
 
 **使用接口时，属性不能多也不能少，要保持一致**
+
+#### 接口与函数
+
+```ts
+interface Person{
+    (str:string):void
+}
+let fn:Person = function(str:string):void{
+    console.log("void表示没有 返回值")
+}
+```
+
+#### 接口与 类
+
+```ts
+interface Person{
+    say():void
+}
+class Xiaoming implement Person{
+    name:string
+    constructor(name:string){
+        this.name = name
+    }
+    say(){
+        console.log("接口中的方法，必须要在类中实现")
+    }
+}
+```
+
+
 
 ####  可选属性
 
