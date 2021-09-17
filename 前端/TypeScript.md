@@ -72,7 +72,7 @@ let fn:Person = function(str:string):void{
 }
 ```
 
-#### 接口与 类
+#### 接口与类
 
 ```ts
 interface Person{
