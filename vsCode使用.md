@@ -34,3 +34,9 @@ alt + shift + F
 ctrl + shift + p
 ```
 
+#### 6、跳转到指定行
+
+```bash
+ctrl + G
+```
+
