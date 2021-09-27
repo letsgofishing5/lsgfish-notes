@@ -168,17 +168,7 @@ export default {
 </template>
 
 <script>
-    import crud from '../js/crud';
-
     export default {
-        name: 'ClockingInIntelligent',
-        mixins: [crud],
-        props: {
-            communityId: {
-                type: Number,
-                default: 0
-            }
-        },
         data() {
             var validateFiled = (rule, value, callback) => {
                 if (value === '') {
