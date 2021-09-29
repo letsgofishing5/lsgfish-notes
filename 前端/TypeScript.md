@@ -251,3 +251,12 @@ function reverse(x: number | string): number | string | void {
     }
 }
 ```
+
+### 插件
+
+webpack-dev-server
+
+```bash
+npm i -D webpack-dev-server
+```
+
