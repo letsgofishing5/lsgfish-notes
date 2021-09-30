@@ -57,5 +57,35 @@
 npm init -y
 #安装webpack,ts,ts-loader,webpack-cli
 npm i -D webpack webpack-cli typescript ts-loader 
+# 安装webpack-dev-server
+npm i -D webpack-dev-server
+# 安装html-webpack-plugin
+npm i -D html-webpack-plugin
+
 ```
+
+#### babel
+
+```bash
+npm i -D @babel/core @babel/preset-env babel-loader core-js
+```
+
+## 抽象类
+
+使用`abstract`修饰的类是抽象类
+
+```ts
+abstract class Person {
+    name: string = "张三李四"
+    age: number = 23  
+}
+//抽象方法，抽象方法在被继承时，必须要被实现
+abstract class Person {
+    name: string = "张三李四"
+    age: number = 23
+    abstract say(): string
+}
+```
+
+## 接口
 
