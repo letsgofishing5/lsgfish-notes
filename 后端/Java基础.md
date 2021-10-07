@@ -160,6 +160,225 @@ public void test(int...b){
 2. 并且具有无参的构造方法
 3. 成员变量私有化，并提供用来操作的成员变量的`get/set`方法
 
-### 继承 
+### 继承
 
 资源的复用
+
+### 多态
+
+#### 向下转型
+
+向上转型与向下转型都是针对于运行时类型，从始至终不会发生改变
+
+向下转型就是使用子类独有的资源
+
+向下转型的前提是向上转型
+
+```java
+class Animal{}
+class Cat extends Animal{}
+Animal animal = new Cat()
+Cat cat = (Cat)animal
+```
+
+#### instanceof
+
+判断左边的是否是右边的实例对象
+
+### 引用类型
+
+#### final
+
+1. 数据被final修饰，则变成了常量
+2. 方法参数被final修饰，该参数不可修改
+3. 方法被final修饰，表示该方法不可被重载和重写
+4. 类被修饰，表示该类不可被继承
+
+#### Object类
+
+#### 抽象类
+
+抽象类就是为了继承而存在的
+
+抽象方法只能存在于抽象类中
+
+#### 接口
+
+1. 接口中的抽象方法默认被 public abstract 修饰
+2. 接口中的变量默认被 public static final 修饰
+3. 接口中有默认方法，使用 public default 修饰
+4. 接口中有静态方法，使用 public static
+
+[抽象类与接口](https://juejin.cn/post/6970145897829105678#heading-7)
+
+#### 枚举
+
+### 包装类
+
+**Java中的方法与JS中的方法基本一致**
+
+包装类对应着基本类型
+
+byte	short	int	long	float	double	char	boolean
+
+Byte	Short	Integer	Long	Float	Double	Character	Boolean
+
+包装类多出来的方法：
+
+```java
+//转换二进制：
+Integer.toBinaryString(127);//1111111
+```
+
+#### 基本类型与包装类型之间的转换
+
+1. 基本类型转包装类型
+
+   ```java
+   //通过构造器：
+   Integer integer = new Integer(1)
+   //通过valueOf方法
+   Integer integer = Integer.valueOf(1)
+   //自动装箱
+   Integer integer = 1
+   ```
+
+   
+
+2. 包装类型转基本类型
+
+   ```java
+   //通过 intValue
+   int i = integer.intValue();
+   //自动拆箱
+   int i = integer;
+   ```
+
+3. 字符串转包装类型
+
+   ```java
+   String str = "123"
+   Integer integer = Integer.parseInt(str,10)
+   ```
+
+### String
+
+#### StringBuffer
+
+1. 单线程，效率低
+2. 底层采用`char[]`数组，默认长度是16
+
+#### StringBuilder
+
+1. 线程不安全，效率高
+2. 底层采用`char[]`数组，默认长度是16
+
+### 内部类
+
+把一个类定义在类的内部，地位与属性和方法一致，可以被很多修饰符进行修饰
+
+### 注解
+
+1. @Override：重写注解
+2. @Deprecated：过时的注解
+3. @SuppressWarning：抑制警告
+
+### JavaDoc生成API文档
+
+### 异常
+
+```java
+Throwable：所有的异常的祖师爷
+    Error：处理不了的异常
+    Exception：程序员能处理的异常
+```
+
+1. throw：处理运行时异常
+2. throws：处理编译时异常
+
+### 多线程
+
+Java 提供了三种创建线程的方法：
+
+- 通过实现 Runnable 接口；
+- 通过继承 Thread 类本身；
+- 通过 Callable 和 Future 创建线程。
+
+重写run方法，start启动线程
+
+### 常用API
+
+1. BigInteger：保存大的整数
+
+2. BigDecimal：存储确切的小数
+
+3. Date：
+
+   1. 日期转字符串
+
+      ```java
+      //使用日期格式化类
+      SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd hh");
+      Date date = new Date();
+      String str = simpleDateFormat.format(date);
+      System.out.println(str);
+      ```
+
+      
+
+   2. 字符串转日期
+
+      ```java
+      //使用日期格式化类
+      Date date = new Date();
+      SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh");
+      System.out.println(simpleDateFormat.parse("2021-10-3 21:23:18"));
+      ```
+
+#### LocalDate
+
+时间类
+
+#### System
+
+```java
+Properties properties = System.getProperties();
+properties.list(System.out);
+```
+
+#### IDEA 模板
+
+Editor——》Live Templates
+
+### 集合
+
+#### List集合
+
+`ArrayList、LinkedList`
+
+1. 有序添加
+2. 元素可以重复
+
+#### Set集合
+
+`HashSet（无序，唯一）、LinkedHashSet（有序，添加顺序）、TreeSet（有序，自然顺序）`
+
+1. 无序输出
+2. 元素唯一
+
+#### Map集合
+
+HasMap
+
+## 设计模式
+
+### 单例模式
+
+ 1. 饿汉模式
+
+    一开始 创建类的时候，就把此对象创建出来
+
+ 2. 懒汉模式
+
+    等到需要的时候，再次创建出来
+

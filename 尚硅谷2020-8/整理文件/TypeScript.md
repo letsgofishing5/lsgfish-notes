@@ -87,5 +87,7 @@ abstract class Person {
 }
 ```
 
-## 接口
+## 属性封装
+
+
 
