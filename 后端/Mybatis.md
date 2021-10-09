@@ -216,3 +216,20 @@ String sql = "%模糊查%"
 </select>
 ```
 
+### 配置文件
+
+```properties
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/lgf
+jdbc.user=root
+jdbc.pwd=123456
+```
+
+```xml
+<!--配置文件中添加properties标签引入配置文件-->
+<properties  resource="jdbc.properties"/>
+<dataSource type="POOLED">
+	<property name="driver" value="${jdbc.driver}"/>
+</dataSource>
+```
+
