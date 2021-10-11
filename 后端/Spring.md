@@ -419,3 +419,28 @@ CGLIB：当不使用接口时，使用的时CGLIB动态代理；如果使用了�
 2. SqlSessionFactory
 3. Dao对象
 4. 自定义声明的service
+
+```xml
+<!--application.xml-->
+<!--    声明数据源dataSource，作用是连接连接数据库-->
+<bean id="myDataSource" class="com.alibaba.druid.pool.DruidDataSource" 
+      init-method="init" destroy-method="close">
+    <property name="url" value="jdbc:mysql://localhost:3306/lgf"/>
+    <property name="username" value="root"/>
+    <property name="password" value="123456"/>
+</bean>
+<!--    声明的是mybatis中提供的sqlSessionFactoryBean类，这个类内部创建SqlSessionFactory-->
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <!--        首先连接数据库-->
+    <property name="dataSource" ref="myDataSource"/>
+    <!--        然后读取mybatis主配置文件-->
+    <property name="configLocation" value="classpath:mybatis-config.xml"/>
+</bean>
+<!--    创建dao对象，使用SqlSession的getMapper(User.class)-->
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <!--指定SqlSessionFactory对象的id-->
+    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    <property name="basePackage" value="com.cth.dao"/>
+</bean>
+```
+
