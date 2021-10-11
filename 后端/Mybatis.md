@@ -92,6 +92,15 @@ $字符串替换，告诉`Mybatis`使用`$`包含的“字符串”替换所在�
 
 ### 查询返回Map
 
+总结：
+resultType:
+
+1、基本类型  ：resultType=基本类型
+
+2、List类型：   resultType=List中元素的类型
+
+3、Map类型    **单条记录**：resultType =map，**多条记录**：resultType =Map中value的类型
+
 ```xml
 <resultMap id="res" type="Java类型全限定名称">
 	<id column="" property=""/>
