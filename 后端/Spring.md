@@ -444,3 +444,29 @@ CGLIB：当不使用接口时，使用的时CGLIB动态代理；如果使用了�
 </bean>
 ```
 
+### 事务
+
+1. PROPAGATION_REQUIRED：指定的方法必须在事务内执行。当前有事务就加入，没有就创建新事务
+2. PROPAGATION_SUPPORTS：指定的方法支持当前事务，但若当前没有事务，也可以以非事务方式执行
+3. PROPAGATION_REQUIRES_NEW：总是新建一个事务，若当前存在事务则挂起当前事务，直到新事务执行结束
+
+事务提交与回滚的时机
+
+1. 业务方法执行成功没有异常抛出，方法执行完毕后spring自动commit
+2. 业务方法抛出运行时异常或者Error，spring执行回滚，调用rollback
+3. 业务方法抛出非运行时异常，则提交事务
+
+#### 配置事务
+
+在配置文件中声明事务管理器对象
+
+```xml
+<!--    声明事务管理器对象-->
+<bean id="dataSourceTranscationManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="myDataSource"/>
+</bean>
+<tx:annotation-driven transaction-manager="dataSourceTranscationManager"/>
+```
+
+注解：@Transcational
+
