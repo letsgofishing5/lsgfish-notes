@@ -356,19 +356,19 @@ Editor——》Live Templates
 
 `ArrayList、LinkedList`
 
-1. 有序添加
-2. 元素可以重复
+1. **有序**添加
+2. 元素可以**重复**
 
 #### Set集合
 
 `HashSet（无序，唯一）、LinkedHashSet（有序，添加顺序）、TreeSet（有序，自然顺序）`
 
-1. 无序输出
-2. 元素唯一
+1. **无序**输出
+2. 元素**唯一**
 
 #### Map集合
 
-HasMap
+HasMap（key不允许重复）
 
 ## 设计模式
 
