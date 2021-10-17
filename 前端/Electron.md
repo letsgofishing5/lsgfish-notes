@@ -54,5 +54,16 @@ npm i -g electron
 
 5. 启动项目(全局安装了electron)：electron .
 
+
+
 ## remote模块
+
+#### 渲染进程require报错
+
+```js
+webPreferences:{
+    contextIsolation:false,
+    nodeIntegration:true
+}
+```
 
