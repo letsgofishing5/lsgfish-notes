@@ -67,3 +67,137 @@ for (int i = 0; i < 10; i++) {
 
 ### 集合
 
+1. 集合不能直接存储基本 数据类型（自动装箱） ，也不能存储Java对象，集合中 存储的都是Java对象的内存地址。集合任何时候存储的都是**引用**
+
+#### 集合分类
+
+#### Iterator
+
+hasNext()
+
+next()
+
+remove()
+
+##### List
+
+有序可重复，存储的元素有下标
+
+**ArrayList：**底层采用了数组结构，非线程安全的
+
+##### Set
+
+无序不可重复，
+
+**HashSet：**底层创建了HashMap（new HashMap)
+
+**TreeSet：**底层创建了 TreeMap（new TreeMap）
+
+#### Map
+
+1. Map 和 Conllection没有关系
+2. Map  以键值对形式存在
+3. key 和 value 都是存储 Java对象的内存地址
+4. 所有的 key 都是无序不可重复的
+
+##### HashMap
+
+**key可以为null**
+
+底层是哈希表，非线程安全
+
+#####  TreeMap
+
+底层是二叉树 ，**key** 可以自动 按照大小顺序自动 排序
+
+#### Collection常用方法
+
+```java
+add();//添加
+remove();//删除
+clear();//清空
+size();//集合中的元素个数
+contains();//集合中包含什么元素
+isEmpty();//是否是空集合
+```
+
+####  Map常用方法
+
+```java
+map.keySet();//map先将key转为set集合，然后进行遍历取值
+```
+
+
+
+#### crud方法查找
+
+增：add、save、put、new
+
+删：delete、drop、remove
+
+改：update、set、modify
+
+查：find、get、query、select
+
+### IO流
+
+I：input
+
+O：output
+
+硬盘的读写
+
+#### 四大家族
+
+InputeStream：字节输入流
+
+OutputStream：字节输出流
+
+Reader：字符输入流
+
+Writer：字符输出流
+
+这四个都是抽象类
+
+**注意：`Java`中类名只要以`Stream`结尾的都是字节流，以`Reader/Writer`结尾的都是字符流**
+
+#### 方法
+
+```java
+flush();//刷新流，输出流的时候记得刷新流
+close();//关闭流，输出流结束的时候记得关闭流
+```
+
+#### 流分类
+
+```java
+//文件专属
+FileInputStream
+//转换流（字节转字符）
+InputStreamReader
+//缓冲流专属
+BufferedReader
+//数据专属
+DataInputStream
+//标准输出流
+PrintStream
+//对象专属流
+ObjectInputStream
+```
+
+#### 操作流程
+
+```java
+String str = "D:\\Desktop\\temp\\electron-quick-start\\.gitignore";
+FileInputStream fis = null;
+try {
+    fis = new FileInputStream(str);
+    int read = fis.read();
+    System.out.println((char) read);
+} catch (FileNotFoundException e) {
+    e.printStackTrace();
+} catch (IOException e) {
+    e.printStackTrace();
+}
+```
+
