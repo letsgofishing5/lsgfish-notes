@@ -85,3 +85,17 @@ ctrl+f9更新
 ### banner图
 
 在resources目录下新建banner.txt文件，将文本复制进去
+
+### Data
+
+1. 选择数据库驱动
+2. 选择jdbc（连接方式自己选）
+3. 在配置文件中配置数据库连接信息
+4. 使用 DataSource 自动注入
+
+ G+)DJcpPd2k_
+
+
+
+
+
