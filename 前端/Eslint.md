@@ -67,6 +67,10 @@ Javascript 、YAML、JSON 形式的配置文件
 var un = 123
 ```
 
+#### 代码修复
+
+eslint . --fix
+
 #### 代码提交前的校验
 
 1. pre-commit
