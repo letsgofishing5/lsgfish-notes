@@ -63,6 +63,7 @@ webPreferences:{
 }
 ```
 
+
 ### 渲染进程
 
 ```bash
@@ -121,5 +122,3 @@ cd vue-electron #进入项目
 vue add electron-builder #添加Vue CLI Plugin Electron Builder
 npm run electron:serve #运行程序
 ```
-
-C:\Users\走我们钓鱼去\Documents\WeChat Files\wxid_efl3fzj1bir822\FileStorage\File\2021-10

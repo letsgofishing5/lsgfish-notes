@@ -16,3 +16,5 @@
    ```
 
 5. 执行 source  /etc/profile.d/my_env.sh 是 环境变量立即生效，如果不生效立即重启Xshell
+
+
