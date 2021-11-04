@@ -1,7 +1,7 @@
 ## 安装
 
 ```npmrc
-#electron中国镜像：
+#在.npmrc文件中添加electron中国镜像：
 ELECTRON_MIRROR="https://cdn.npm.taobao.org/dist/electron/"
 ```
 
@@ -33,23 +33,19 @@ npm i -g electron
 3. main.js中输入一下内容
 
    ```js
-   const electron = require('electron')
-   const app = electron.app//分配一个进程，一个软件即一个进程
-   let BrowserWindow = electron.BrowserWindow//开启一个软件窗口
-   let mainWindow  =  null
-   app.on("ready",()=>{
-       mainWindow  = new BrowserWindow({//这个软件窗口的样式 与 功能设置
-           width:800,
-           height:800,
-           webpreferences:{nodeIntegration:true}
+   const {app,BrowserWindow} = require('electron')
+   app.on('ready',()=>{
+       let wind = new BrowserWindow({
+           width:'100%',
+           height:'100%'
        })
-       mainWindow.loadFile('index.html')//这个窗口加载一个页面
-       mainWindow.on('closed',()=>{//窗口关闭时释放这个窗口
-           mainWindow = null
+       wind.loadFile('index.html')
+       wind.on('closed',()=>{
+           wind = null
        })
    })
    ```
-
+   
 4. 在控制台初始化项目：npm init -y
 
 5. 启动项目(全局安装了electron)：electron .
@@ -58,7 +54,7 @@ npm i -g electron
 
 ## remote模块
 
-#### 渲染进程require报错
+### 渲染进程require报错
 
 ```js
 webPreferences:{
@@ -67,3 +63,63 @@ webPreferences:{
 }
 ```
 
+### 渲染进程
+
+```bash
+#安装 @electron/remote
+npm @electron/remote
+```
+
+
+
+```js
+//主进程，在窗口启动时进行引入初始化，并启动
+app.on("ready", () => {
+  mainWind = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+  require("@electron/remote/main").initialize();//引入初始化
+  require("@electron/remote/main").enable(mainWind.webContents);//启动webContents
+  mainWind.loadFile("index.html");
+  mainWind.on("closed", () => {
+    mainWind = null;
+  });
+});
+//渲染进程中，引入
+var { BrowserWindow } = require("@electron/remote");
+```
+
+## Menu
+
+```js
+const { Menu, BrowserWindow } = require("electron");
+const template = [{label:'菜单选项',submenu:[{label:"子菜单选项"}]}]
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
+```
+
+
+
+## 打包应用程序
+
+```bash
+npm install --save-dev @electron-forge/cli
+npx electron-forge import
+npm run make
+```
+
+
+
+## electron-vue
+
+```bash
+vue create vue-electron #创建一个vue项目
+cd vue-electron #进入项目
+vue add electron-builder #添加Vue CLI Plugin Electron Builder
+npm run electron:serve #运行程序
+```
+
+C:\Users\走我们钓鱼去\Documents\WeChat Files\wxid_efl3fzj1bir822\FileStorage\File\2021-10
