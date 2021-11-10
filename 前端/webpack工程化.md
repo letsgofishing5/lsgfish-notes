@@ -28,7 +28,19 @@ webpack5 可以使用内置的 type:'asset/resource'
 
 #### 优化代码调试
 
-#### 优化代码运行性能
+1. 开发环境
+   1. 速度快，（eval>inline>cheap）
+   2. 调试更友好，（source-map>cheap-module-source-map>cheap-source-map）
+2. 生产环境
+   1. hidden-source-map：只隐藏源代码，会提示构建后代码错误
+   2. nosources-source-map：全部隐藏
+
+### tree shaking
+
+1. 必须是使用了ES6模块化
+2. 开启生产环境：production
+
+### 代码分割
 
 
 
@@ -41,3 +53,28 @@ html文件对应着html-loader
 css文件对应这css-loader
 
 ……
+
+### entry
+
+```js
+//打包成单文件
+entry:'src/index.js'//打包成一个文件
+entry:['src/index.js','src/another.js']//将两个文件打包成一个文件
+//打包成多文件
+entry:{
+    index:'src/index.js',
+    another:'src/another.js'
+}//对应的文件打包到对应的文件里，
+```
+
+### output
+
+```js
+output:{
+    filename:'js/[name].[hash:5].js',
+    path:resolve(__dirname,'dist'),
+    publicPath: '/',
+    chunkFilename: '[name]_chunk.js'
+}
+```
+
