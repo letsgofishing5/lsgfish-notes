@@ -71,10 +71,82 @@ entry:{
 
 ```js
 output:{
-    filename:'js/[name].[hash:5].js',
-    path:resolve(__dirname,'dist'),
-    publicPath: '/',
-    chunkFilename: '[name]_chunk.js'
+    filename:'js/[name].[hash:5].js',//文件名称
+    path:resolve(__dirname,'dist'),//输出文件的路径
+    publicPath: '/',//静态资源拼接地址的前缀，比如在 img/a.jpg 静态资源前面添加前缀 / ，则为 /img/a.jpg
+    chunkFilename: '[name]_chunk.js'//非入口文件chunk的名称，比如import导入的文件
+}
+```
+
+### module
+
+```js
+module:{
+    rules:[
+        {
+            test:/\.js/,
+            exclude:/node_modules/,//排除node_modules目录下的js文件
+            include: resolve(__dirname,'src'),//只检查src下的js文件
+            enforce:'pre',//pre:优先执行，post:延后执行
+            loader:'eslint-loader'
+        }
+    ]
+}
+```
+
+### resolve
+
+解析模块规则
+
+```js
+resolve:{
+    alias:{
+        '@':resolve(__dirname,"src"),//配置路径别名，src目录路径使用 @ 符号代替
+    }，
+    //配置省略文件后缀名
+    extensions:['.js','json','jsx'],
+	//告诉webpack解析模块是去哪个目录
+    modules:[resolve(__dirname,'../../node_modules'),'node_modules']
+}
+```
+
+### devServer
+
+```js
+//用于开发环境
+devServer:{
+    port:1998,//执行服务端口
+    hot:true,//开启HMR
+    compress:true,//开启gzip压缩
+    host:'localhost',//域名
+    open:true,//自动打开浏览器
+    clientLogLevel:'none',//不要显示启动服务器日志信息
+    quite：true,//除了一些基本启动信息以外，其他内容都不显示
+    overlay:false,//如果出错，不要全屏提示
+    proxy:{//服务器代理，用来解决跨域问题
+        '/api':{//devServer服务器接收到/api/**请求，则代理到target路径
+            target:'http://localhost:3000',
+            pathRewrite:{//路径重写，把/api从访问路径中去掉
+                '^/api':''
+            }
+        }
+    }
+}
+```
+
+### optimization
+
+https://webpack.docschina.org/plugins/split-chunks-plugin/
+
+```js
+optimization:{
+    splitChunks:{
+        chunks:'all',
+        minSize:30*1024,//分割的chunk最小为30kb
+        maxSize:0,//没有最大限制
+        minChunks:1,//要提取的chunk最少被引用一次
+        ……
+    }
 }
 ```
 
