@@ -200,31 +200,6 @@ export default {
                 dialogVisible: false
             };
         },
-        created() {
-
-        },
-        methods: {
-            cancel() {
-                this.dialogVisible = false;
-                this.resetForm('form');
-            },
-            getList() {
-                this.loading=true
-                this.api({
-                    url:'',
-                    params:this.listQuery
-                }).then(data=>{
-                    console.log("表格返回值：",data)
-                    this.total=data.total
-                    this.tableData=data.list
-                }).finally(()=>{
-                    this.loading=false
-                })
-            },
-            handleAdd() {
-                this.dialogVisible = true;
-            }
-        }
     };
 </script>
 ```
@@ -311,19 +286,8 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true;
-        this.uniApi.切换自己的名字[funcName](row).then(() => {
-          this.loading = false;
-          this.$message.success('删除成功');
-          this.getList('intelligentGetList');
-        }).catch(() => {
-          this.loading = false;
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
+        this.loading = false;
+      })
     },
     /**
      * 分页查询
@@ -333,19 +297,16 @@ export default {
       this.listQuery.pageNum = pageNum;
       this.getList(funcName);
     },
-    /**
-     * 获取当前页表格总信息
-     * @param funcName
-     */
-    getList(funcName) {
-      this.loading = true;
-      this.uniApi.切换自己模块的名字[funcName](this.listQuery).then(data => {
-        this.tableData = data.list;
-        this.total = data.total;
-      }).finally(() => {
-        this.loading = false;
-      });
-    }
+          //表格格式化信息
+    formatTest(row,column){
+        let data = row[column.property]
+        for (let i = 0; i < this.inspectionPlanPeriod.length; i++) {
+            if (data===this.inspectionPlanPeriod[i]['dictCode']){
+                return this.inspectionPlanPeriod[i]['dictValue']
+            }
+        }
+        return
+    },
   }
 };
 
@@ -358,15 +319,7 @@ cancel(){
     this.dialogVisible=false
     this.resetForm('form')
 },
-    //dialog提交或修改信息
-onSubmit(){
-    this.dialogLoading=true
-    this.api({
-        url:this.title===''?'':''
-    }).finally(()=>{
-        this.dialogLoading=false
-    })
-}
+
 //获取字典表
 getDictValue(fileds){
     this.api({
@@ -385,15 +338,6 @@ getDictValue(fileds){
         })
     })
 },
-    //表格格式化信息
-    formatTest(row,column){
-        let data = row[column.property]
-        for (let i = 0; i < this.inspectionPlanPeriod.length; i++) {
-            if (data===this.inspectionPlanPeriod[i]['dictCode']){
-                return this.inspectionPlanPeriod[i]['dictValue']
-            }
-        }
-        return
-    },
+
 ```
 
