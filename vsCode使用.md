@@ -40,3 +40,9 @@ ctrl + shift + p
 ctrl + G
 ```
 
+#### 7、替换
+
+```bash
+ctrl + h
+```
+
