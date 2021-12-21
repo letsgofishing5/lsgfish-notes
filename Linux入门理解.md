@@ -257,3 +257,54 @@ systemctl set-default graphical.target #设置图形化界面
 
 #### 找回root密码
 
+仅Centos7版本后有效
+
+1. 重启系统，在进入登记页面前，选择core，然后按 e 键
+2. 进入后找到 UTF-8，在后面输入 init=/bin/sh，然后快捷键 CTRL+x 进入单用户模式
+3. 在光标闪烁的位置中输入：mount -o remount,rw /
+4. 在新的一行输入：passwd，然后回车输入新密码（密码长度最好8位以上，但不是必须的）密码修改成功后，会显示passwd字样说明密码修改成功
+5. 在光标闪烁的位置中输入：touch /.autorelabel
+6. 继续在闪烁的位置输入：exec /sbin/init （这个过程有点长，耐心等待），完成后系统会自动重启，新的密码就生效了
+
+#### 帮助指令
+
+```bash
+#获取指令 ll 的帮助信息
+man ls
+help ls
+```
+
+#### 文件目录指令
+
+```bash
+#创建目录
+mkdir one
+#创建多级目录
+mkdir one/two/three -p
+#删除目录、文件。-r：递归，-f：强制
+rm -rf 文件/目录  
+
+#拷贝文件/目录。-r：递归，
+cp 拷贝源 拷贝到哪里
+#强制覆盖同名文件
+\cp 拷贝源 拷贝到哪里
+
+#分屏查看文件内容。空白键 向下翻页，pageup 向上翻页，q 退出
+less 文件名
+#查看文件前10行（默认）
+head 文件名
+head 文件名 -n 5 #指定查看前5行
+#查看文件后10行（默认）
+tail 文件名
+tail 文件名 -n 5 #指定查看后5行
+
+#输出内容到控制台
+echo $PATH
+# 重定向 >
+echo 'hello world' > 文件名 #将 hello world 内容输入到文件中
+echo 'hello world' >> 文件名 #将 hello world 内容追加到文件中
+ll > 文件名 #将查询到的结果写入到文件中
+```
+
+
+
