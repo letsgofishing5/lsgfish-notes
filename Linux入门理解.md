@@ -303,7 +303,49 @@ echo $PATH
 # 重定向 >
 echo 'hello world' > 文件名 #将 hello world 内容输入到文件中
 echo 'hello world' >> 文件名 #将 hello world 内容追加到文件中
-ll > 文件名 #将查询到的结果写入到文件中
+ll > 文件名 #将查询到的结果写入到文件中，如果文件不存在则自动创建
+
+# 软连接，类似于快捷键
+ln -s 源文件或目录 软连接名
+# 删除软连接
+rm 软连接名 -f
+
+#查看历史命令
+history
+history 10 #查看10条历史命令记录
+#执行历史命令
+!历史命令编号 #如：!23，执行历史第23条命令
+
+#时间指令
+date
+date "+%Y-%m-%d %H:%M:%S"
+#设置日期时间
+date -s "2021-12-21 21:09:55"
+#查看日历
+cal
+#查看本年度日历
+cal 2021
+
+#搜索查找
+find 搜索目录 -name 文件名
+#查看指令位置
+which 指令名称
+#查看文件
+locate 文件名 #在执行前，需要先执行 updatedb 
+#管道 | 与 grep
+ll | grep temp
+cat one.txt | grep two -n # -n 可以显示内容所在的行号
+```
+
+#### 压缩与解压
+
+```bash
+#压缩
+gzip 文件 
+zip 文件
+#解压
+gunzip 压缩包
+unzip 压缩包
 ```
 
 
