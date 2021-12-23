@@ -32,6 +32,58 @@
 
 
 
+### 网络配置
+
+```bash
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no 
+BOOTPROTO=dhcp # dhcp：动态分配，改成 static
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=eno1
+UUID=a3744ad9-f101-42fc-875a-c33b6b1bd61b
+DEVICE=eno1
+ONBOOT=yes
+#IP地址（追加）
+IPADDR=192.168.131.200
+#网关（追加）
+GATEWAY=192.168.131.2
+#域名解析器（追加）
+DNS1=192.168.131.2
+
+```
+
+重启网络服务
+
+```bash
+service network restart #重启网络
+reboot # 重启系统
+```
+
+#### 设置主机名与hosts映射
+
+在 Linux中的 /etc/hosts 文件中，可以设置IP映射关系
+
+```bash
+172.16.72.238 owner
+```
+
+```bash
+ping owner
+PING owner (172.16.72.238) 56(84) bytes of data.
+64 bytes from owner (172.16.72.238): icmp_seq=1 ttl=124 time=13.1 ms
+64 bytes from owner (172.16.72.238): icmp_seq=2 ttl=124 time=12.7 ms
+64 bytes from owner (172.16.72.238): icmp_seq=3 ttl=124 time=12.6 ms
+```
+
+
+
 ## 常用命令
 
 #### 系统服务命令
@@ -475,5 +527,41 @@ at命令是一次性定时计划任务，at守护进程atd会以后台模式运�
 
 **命令**：at 【选项】【时间】
 
-CTRL+D 结束at命令的输入
+CTRL+D 结束at命令的输入，需要输入两次
 
+## 进程
+
+![image-20211223143515423](Linux入门理解_img/image-20211223143515423.png)
+
+#### 基本介绍
+
+```bash
+ps -a：显示当前终端的所有进程信息
+ps -u：以用户的格式显示进程信息
+ps -x：显示后台进程运行的参数
+```
+
+命令
+
+```bash
+#查看进程 -e 显示全部进程 -f 显示全部格式
+ps -ef | grep xxx
+#终止进程
+kill 【选项】进程号（通过进程号杀死/终止进程）
+killall 进程名（通过进程名杀死进程，也支持通配符，这在系统因负载过大而变得很慢时很有用）
+#常用选项
+# -9：表示强迫进程立即停止
+```
+
+## 服务管理（service）
+
+> 服务(service)本质就是进程,但是是运行在后台的,通常都会监听某个端口,等待其它程序的请求,比如(mysqld , sshd 防火墙等) ,因此我们又称为守护进程，是Linux中非常重要的知识点。
+
+#### service管理指令
+
+```bash
+# CentOS7.0后，很多服务不再使用service，而是systemctl
+service 服务名 [start | stop | restart | reload | status]
+```
+
+可以通过查看 /etc/init.d 目录来判断是否可以使用service指令，显示绿色目录的则表示可以使用
