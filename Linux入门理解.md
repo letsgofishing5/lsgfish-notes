@@ -62,7 +62,7 @@ DNS1=192.168.131.2
 重启网络服务
 
 ```bash
-service network restart #重启网络
+systemctl restart network #重启网络
 reboot # 重启系统
 ```
 
@@ -80,6 +80,43 @@ PING owner (172.16.72.238) 56(84) bytes of data.
 64 bytes from owner (172.16.72.238): icmp_seq=1 ttl=124 time=13.1 ms
 64 bytes from owner (172.16.72.238): icmp_seq=2 ttl=124 time=12.7 ms
 64 bytes from owner (172.16.72.238): icmp_seq=3 ttl=124 time=12.6 ms
+```
+
+#### 网络服务设置
+
+```bash
+systemctl start network #开启网络
+systemctl restart network #重启网络
+systemctl stop network #关闭网络
+vim /etc/sysconfig/network-scripts/ifcfg-ens33
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+#设置成static
+BOOTPROTO=static
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+UUID=ab7855db-6a29-42dc-a901-ad68baec3db5
+DEVICE=ens33
+ONBOOT=yes #自动连接网络
+#IP
+IPADDR=192.168.41.123
+#网关
+GATEWAY=192.168.41.2
+#DNS
+DNS1=192.168.41.2
+```
+
+#### 查看网络状况
+
+```bash
+netstat -anp
 ```
 
 
@@ -565,3 +602,64 @@ service 服务名 [start | stop | restart | reload | status]
 ```
 
 可以通过查看 /etc/init.d 目录来判断是否可以使用service指令，显示绿色目录的则表示可以使用
+
+#### 查看系统服务
+
+```bash
+ll /etc/init.d
+#或者如下
+setup
+#选择系统服务，前面带了 * 号的，都是启用了服务自启动
+#按 tab 键退出
+```
+
+#### 服务自启动
+
+通过**chkconfig**命令可以给服务的**各个运行级别**设置自启动/关闭
+**chkconfig**指令管理的服务在**/etc/init.d** 查看
+
+注意: Centos7.0后,很多服务使用**systemctl**管理
+
+##### 基本语法
+
+```bash
+# 使用细节：chkconfig重新设置服务后自启动或关闭，需要重启机器 reboot 生效
+chkconfig --list
+chkconfig 服务名 --list
+chkconfig --level 5 服务名 on/off #对服务名 在 级别5 设置自启动/关闭
+```
+
+#### systemctl管理命令
+
+可以查看 **/usr/lib/systemd/system** 文件夹，来查看有哪些服务可以使用
+
+**systemctl** 来控制
+
+基本语法：`systemctl [start | stop | restart | status | disable | enable]` 服务名
+
+```bash
+systemctl list-unit-files （查看服务开机启动状态）
+systemctl is-enabled 服务名（查询某个服务是否自启动）
+```
+
+#### 防火墙打开或关闭指定端口
+
+```bash
+firewall-cmd --permanent --add-port=端口/协议	#开启端口
+firewall-cmd --permanent --remove-port=端口/协议 #关闭端口
+#不管是关闭还是开启，都需要重新载入才能生效：
+firewall-cmd --reload
+#查询端口是否开放
+firewall-cmd --query-port=端口/协议
+
+# 查询端口
+netstat -anp
+
+# 使用案例
+# 开启端口：111
+firewall-cmd --add-port=111/tcp
+firewall-cmd --reload
+# 关闭端口：111
+firewall-cmd --remove-port=111/tcp
+```
+
