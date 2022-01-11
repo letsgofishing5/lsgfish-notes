@@ -615,20 +615,6 @@ setup
 
 #### 服务自启动
 
-通过**chkconfig**命令可以给服务的**各个运行级别**设置自启动/关闭
-**chkconfig**指令管理的服务在**/etc/init.d** 查看
-
-注意: Centos7.0后,很多服务使用**systemctl**管理
-
-##### 基本语法
-
-```bash
-# 使用细节：chkconfig重新设置服务后自启动或关闭，需要重启机器 reboot 生效
-chkconfig --list
-chkconfig 服务名 --list
-chkconfig --level 5 服务名 on/off #对服务名 在 级别5 设置自启动/关闭
-```
-
 #### systemctl管理命令
 
 可以查看 **/usr/lib/systemd/system** 文件夹，来查看有哪些服务可以使用
@@ -640,6 +626,20 @@ chkconfig --level 5 服务名 on/off #对服务名 在 级别5 设置自启动/�
 ```bash
 systemctl list-unit-files （查看服务开机启动状态）
 systemctl is-enabled 服务名（查询某个服务是否自启动）
+```
+
+通过**chkconfig**命令可以给服务的**各个运行级别**设置自启动/关闭
+**chkconfig**指令管理的服务在**/etc/init.d** 查看
+
+注意: Centos7.0后,很多服务使用**systemctl**管理
+
+##### 基本语法(Centos7已经不再使用一下命令)
+
+```bash
+# 使用细节：chkconfig重新设置服务后自启动或关闭，需要重启机器 reboot 生效
+chkconfig --list
+chkconfig 服务名 --list
+chkconfig --level 5 服务名 on/off #对服务名 在 级别5 设置自启动/关闭
 ```
 
 #### 防火墙打开或关闭指定端口
