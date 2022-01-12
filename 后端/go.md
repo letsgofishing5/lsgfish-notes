@@ -5,6 +5,13 @@
 3. Path：go的bin目录
 4. 在步骤一的GOPATH目录中，新建：src、pkg、bin
 
+#### 配置vscode编辑环境
+
+1. 安装 go 插件
+2. cmd下设置代理：go env -w GOPROXY=https://goproxy.cn,direct
+3. 在 vscode 中，按下：CTRL+shift+P 键，输入：go:install ，下面会自动搜索相关命令，我们选择`Go:Install/Update Tools`这个命令，选择全部安装
+4. 设置代码片段快捷键，按下：CTRL+shift+P 键，输入 snippets，选择 Preferences:Configure User Snippets，然后再输入 go.json，选择 go.json 命令回车
+
 #### 常用命令
 
 1. go env
