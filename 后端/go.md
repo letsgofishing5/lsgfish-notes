@@ -25,8 +25,6 @@
 
 1. Go
 
-
-
 ## 数据类型
 
 ### 变量声明
@@ -62,7 +60,9 @@ const (
 
 ### 基本数据类型
 
-#### 整形
+整型、浮点型、复数、布尔值、字符串
+
+#### 整型
 
 ##### 带符号
 
@@ -76,7 +76,7 @@ const (
 | int     | 32位操作系统上就是int32，64位操作系统就是int64   |
 | uintptr | 无符号整型，用于存放一个指针                     |
 
-#### 进制
+##### 进制
 
 1. 八进制：0开头
 2. 十六进制：0x开头
@@ -90,9 +90,10 @@ fmt.Printf("%d",n)//输出十进制
 fmt.Printf("%x",n)//输出十六进制
 fmt.Printf("%f",n)//输出浮点数
 fmt.Printf("%s",n)//输出字符串
+fmt.Printf("%t",n)//输出布尔类型
+fmt.Printf("%T",n)//输出值的类型
 fmt.Printf("%v",n)//输出值，不管任何类型
 fmt.Printf("%#v",n)//输出值，并表示类型，如果是字符串类型，会给字符串加个双引号
-fmt.Printf("%T",n)//输出值的类型
 
 ```
 
@@ -115,6 +116,10 @@ func main() {
     //float32不能转成float64
 }
 ```
+
+#### 复数
+
+complex64 和complex128
 
 #### bool布尔值
 
@@ -146,4 +151,123 @@ Go语言中以`bool`类型进行声明布尔型数据，布尔型数据只有`tr
 | strings.HasPrefix,strings.HasSuffix |      前缀/后缀判断       |                                 |
 | strings.Index(),strings.LastIndex() |      子串出现的位置      |                                 |
 | strings.Join(a[]string, sep string) |         join操作         |                                 |
+
+## 流程控制 
+
+##### if判断
+
+```go
+if bool {
+    fmt.Println("为真，怎么怎么样")
+}else {
+    fmt.Println("否则，怎么怎么样")
+}
+
+```
+
+##### for循环
+
+```go
+//正常循环
+for i:=0;i<5;i++{
+    fmt.Println("i:",i)
+}
+//无限循环
+for {
+    fmt.Println("hello")
+}
+// for range 循环,遍历返回key-value
+str:="hello"
+for i,v :=range str{
+    fmt.Printf("%d,%c",i,v)
+}
+```
+
+##### switch
+
+```go
+func switchDemo1() {
+	finger := 3
+	switch finger {
+	case 1:
+		fmt.Println("大拇指")
+	case 2:
+		fmt.Println("食指")
+	case 3:
+		fmt.Println("中指")
+	case 4:
+		fmt.Println("无名指")
+	case 5:
+		fmt.Println("小拇指")
+	default:
+		fmt.Println("无效的输入！")
+	}
+}
+//fallthrough语法可以执行满足条件的case的下一个case，是为了兼容C语言中的case设计的。
+func switchDemo5() {
+	s := "a"
+	switch {
+	case s == "a":
+		fmt.Println("a")
+		fallthrough
+	case s == "b":
+		fmt.Println("b")
+	case s == "c":
+		fmt.Println("c")
+	default:
+		fmt.Println("...")
+	}
+}
+```
+
+#####  goto、continue、break
+
+```go
+gotoTab:
+fmt.Println("goto跳槽")
+goto gotoTab
+
+continueTab:
+fmt.Println("continue跳槽")
+continue continueTab
+
+for i:=0;i<2;i++{
+    if(i==1){
+        break;
+    }
+}
+```
+
+## 数组
+
+1.  数组在go中，**是值类型，不是引用类型**
+2. 数组的长度是固定的，并且数组的长度属于类型的一部分
+
+### 数组的声明
+
+```go
+var num1 [5]int{1,2,3,4}	//第一种，初始化声明
+var num2 = [5]int{1,2,3,4}  //第二中，赋值声明
+var num3 = [...]int{1,2,3,4}//第三种，根据赋值多少来决定数组长度
+var num4 = [...]int{3:5,5:6}//第四种，根据下标来决定数组长度
+```
+
+##  切片 
+
+1. 相当于一个可变长度的同类型元素数组，支持自动扩容
+2. **切片是一个引用类型**，内部结构包含`地址`、`长度`和`容量`
+
+### 切片声明
+
+```go
+var slice []T
+```
+
+### 切片表达式
+
+```go
+arr := [4]int{1,2,3,4}
+s := arr[:3]
+
+```
 
