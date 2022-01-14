@@ -260,14 +260,48 @@ var num4 = [...]int{3:5,5:6}//第四种，根据下标来决定数组长度
 ### 切片声明
 
 ```go
-var slice []T
+var slice []T //初始化
+var slice = make([]T,len,cap)//如果不给定容量，则容量与长度一致
 ```
 
 ### 切片表达式
 
 ```go
-arr := [4]int{1,2,3,4}
-s := arr[:3]
+slice = arr[low:high:max]
+//slice长度为：high - low
+//slice容量为：max - low
+```
 
+### 切片的crud
+
+> Go语言中并没有删除切片元素的专用方法，我们可以使用切片本身的特性来删除元素。要从切片a中删除索引为index的元素，操作方法是
+
+```go
+//添加
+slice = append(slice,1,2,3)
+//复制，复制元素，不是复制地址
+copy(target,src)
+//删除,a = append(a[:index], a[index+1:]...)
+a := []int{30, 31, 32, 33, 34, 35, 36, 37}
+// 要删除索引为2的元素
+a = append(a[:2], a[3:]...)
+fmt.Println(a) //[30 31 33 34 35 36 37]
+//判断切片是否为空
+len(slice) == 0
+```
+
+## map
+
+> map是一种无序的基于`key-value`的数据结构，Go语言中的map是引用类型，必须初始化才能使用。
+
+## 指针
+
+#### 符号
+
+```go 
+&：取地址
+*：根据地址取值
+s := 1
+fmt.Printf("s的地址：%p\n", &s)
 ```
 
