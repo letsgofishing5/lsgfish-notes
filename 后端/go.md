@@ -555,6 +555,8 @@ fmt.Printf("%#v\n", user)
 
 接收者分两种，一种是引用类型接收者，一种事值类型引用者
 
+#### 方法声明 
+
 ```go
 func(p Person) 方法名(参数列表) 返回参数{
     函数体
@@ -575,4 +577,66 @@ err :=json.Unmarshal([]byte(data),obj)
 ```
 
 ## 包
+
+##  接口
+
+### 定义接口
+
+> 接口就是一堆方法的集合，
+>
+> 只要实现了接口里的所有方法，那么就可以认为两者是同一个类型的数据，从而达到多态的效果
+
+```go
+type 接口类型名 interface{
+    方法名1( 参数列表1 ) 返回值列表1
+    方法名2( 参数列表2 ) 返回值列表2
+    …
+}
+```
+
+> 例子
+
+```go
+package main
+
+import "fmt"
+
+type person struct {
+}
+
+func (p person) say() {
+	fmt.Println("人说话了，啊啊啊")
+}
+
+type sayer interface {
+	say()
+}
+
+func say(args sayer) {
+	args.say()
+}
+func main() {
+	p1 := person{}
+	say(p1)
+}
+```
+
+### 接口嵌套
+
+```go
+type sayer interface {
+	say()
+    mover//将mover接口嵌套进来，就相当于添加了mover中的方法
+}
+type mover interface {
+	run()
+}
+```
+
+#### 类型断言
+
+```go
+str := "hello"
+result := str.(string)//类型断言，判断str是否是string类型，返回布尔值
+```
 
