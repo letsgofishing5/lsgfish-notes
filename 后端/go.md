@@ -1,3 +1,5 @@
+# 准备工作
+
 ## 配置环境变量
 
 1. GOPATH：保存的是以后项目的存放目录GO
@@ -24,6 +26,16 @@
 ### 插件
 
 1. Go
+
+# GO
+
+### 可见性
+
+1. 声明在函数内部，是函数的本地值，类似private
+2. 声明在函数外部，是对当前包可见(包内所有.go文件都可见)的全局值，类似protect
+3. 声明在函数外部且首字母大写是所有包可见的全局值,类似public
+
+
 
 ## 数据类型
 
@@ -203,7 +215,7 @@ func switchDemo1() {
 		fmt.Println("无效的输入！")
 	}
 }
-//fallthrough语法可以执行满足条件的case的下一个case，是为了兼容C语言中的case设计的。
+//使用 fallthrough 会强制执行后面的 case 语句，fallthrough 不会判断下一条 case 的表达式结果是否为 true。
 func switchDemo5() {
 	s := "a"
 	switch {
@@ -292,16 +304,275 @@ len(slice) == 0
 
 ## map
 
-> map是一种无序的基于`key-value`的数据结构，Go语言中的map是引用类型，必须初始化才能使用。
+> map是一种**无序**的基于`key-value`的数据结构，Go语言中的map是**引用类型，必须初始化才能使用**。
+
+### map声明
+
+```go
+var val map[T]T //声明
+val2 := map[string]bool{
+    "name":true,
+    "age":false
+} //声明并赋值
+//通过make函数生成
+sourcMap := make(map[string]string,cap)
+```
+
+### 判断是否存在key
+
+```go
+sourceMap := map[string]string{
+    "name":"张三"
+}
+value, ok := sourceMap["name"]
+if ok{
+    fmt.Printf("value:%v",value)
+}
+```
+
+### 删除
+
+```go
+//delete
+sourceMap := map[string]string{
+    "name":    "张三",
+    "age":     "23",
+    "phone":   "13505657895",
+    "address": "张家界狄磉偶第四大队",
+    "qq":      "111235645",
+}
+fmt.Printf("删除age前：%v\n", sourceMap)
+delete(sourceMap, "age")
+fmt.Printf("删除age后：%v\n", sourceMap)
+```
+
+## 函数
+
+### 函数定义
+
+```go
+func 函数名(参数) 返回值{
+    函数体
+}
+```
+
+1. 函数名：由字母、数字、下划线组成。但函数名的第一个字母不能是数字
+2. 参数：参数由参数变量和参数变量的类型组成，多个参数之间使用`,`分隔
+3. 返回值：返回值由返回值变量和其变量类型组成，也可以只写返回值的类型，多个返回值必须用`()`包裹，并用`,`分隔。
+4. 函数体：实现指定功能的代码块
+
+### 参数
+
+```go
+//参数简写
+func fn1(x,y int){
+    
+}
+//可变参数
+func fn2(x ...int){
+    
+}
+```
+
+###  返回值
+
+多返回值也支持类型简写
+
+```go
+//多返回值
+func fn(){
+    return x,y
+}
+//返回值命名
+func fn1()(x,y int){
+    x = 1,
+    y = s
+    return //这里不需要写上返回值名称，return即可返回声明过的返回值
+}
+```
+
+###  变量作用域
+
+##### 全局变量
+
+全局变量是定义在函数外部的变量，它在程序整个运行周期内都有效。 在函数中可以访问到全局变量。
+
+##### 局部变量
+
+局部变量又分为两种： 函数内定义的变量无法在该函数外使用，
+
+如果局部变量和全局变量重名，优先访问局部变量。
+
+for循环定义的变量也只在for语句种生效
+
+### defer语句
+
+> Go语言中的`defer`语句会将其后面跟随的语句进行延迟处理。在`defer`归属的函数即将返回时，将延迟处理的语句按`defer`定义的逆序进行执行，也就是说，先被`defer`的语句最后被执行，最后被`defer`的语句，最先被执行。
+
+##### defer执行时机
+
+> 在Go语言的函数中`return`语句在底层并不是原子操作，它分为给返回值赋值和RET指令两步。而`defer`语句执行的时机就在返回值赋值操作后，RET指令执行前。
+>
+> **defer注册要延迟执行的函数时该函数所有的参数都需要确定其值**
+
+###  panic与recover
+
+> Go语言中目前（Go1.12）是没有异常机制，但是使用`panic/recover`模式来处理错误。 `panic`可以在任何地方引发，但`recover`只有在`defer`调用的函数中有效。 首先来看一个例子：
+
+```go
+func funcA() {
+	fmt.Println("func A")
+}
+
+func funcB() {
+	panic("panic in B")
+}
+
+func funcC() {
+	fmt.Println("func C")
+}
+func main() {
+	funcA()
+	funcB()
+	funcC()
+}
+```
+
+> 程序运行期间`funcB`中引发了`panic`导致程序崩溃，异常退出了。这个时候我们就可以通过`recover`将程序恢复回来，继续往后执行。
+
+```go
+func funcA() {
+	fmt.Println("func A")
+}
+
+func funcB() {
+	defer func() {
+		err := recover()
+		//如果程序出出现了panic错误,可以通过recover恢复过来
+		if err != nil {
+			fmt.Println("recover in B")
+		}
+	}()
+	panic("panic in B")
+}
+
+func funcC() {
+	fmt.Println("func C")
+}
+func main() {
+	funcA()
+	funcB()
+	funcC()
+}
+```
+
+####  注意
+
+1. `recover()`必须搭配`defer`使用。
+2. `defer`一定要在可能引发`panic`的语句之前定义。
 
 ## 指针
 
 #### 符号
 
 ```go 
-&：取地址
-*：根据地址取值
+&：取 值的地址
+*：根据指针地址取指针指向的值
 s := 1
 fmt.Printf("s的地址：%p\n", &s)
 ```
+
+### new与make
+
+> 使用new函数得到的是一个类型的指针，并且该指针对应的值为该类型的零值。
+>
+> make也是用于内存分配的，区别于new，它只用于slice、map以及chan的内存创建，而且它返回的类型就是这三个类型本身，
+
+```go
+//new(T)*T
+a := new(bool) //初始化引用类型
+//make
+make(t Type, size ...IntegerType) Type //初始化引用类型（map、slice、chan）
+```
+
+#### 区别
+
+1. 二者都是用来做内存分配的。
+2. make只用于slice、map以及channel的初始化，返回的还是这三个引用类型本身；
+3. 而new用于类型的内存分配，并且内存对应的值为类型零值，返回的是指向类型的指针。
+
+## 结构体struct
+
+#### 自定义类型
+
+> 通过`type`关键字的定义，`MyInt`就是一种新的类型，它具有`int`的特性。
+
+```go
+type MyInt int
+```
+
+#### 类型别名
+
+> 类型别名规定：TypeAlias只是Type的别名，本质上TypeAlias与Type是同一个类型。就像一个孩子小时候有小名、乳名，上学后用学名，英语老师又会给他起英文名，但这些名字都指的是他本人。
+
+```go
+type MyInt = int
+//我们之前见过的rune和byte就是类型别名，他们的定义如下：
+type byte = uint8
+type rune = int32
+```
+
+
+
+#### 实例化
+
+```go
+type 类型名 struct {
+    字段名 字段类型
+    字段名 字段类型
+    …
+}
+//定义一个 Person （人）结构体
+type person struct {
+	name string
+	city string
+	age  int8
+}
+```
+
+#### 匿名结构体
+
+> 定义一些临时数据结构等场景下还可以使用匿名结构体
+
+```go
+var user struct{Name string; Age int}
+user.Name = "小王子"
+user.Age = 18
+fmt.Printf("%#v\n", user)
+```
+
+### 方法和接收者
+
+接收者分两种，一种是引用类型接收者，一种事值类型引用者
+
+```go
+func(p Person) 方法名(参数列表) 返回参数{
+    函数体
+}
+```
+
+#### 结构体字段可见性
+
+结构体中字段大写开头表示可公开访问，小写表示私有（仅在定义当前结构体的包中可访问）。
+
+### json
+
+```go
+//序列号  go数据结构 -> json
+data,err := json.Marshal(obj)
+//反序列化 json-> go数据结构
+err :=json.Unmarshal([]byte(data),obj)
+```
+
+## 包
 
