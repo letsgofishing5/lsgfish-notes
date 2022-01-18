@@ -81,7 +81,7 @@ data是函数，他返回回来的对象才是真正意义上的数据的存储�
 
 #### $attrs&$listeners
 
-`$attrs`用于监听父组件作用域下定义在自己身上（class与style除外）的排除了自己在props中接收过的属性集合，只要被props声明过，则不会出现在`$attrs`中，通过子组件内部声明： `v-bind="$attrs"`来接收父组件传递过来的属性集合
+`$attrs`用于监听父组件作用域下定义在子组件身上（class与style除外）的排除了子组件在props中接收过的属性集合，只要被props声明过，则不会出现在`$attrs`中，通过子组件内部声明： `v-bind="$attrs"`来接收父组件传递过来的属性集合
 
 ```vue
 //parent

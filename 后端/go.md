@@ -582,7 +582,9 @@ err :=json.Unmarshal([]byte(data),obj)
 
 ### 定义接口
 
-> 接口就是一堆方法的集合，
+> 接口就是一种数据类型
+>
+> 接口内部就是一堆方法的集合，
 >
 > 只要实现了接口里的所有方法，那么就可以认为两者是同一个类型的数据，从而达到多态的效果
 
@@ -633,10 +635,36 @@ type mover interface {
 }
 ```
 
-#### 类型断言
+## 反射reflect
+
+#### 概念
+
+> go 中，通过 reflect.Typeof() 可以获取**任意值**的**类型对象**
+>
+> 然后通过这个类型对象可以获取 类型的 Type 和 种类 Kind
 
 ```go
-str := "hello"
-result := str.(string)//类型断言，判断str是否是string类型，返回布尔值
+var num int32
+tNum := reflect.Typeof(num)
+fmt.Printf("type：%v，kind:%v\n", tNum.Name(), tNum.Kind())
+//数组，切片，map，指针类型变量，他们的.Name()都返回空
 ```
+
+> 通过 reflect.Valueof() 可以获取值的 类型对象
+
+```go 
+func reflectValueOf(x interface{}) {
+    t := reflect.ValueOf(x)
+    fmt.Printf("值：%v，类型：%T\n", t, t)
+    fmt.Printf("获取值类型：%v\n", t.Kind())
+}
+```
+
+#### 通过反射设置变量的值
+
+
+
+#### 个人总结反射
+
+可以通过 `reflect.ValueOf()` 或 `reflect.TypeOf()` 来获取任意值的数据类型对象，而通过这个数据类型对象可以获取当前值`（Name）`和数据底层类型`（Kind）`
 
