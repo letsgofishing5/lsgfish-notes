@@ -567,6 +567,19 @@ func(p Person) 方法名(参数列表) 返回参数{
 
 结构体中字段大写开头表示可公开访问，小写表示私有（仅在定义当前结构体的包中可访问）。
 
+#### 结构体标签
+
+```go
+//Student 学生
+type Student struct {
+	ID     int    `json:"id"` //通过指定tag实现json序列化该字段时的key
+	Gender string //json序列化是默认使用字段名作为key
+	name   string //私有不能被json包访问
+}
+```
+
+
+
 ### json
 
 ```go
@@ -662,9 +675,77 @@ func reflectValueOf(x interface{}) {
 
 #### 通过反射设置变量的值
 
+需要传入地址类型（&num），然后通过Elem().SetInt(值)来设置值
 
+```go
+func reflectSetValue(x interface{}){
+    t := reflect.ValueOf(x)
+    if t.Elem().Kind() == reflect.Int
+        t.Elem().SetInt(200)
+    }
+}
+```
 
 #### 个人总结反射
 
 可以通过 `reflect.ValueOf()` 或 `reflect.TypeOf()` 来获取任意值的数据类型对象，而通过这个数据类型对象可以获取当前值`（Name）`和数据底层类型`（Kind）`
+
+## 并发
+
+### goroutine
+
+go中，通过在函数前面添加一个 go 的声明则开启一个线程
+
+```go
+package main
+
+func hello(){
+    fmt.Println("hello")
+}
+func main(){
+    go hello()
+    fmt.Println("main")
+}
+```
+
+#### 线程等待
+
+使用 sync.WaitGroup
+
+```go
+var wg sync.WaitGroup
+wg.Add(1)//添加一个标记
+wg.Done()//减去一个标记
+wg.Wait()//等到标记为0时，结束当前goroutine
+```
+
+#### 分配CPU核心数
+
+```go
+runtime.GOMAXPROCS(1)//默认是启动所有的核心数，可以自己设置
+```
+
+### channel
+
+> chan是一个引用类型数据，声明chan后，需要使用make函数初始化后才可以使用 
+
+#### 声明格式
+
+```go
+var ch chan int //声明一个传递整型的通道
+ch := make(chan int)
+```
+
+#### 操作 
+
+接收、发送、关闭
+
+```go
+//接受与发送都是通过 <- 符号来完成的
+ch := make(chan int,2)//初始化一个chan,缓冲大小为2，
+ch = <- 10            //接收第一个值：10
+ch = <- 20			  //接收第二个值：20
+x := <-ch			  //ch发送第一个值10 给 x
+close(ch)			  //关闭ch通道
+```
 
