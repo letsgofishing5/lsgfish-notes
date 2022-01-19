@@ -743,9 +743,96 @@ ch := make(chan int)
 ```go
 //接受与发送都是通过 <- 符号来完成的
 ch := make(chan int,2)//初始化一个chan,缓冲大小为2，
-ch = <- 10            //接收第一个值：10
-ch = <- 20			  //接收第二个值：20
+ch <- 10              //接收第一个值：10
+ch <- 20			  //接收第二个值：20
 x := <-ch			  //ch发送第一个值10 给 x
 close(ch)			  //关闭ch通道
+```
+
+ #### 有无缓冲
+
+初始化的时候给了容量，则是有缓冲，没给就是没有缓冲。
+
+```go
+ch1 := make(chan int,1)//有缓冲
+ch2 := make(chan int)//无缓冲
+```
+
+#### 判断chan内的值是否输出结束
+
+```go
+ch := make(chan int,2)
+ch <- 10
+ch <- 20
+for {
+    v,ok := <- ch //判断ok是否为true，为true则没有输出结束
+    if !ok {
+        break;
+    }
+    fmt.Println("chan的值：",v)
+}
+```
+
+#### select
+
+> `select`的使用类似于switch语句，它有一系列case分支和一个默认的分支。每个case会对应一个通道的通信（接收或发送）过程。`select`会一直等待，直到某个`case`的通信操作完成时，就会执行`case`分支对应的语句。具体格式如下：
+
+### 并发安全和锁
+
+#### 互斥锁
+
+使用 sync.Mutex 下的互斥锁
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+var x int64
+var wg sync.WaitGroup
+var lock sync.Mutex
+
+func add() {
+	for i := 0; i < 10000; i++ {
+		lock.Lock()//加锁
+		x = x + 1
+		lock.Unlock()//解锁
+	}
+	wg.Done()
+}
+func main() {
+	wg.Add(2)
+	go add()
+	go add()
+	wg.Wait()
+	fmt.Printf("x 的累计值：%v", x)
+}
+```
+
+#### 读写互斥锁
+
+使用 sync.RWMutex，来给读写分别执行加锁和解锁动作
+
+```go
+var rwlock sync.RWMutex
+//给读执行加锁动作
+rwlock.Rlock()
+rwlock.RUnlock()
+//给写执行加锁动作
+rwlock.Lock()
+rwlock.Unlock()
+
+```
+
+#### Map安全读写
+
+使用 sync.Map
+
+```go
+var m sync.Map
+
 ```
 
