@@ -572,7 +572,7 @@ func(p Person) 方法名(参数列表) 返回参数{
 ```go
 //Student 学生
 type Student struct {
-	ID     int    `json:"id"` //通过指定tag实现json序列化该字段时的key
+	ID     int    `json:"id" form:"id"` //通过指定tag实现json序列化该字段时的key，有多种类型时，用空格分开
 	Gender string //json序列化是默认使用字段名作为key
 	name   string //私有不能被json包访问
 }
