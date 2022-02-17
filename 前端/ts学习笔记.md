@@ -213,3 +213,58 @@ const dog = new Dog("小黑")
 dog.eat()
 ```
 
+#### 接口的扩展
+
+```ts
+interface Animal {
+  eat(): void
+}
+interface Dog extends Animal {
+  work(): void
+}
+class XiaoDog implements Dog {
+  work(): void {
+    throw new Error('Method not implemented.')
+  }
+  eat(): void {
+    console.log('小狗吃eat')
+  }
+}
+const xg = new XiaoDog()
+xg.eat()
+```
+
+### 泛型
+
+泛型就是用来解决 类 接口 方法 的复用性。以及对不特定数据类型的支持
+
+```ts
+function demo<T>(value:T):T{
+    console.log("泛型，在调用时决定数据类型",value)
+    return value
+}
+demo<string>("张三")
+```
+
+## 命名空间
+
+通过`export`暴露模块，用`import`导入模块
+
+```ts
+export namespace A{
+    export interface demo{
+        name:string;
+        age:number;
+    }
+}
+//调用命名空间方法
+
+```
+
+## 装饰器
+
+- 装饰器:装饰器是一种特殊类型的声明， 它能够被附加到类声明，方法，属性或参数上，可以修改类的行为。
+- 通俗的讲装饰器就是一一个方法，可以注入到类、方法、属性参数上来扩展类、属性、方法、参数的功能。
+- 常见的装饰器有:类装饰器、属性装饰器、方法装饰器、参数装饰器
+- 装饰器的写法:普通装饰器(无法传参)、装饰器工厂(可传参)
+- 装饰器是过去几年中js最大的成就之一，已是Es7的标准特性之一
