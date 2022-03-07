@@ -13,6 +13,31 @@ const demo2:Ref<string> = ref("")
 </script>
 ```
 
+### computed
+
+```vue
+<script setup lang="ts">
+import {computed} from 'vue';
+//vue3中计算属性的函数中如果只传入一个回调函数，表示的是get
+const cal1 = computed(()=>{
+    return 1
+})
+//计算属性中的函数如果传入的是对象，则表示get/set
+const msg = ref("")
+const cal2 = computed({
+    get(){
+        return 1
+    },
+    set(val){
+        //当cal2的值被主动修改时，会触发set方法
+        msg.value = val
+    }
+})
+</script>
+```
+
+
+
 ### watch
 
 ```vue
@@ -28,6 +53,23 @@ const demo2:Ref<string> = ref("")
         immediate：true,
     })
 </script>
+```
+
+### defineProps
+
+```vue
+//无需导入，会自动加入宏编译器
+//第一种方式
+defineProps<{msg:string}>()
+//第二种方式
+const props = defineProps({
+    msg:string
+})
+//第三种方式
+type Leixing = {
+    msg:string
+}
+defineProps<Leixing>()
 ```
 
 
