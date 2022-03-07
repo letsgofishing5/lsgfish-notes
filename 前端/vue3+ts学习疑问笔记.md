@@ -1,3 +1,37 @@
+# vue3
+
+## 响应式API
+
+### ref
+
+```vue
+<script setup lang="ts">
+import {ref,Ref} from 'vue';
+//设置返回值类型(方法一、方法二)
+const demo = ref<string>("")
+const demo2:Ref<string> = ref("")
+</script>
+```
+
+### watch
+
+```vue
+<script setup lang="ts">
+    let msg = ref(0)
+    watch(msg,(newVal,oldVal)=>{
+        console.log("newVal",newVal,"oldVal":oldVal)
+    }),
+    watch(msg,(newVal,oldVal)=>{
+        console.log("newVal",newVal,"oldVal":oldVal)
+    },{
+        deep:true,//深度监听
+        immediate：true,
+    })
+</script>
+```
+
+
+
 ## tsconfig.ts
 
 #### 配置简单的映射路径
