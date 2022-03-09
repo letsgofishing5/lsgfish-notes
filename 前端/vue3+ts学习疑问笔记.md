@@ -114,7 +114,7 @@ watchEffect(()=>{
 //无需导入，会自动加入宏编译器
 //第一种方式
 defineProps<{msg:string}>()
-//第二种方式
+//第二种方式，此方法可以在setup中使用接收的值
 const props = defineProps({
     msg:string
 })
@@ -227,7 +227,7 @@ const getVal = function (val: string) {
 
 #### defineExpose
 
-> 父组件获取子组件的实例
+> 父组件获取子组件的实例，父组件调用子组件方法
 
 ```vue
 <!--父组件-->
@@ -236,7 +236,7 @@ const getVal = function (val: string) {
 </template>
 <script setup lang="ts">
 import {ref,onMounted} from 'vue'
-const example = ref(null)//声明 example，用来通过ref属性获取子组件的实例
+const example = ref<any>()//声明 example，用来通过ref属性获取子组件的实例
 onMounted(()=>{
     console.log("子组件中的list值：",example.list)
 })
