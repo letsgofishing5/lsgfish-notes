@@ -253,6 +253,123 @@ onMounted(()=>{
 </script>
 ```
 
+### 组件
+
+#### 全局组件
+
+> 可以在main文件中，挂载到全局中，再次使用时则不需要声明的组件
+
+```vue
+<template>
+全局组件
+</template>
+```
+
+main文件
+
+```ts
+import CustomComponent from '**'
+const app = createApp(App)
+app.component("custom",CustomComponent)
+app.mount('#app')
+```
+
+#### 动态组件
+
+> 通过 component 内置的组件，is 属性来指定切换的组件
+>
+> 在使用动态组件的时候，会出现组件代理响应式对象，造成不必要的性能开销，可以使用 markRaw 包裹组件，来消除组件的响应式
+
+```vue
+<template>
+	<component :is="Component"/>
+</template>
+<scritp setup lang="ts">
+import A from "xx",
+import {ref,markRaw} from 'vue'
+const Component = ref()
+Component.value = markRaw(A)
+</scritp>
+```
+
+#### 异步组件
+
+> 异步组件就是通过defineAsyncComponent 和 suspense组件，在 promise 机制下，可以达到一个pending 的效果。
+>
+> **同时能够减小文件加载的大小，进行代码分割**
+
+```vue
+<!--父组件-->
+<script setup lang="ts">
+import { defineAsyncComponent, ref } from "vue";
+const Demo = defineAsyncComponent(() => import("@/components/Demo.vue"));
+</script>
+<template>
+  <suspense>
+    <template #default>
+      <Demo />
+    </template>
+    <template #fallback>
+      <div>Loading...</div>
+    </template>
+  </suspense>
+</template>
+<style></style>
+
+<!--子组件-->
+<script setup lang="ts">
+import axios from "@/utils/request";//异步请求api
+import { ref } from "vue";
+const list = ref<Array<string>>();
+const res = await axios("get", "./data.json");//在顶层使用await，是长时间观看到loading 效果的关键
+list.value = res;
+</script>
+<template>
+  <div class="wrap">
+    <div v-for="(item, index) in list" :key="index">{{ item }}</div>
+  </div>
+</template>
+<style></style>
+```
+
+
+
+#### 代码分包
+
+
+
+## 应用
+
+### 插槽
+
+#### 插槽作用域
+
+> 可以通过 slot 的属性，将子组件的值传递给父组件
+
+```vue
+<!--子组件-->
+<template>
+	<div>
+        <slot :msg="hello slot">这里slot可以通过data属性，将one这个值传递给使用插槽的父组件</slot>
+    </div>
+</template>
+
+<!--父组件-->
+<Demo #default="{ msg }">{{ msg }}</Demo>
+```
+
+### Teleport
+
+> teleport 不会受到 v-show 指令的影响，但是会收到 v-if 的影响
+
+```vue
+<teleport to="html">hello teloport</teleport>
+```
+
+### keep-alive
+
+> 相关的生命周期函数：onActivated、onDeactivated
+
 
 
 # typescript
