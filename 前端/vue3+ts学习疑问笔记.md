@@ -370,6 +370,165 @@ list.value = res;
 
 > 相关的生命周期函数：onActivated、onDeactivated
 
+### 过渡
+
+[vue官方解答](https://v3.cn.vuejs.org/guide/transitions-enterleave.html#%E8%BF%87%E6%B8%A1-class)
+
+[transition内置组件](https://v3.cn.vuejs.org/api/built-in-components.html#transition)
+
+#### transition-group
+
+> 每个 `<transition-group>` 的子节点必须有[**独立的 key**](https://v3.cn.vuejs.org/api/special-attributes.html#key)，动画才能正常工作。
+>
+> 用法与 transition 一模一样
+
+```vue
+<script setup lang="ts">
+    import { ref, reactive } from "vue";
+    const nextNum = ref(10);
+    const items = reactive([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    const randomIndex = function () {
+        return Math.floor(Math.random() * items.length);
+    };
+    const add = function () {
+        items.splice(randomIndex(), 0, nextNum.value++);
+    };
+
+    const remove = function () {
+        items.splice(randomIndex(), 1);
+    };
+</script>
+<template>
+<div id="list-demo">
+    <button @click="add">Add</button>
+    <button @click="remove">Remove</button>
+    <transition-group name="list" tag="p">
+        <span v-for="item in items" :key="item" class="list-item">
+            {{ item }}
+    </span>
+    </transition-group>
+    </div>
+</template>
+<style scoped>
+    .list-item {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .list-enter-active,
+    .list-leave-active {
+        transition: all 1s ease;
+    }
+    .list-enter-from,
+    .list-leave-to {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+</style>
+
+```
+
+##### 移动过渡
+
+> 引入lodash 函数工具库，调用里面的 **shuffle** 函数，打乱数组元素
+>
+> 注意点
+>
+> - transition-group 子节点的 key 必须唯一
+> - 移动过渡的过渡效果依赖于 transition-group 的 move-class，给这个类，添加 transition 
+
+```vue
+<script setup lang="ts">
+import _ from "lodash";
+import { ref } from "vue";
+const arr = ref(
+  Array.apply(null, { length: 81 } as number[]).map((_, index) => {
+    return {
+      id: index,
+      num: (index % 9) + 1,
+    };
+  })
+);
+const change = function () {
+  arr.value = _.shuffle(arr.value);
+};
+</script>
+<template>
+  <div>
+    <button @click="change">change</button>
+    <transition-group move-class="mmm" tag="div" class="wrap">
+      <div class="item" v-for="(item, index) in arr" :key="item.id">{{ item.num }}</div>
+    </transition-group>
+  </div>
+</template>
+<style lang="scss">
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  width: calc(25px * 10);
+  .item {
+    width: 25px;
+    height: 25px;
+    border: 1px solid gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.mmm {
+  transition: all 1s;
+}
+</style>
+
+```
+
+### 自定义指令
+
+[官方文档](https://v3.cn.vuejs.org/guide/custom-directive.html#%E7%AE%80%E4%BB%8B)
+
+```vue
+<script setup lang="ts">
+import { Directive } from "vue";
+// 变量命名：要以 v 开头
+const vMove: Directive = {
+  mounted(...args: Array<any>) {
+    console.log(args);
+    args[0].style.backgroundColor = "red";
+  },
+};
+</script>
+<template>输入：<input type="text" v-move="1" /></template>
+<style></style>
+```
+
+### Hooks
+
+> 默认导出一个函数，函数中使用 各种生命周期函数，以达到 mixin 的效果
+
+```ts
+import { onMounted } from "vue";
+export default function (el: HTMLElement) {
+    onMounted(() => {
+        console.log("执行了onMounted");
+    })
+}
+```
+
+```vue
+<script setup lang="ts">
+import hooks from "@/utils/hooks";
+hooks();
+</script>
+```
+
+
+
+## 好用的插件
+
+```bash
+# 自动导入插件
+npm i unplugin-auto-import -D
+```
+
 
 
 # typescript
