@@ -253,7 +253,11 @@ onMounted(()=>{
 </script>
 ```
 
+### 组件
 
+#### 全局组件
+
+> 在
 
 # typescript
 
