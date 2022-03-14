@@ -225,7 +225,7 @@ const getVal = function (val: string) {
 </script>
 ```
 
-#### defineExpose
+#### defineExpose暴露实例内容
 
 > 父组件获取子组件的实例，父组件调用子组件方法
 
@@ -513,6 +513,19 @@ export default function (el: HTMLElement) {
 import hooks from "@/utils/hooks";
 hooks();
 </script>
+```
+
+### 全局函数和变量
+
+[官网地址](https://v3.cn.vuejs.org/api/application-config.html#globalproperties)
+
+```js
+// 之前 (Vue 2.x)
+Vue.prototype.$http = () => {}
+
+// 之后 (Vue 3.x)
+const app = createApp({})
+app.config.globalProperties.$http = () => {}
 ```
 
 
