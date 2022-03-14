@@ -539,6 +539,10 @@ npm i unplugin-auto-import -D
 
 # typescript
 
+
+
+
+
 ## tsconfig.ts
 
 #### 配置简单的映射路径
