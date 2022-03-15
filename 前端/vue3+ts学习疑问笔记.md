@@ -225,7 +225,7 @@ const getVal = function (val: string) {
 </script>
 ```
 
-#### defineExpose
+#### defineExpose暴露实例内容
 
 > 父组件获取子组件的实例，父组件调用子组件方法
 
@@ -254,6 +254,7 @@ onMounted(()=>{
 ```
 
 ### 组件
+
 
 #### 全局组件
 
@@ -331,12 +332,6 @@ list.value = res;
 </template>
 <style></style>
 ```
-
-
-
-#### 代码分包
-
-
 
 ## 应用
 
@@ -520,6 +515,19 @@ hooks();
 </script>
 ```
 
+### 全局函数和变量
+
+[官网地址](https://v3.cn.vuejs.org/api/application-config.html#globalproperties)
+
+```js
+// 之前 (Vue 2.x)
+Vue.prototype.$http = () => {}
+
+// 之后 (Vue 3.x)
+const app = createApp({})
+app.config.globalProperties.$http = () => {}
+```
+
 
 
 ## 好用的插件
@@ -529,9 +537,11 @@ hooks();
 npm i unplugin-auto-import -D
 ```
 
-
-
 # typescript
+
+
+
+
 
 ## tsconfig.ts
 
