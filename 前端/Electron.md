@@ -148,15 +148,16 @@ npm run electron:serve #运行程序
 #### 配置镜像环境
 
 ```.npmrc
-registry=https://registry.npm.taobao.org/
-ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/
-electron_builder_ binaries_mirror=https://registry.npmmirror.com/binary.html?path=electron-builder-binaries/
+registry=https://registry.npm.taobao.org
+ELECTRON_MIRROR="https://cdn.npm.taobao.org/dist/electron/"
+ELECTRON_BUILDER_BINARIES_MIRROR=http://npm.taobao.org/mirrors/electron-builder-binaries/
 ```
 
 #### 开始
 
 ```bash
-npm i electron electron-builder -D
+pnpm add electron -D
+pnpm add electron-builder -D
 ```
 
 main.js
@@ -235,6 +236,8 @@ index.html
 
 #### 同时执行两条脚本命令
 
+> 该插件，没有执行顺序
+
 ```bash
 npm i concurrently -D
 ```
@@ -247,5 +250,19 @@ npm i concurrently -D
 }
 ```
 
-### 优化
+### electron-builder package.json配置
+
+```json
+{
+    "build": {
+        "appId": "Lsgofish",					//appID，打包必填项
+        "directories": {
+            "output": "dist/artifacts/local",	//指定打包输出的目录
+        },
+        "win":{
+            "target":"portable"	//打包成免安装程序
+        }
+    }, 
+}
+```
 
