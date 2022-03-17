@@ -140,4 +140,129 @@ npm run electron:serve #运行程序
    在打包命令后面添加：--dir
    ```
 
-   
+
+# electron vite 
+
+### electron-builder打包
+
+#### 配置镜像环境
+
+```.npmrc
+registry=https://registry.npm.taobao.org
+ELECTRON_MIRROR="https://cdn.npm.taobao.org/dist/electron/"
+ELECTRON_BUILDER_BINARIES_MIRROR=http://npm.taobao.org/mirrors/electron-builder-binaries/
+```
+
+#### 开始
+
+```bash
+pnpm add electron -D
+pnpm add electron-builder -D
+```
+
+main.js
+
+```js
+const { app, BrowserWindow } = require('electron')
+const path = require('path')
+
+function createWindow() {
+    const win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js')
+        }
+    })
+
+    win.loadFile('index.html')
+}
+
+app.whenReady().then(() => {
+    createWindow()
+
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow()
+        }
+    })
+})
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
+})
+```
+
+preload.js
+
+```js
+window.addEventListener('DOMContentLoaded', () => {
+    const replaceText = (selector, text) => {
+        const element = document.getElementById(selector)
+        if (element) element.innerText = text
+    }
+
+    for (const type of ['chrome', 'node', 'electron']) {
+        replaceText(`${type}-version`, process.versions[type])
+    }
+})
+```
+
+index.html
+
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+
+<body>
+    <h1>Hello World!</h1>
+    <p>
+        We are using Node.js <span id="node-version"></span>,
+        Chromium <span id="chrome-version"></span>,
+        and Electron <span id="electron-version"></span>.
+    </p>
+</body>
+
+</html>
+```
+
+#### 同时执行两条脚本命令
+
+> 该插件，没有执行顺序
+
+```bash
+npm i concurrently -D
+```
+
+```json
+{
+    "script":{
+        "electron": "concurrently \"vite\"  \"electron .\" ",
+    }
+}
+```
+
+### electron-builder package.json配置
+
+```json
+{
+    "build": {
+        "appId": "Lsgofish",					//appID，打包必填项
+        "directories": {
+            "output": "dist/artifacts/local",	//指定打包输出的目录
+        },
+        "win":{
+            "target":"portable"	//打包成免安装程序
+        }
+    }, 
+}
+```
+
