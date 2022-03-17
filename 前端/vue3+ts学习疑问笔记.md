@@ -174,7 +174,11 @@ onUnmount(()={
 defineProps<{msg:string}>()
 //第二种方式
 const props = defineProps({
-    msg:string
+    msg:String,//类型一定要大写
+    list:{
+        type:Array,
+        default:[]
+    }
 })
 //第三种方式
 type Leixing = {
@@ -186,7 +190,7 @@ defineProps<Leixing>()
 type Leixing = {
     msg:string
 }
-widthDefaults(defineProps<Leixing>(),{
+withDefaults(defineProps<Leixing>(),{
     msg:"我是默认值"
 })
 </script>
