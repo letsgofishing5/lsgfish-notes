@@ -1,17 +1,33 @@
 # 准备工作
 
-## 配置环境变量
+### 安装环境
 
-1. GOPATH：保存的是以后项目的存放目录GO
-2. GOROOT：保存的是安装包的目录
-3. Path：go的bin目录
-4. 在步骤一的GOPATH目录中，新建：src、pkg、bin
+下载：https://golang.google.cn/dl/
+
+然后安装，一直点下一步就行了
+
+#### 查看是否安装成功
+
+```bash
+# 查看版本号
+go version
+```
+
+#### 配置代理环境
+
+```bash
+#cmd下设置代理：
+go env -w GOPROXY=https://goproxy.cn,direct
+go env -w GO111MODULE=on
+#或者如下命令，二者目的一样
+set GO111MODULE=on
+set GOPROXY=https://goproxy.cn,direct
+```
 
 #### 配置vscode编辑环境
 
 1. 安装 go 插件
-2. cmd下设置代理：go env -w GOPROXY=https://goproxy.cn,direct
-3. 在 vscode 中，按下：CTRL+shift+P 键，输入：go:install ，下面会自动搜索相关命令，我们选择`Go:Install/Update Tools`这个命令，选择全部安装
+2. 在 vscode 中，按下：CTRL+shift+P 键，输入：go:install ，下面会自动搜索相关命令，我们选择`Go:Install/Update Tools`这个命令，选择全部安装
 4. 设置代码片段快捷键，按下：CTRL+shift+P 键，输入 snippets，选择 Preferences:Configure User Snippets，然后再输入 go.json，选择 go.json 命令回车
 
 #### 常用命令
@@ -21,11 +37,7 @@
 3. go build
 4. go build -o hello.exe  //给编译后的文件重命名
 
-## IDE -vsCode
 
-### 插件
-
-1. Go
 
 # GO
 
