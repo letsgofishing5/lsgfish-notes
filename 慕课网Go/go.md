@@ -30,6 +30,15 @@ set GOPROXY=https://goproxy.cn,direct
 2. 在 vscode 中，按下：CTRL+shift+P 键，输入：go:install ，下面会自动搜索相关命令，我们选择`Go:Install/Update Tools`这个命令，选择全部安装
 4. 设置代码片段快捷键，按下：CTRL+shift+P 键，输入 snippets，选择 Preferences:Configure User Snippets，然后再输入 go.json，选择 go.json 命令回车
 
+#### go mod
+
+```go
+go mod init PackageName
+go mod tidy //类似于 npm i
+```
+
+
+
 #### 常用命令
 
 1. go env
@@ -76,7 +85,7 @@ const (
 )
 const (
 	a1 = iota //iota = 0,自增
-    a2 //a2=1
+    a2 //a2=1，当前常量未赋值，则值同上一个值
     _  //_是匿名变量的意思，表示不要
     a3 //a3=3
 )
@@ -84,15 +93,7 @@ const (
 
 ### 基本数据类型
 
-整型、浮点型、复数、布尔值、字符串
-
-#### 整型
-
-##### 带符号
-
-##### 不带符号
-
-##### 特殊整形
+#### 整形
 
 | 类型    | 描述                                             |
 | ------- | ------------------------------------------------ |
@@ -100,7 +101,46 @@ const (
 | int     | 32位操作系统上就是int32，64位操作系统就是int64   |
 | uintptr | 无符号整型，用于存放一个指针                     |
 
-##### 进制
+#### 布尔型
+
+```go
+bool
+```
+
+#### 字符串类型
+
+1. go语言中字符串使用双引号包裹的
+2. go语言中单引号包裹的是字符串
+
+字节：一个 字节 =  8bit（8个二进制）
+
+字符：单独的字母、汉字，符号表示一个字符
+
+```go
+string
+```
+
+#### byte、rune
+
+```go
+byte: 字节类型
+rune: char类型
+```
+
+#### 浮点型、复数
+
+Go语言支持两种浮点型数：`float32`和`float64`
+
+go语言中默认是`float64`位
+
+```go
+float32,
+float64,
+complex64,
+complex128
+```
+
+#### 进制
 
 1. 八进制：0开头
 2. 十六进制：0x开头
@@ -121,64 +161,24 @@ fmt.Printf("%#v",n)//输出值，并表示类型，如果是字符串类型，�
 
 ```
 
-#### 浮点型
+### 强制类型转换
 
-Go语言支持两种浮点型数：`float32`和`float64`
-
-go语言中默认是`float64`位
+go语言只有强制类型转换，没有隐式转换
 
 ```go
-package main
-import (
-    "fmt"
-)
 func main() {
-	f1  :=1.234
-	fmt.Printf("%T\n",f1)
-	f2 :=float32(f1) //float64转float32
-	fmt.Printf("%T\n",f2)
-    //float32不能转成float64
+	var a float32 = 12.0
+	var b float64 = 14.00
+	b = float64(a)
+	fmt.Println(b)
 }
 ```
 
-#### 复数
 
-complex64 和complex128
-
-#### bool布尔值
-
-Go语言中以`bool`类型进行声明布尔型数据，布尔型数据只有`true（真）`和`false（假）`两个值。
-
-**注意：**
-
-1. 布尔类型变量的默认值为`false`。
-2. Go 语言中不允许将整型强制转换为布尔型.
-3. 布尔型无法参与数值运算，也无法与其他类型进行转换。
-
-#### 字符串
-
-1. go语言中字符串使用双引号包裹的
-2. go语言中单引号包裹的是字符串
-
-字节：一个 字节 =  8bit（8个二进制）
-
-字符：单独的字母、汉字，符号表示一个字符
-
-### 字符串的常用操作
-
-|                方法                 |           介绍           | 用法                            |
-| :---------------------------------: | :----------------------: | ------------------------------- |
-|              len(str)               |          求长度          |                                 |
-|           +或fmt.Sprintf            | 拼接字符串返回拼接的结果 | s3 := fmt.Sprintf("%s%s",s1,s2) |
-|            strings.Split            |           分割           | strings.Split(s,",")            |
-|          strings.contains           |       判断是否包含       |                                 |
-| strings.HasPrefix,strings.HasSuffix |      前缀/后缀判断       |                                 |
-| strings.Index(),strings.LastIndex() |      子串出现的位置      |                                 |
-| strings.Join(a[]string, sep string) |         join操作         |                                 |
 
 ## 流程控制 
 
-##### if判断
+#### if判断
 
 ```go
 if bool {
@@ -189,25 +189,9 @@ if bool {
 
 ```
 
-##### for循环
+#### switch
 
-```go
-//正常循环
-for i:=0;i<5;i++{
-    fmt.Println("i:",i)
-}
-//无限循环
-for {
-    fmt.Println("hello")
-}
-// for range 循环,遍历返回key-value
-str:="hello"
-for i,v :=range str{
-    fmt.Printf("%d,%c",i,v)
-}
-```
-
-##### switch
+switch分两种，一种是在switch后面添加表达式，一种是在case 后面添加表达式
 
 ```go
 func switchDemo1() {
@@ -227,7 +211,7 @@ func switchDemo1() {
 		fmt.Println("无效的输入！")
 	}
 }
-//使用 fallthrough 会强制执行后面的 case 语句，fallthrough 不会判断下一条 case 的表达式结果是否为 true。
+//使用 fallthrough 会强制执行下一条 case 语句，fallthrough 不会判断下一条 case 的表达式结果是否为 true。
 func switchDemo5() {
 	s := "a"
 	switch {
@@ -244,7 +228,25 @@ func switchDemo5() {
 }
 ```
 
-#####  goto、continue、break
+#### for循环
+
+```go
+//正常循环
+for i:=0;i<5;i++{
+    fmt.Println("i:",i)
+}
+//无限循环
+for {
+    fmt.Println("hello")
+}
+// for range 循环,遍历返回key-value
+str:="hello"
+for i,v :=range str{
+    fmt.Printf("%d,%c",i,v)
+}
+```
+
+#### goto、continue、break
 
 ```go
 gotoTab:
@@ -360,6 +362,8 @@ fmt.Printf("删除age后：%v\n", sourceMap)
 
 ## 函数
 
+go语言中的函数，没有很花哨的东西（没有默认参数），参数有可变参数，函数有匿名函数，多返回值
+
 ### 函数定义
 
 ```go
@@ -402,6 +406,19 @@ func fn1()(x,y int){
     return //这里不需要写上返回值名称，return即可返回声明过的返回值
 }
 ```
+
+### 匿名函数
+
+```go
+func main(){
+    demo := func() {
+		fmt.Print("匿名函数")
+	}
+	demo()
+}
+```
+
+
 
 ###  变量作用域
 
@@ -484,6 +501,8 @@ func main() {
 2. `defer`一定要在可能引发`panic`的语句之前定义。
 
 ## 指针
+
+go语言只有值传递，没有引用传递
 
 #### 符号
 
