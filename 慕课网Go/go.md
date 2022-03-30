@@ -45,6 +45,7 @@ go mod tidy //类似于 npm i
 2. go run
 3. go build
 4. go build -o hello.exe  //给编译后的文件重命名
+4. go install ./...                //把当前目录下的所有文件都编译，并把编译结束的结果放到GOPATH目录下
 
 
 
@@ -108,6 +109,8 @@ bool
 ```
 
 #### 字符串类型
+
+strings包，用来处理string
 
 1. go语言中字符串使用双引号包裹的
 2. go语言中单引号包裹的是字符串
@@ -266,13 +269,33 @@ for i:=0;i<2;i++{
 
 ## 数组
 
-1.  数组在go中，**是值类型，不是引用类型**
+1. 数组在go中，**是值类型，不是引用类型**，每次都是值拷贝
+
+   ```go
+   func main() {
+   	arr1 := [5]int{1, 2, 3, 4, 5}
+   	arr2 := arr1
+   	arr3 := arr1
+   	arr1[0] = 122
+   	fmt.Println("arr1[0]:", arr1[0])
+   	fmt.Println("arr2[0]:", arr2[0])
+   	fmt.Println("arr3[0]:", arr3[0])
+   }
+   ```
+
 2. 数组的长度是固定的，并且数组的长度属于类型的一部分
+
+   ```go
+   var arr1=[5]int
+   var arr2=[10]int
+   // arr1 与 arr2 是两种数组类型
+   ```
 
 ### 数组的声明
 
 ```go
-var num1 [5]int{1,2,3,4}	//第一种，初始化声明
+var num [5]int		//数组在声明时，需要声明长度
+var num1 [5]int{1,2,3,4}//第一种，初始化声明
 var num2 = [5]int{1,2,3,4}  //第二中，赋值声明
 var num3 = [...]int{1,2,3,4}//第三种，根据赋值多少来决定数组长度
 var num4 = [...]int{3:5,5:6}//第四种，根据下标来决定数组长度
@@ -286,16 +309,34 @@ var num4 = [...]int{3:5,5:6}//第四种，根据下标来决定数组长度
 ### 切片声明
 
 ```go
-var slice []T //初始化
-var slice = make([]T,len,cap)//如果不给定容量，则容量与长度一致
+var slice []T //切片声明
+var slice = make([]T,len,cap)//通过make函数创建，初始化声明时如果不给定容量，则容量与长度一致
 ```
 
 ### 切片表达式
 
 ```go
-slice = arr[low:high:max]
+slice = arr[low:high:cap]
 //slice长度为：high - low
-//slice容量为：max - low
+//slice容量为：cap - low
+```
+
+#### 切片扩展
+
+slice可以向后扩展，不可以向前扩展
+
+向后扩展不可超过底层数组的容量 cap(arr)
+
+slice添加元素时，如果超过底层数组的cap，则自动重新分配更大的底层数组
+
+由于值传递的关系，必须接受append的返回值
+
+```go
+arr := []int{0, 1, 2, 3, 4, 5, 6, 7}
+s1 := arr[2:6]
+s2 := s1[3:6]
+fmt.Println("s1:", s1)
+fmt.Println("s2:", s2)
 ```
 
 ### 切片的crud
@@ -323,12 +364,13 @@ len(slice) == 0
 ### map声明
 
 ```go
-var val map[T]T //声明
+var val map[K]V //声明
+var val1 = make(map[int]int,cap)
 val2 := map[string]bool{
     "name":true,
     "age":false
 } //声明并赋值
-//通过make函数生成
+//通过make函数创建
 sourcMap := make(map[string]string,cap)
 ```
 
@@ -513,114 +555,57 @@ s := 1
 fmt.Printf("s的地址：%p\n", &s)
 ```
 
-### new与make
-
-> 使用new函数得到的是一个类型的指针，并且该指针对应的值为该类型的零值。
->
-> make也是用于内存分配的，区别于new，它只用于slice、map以及chan的内存创建，而且它返回的类型就是这三个类型本身，
-
-```go
-//new(T)*T
-a := new(bool) //初始化引用类型
-//make
-make(t Type, size ...IntegerType) Type //初始化引用类型（map、slice、chan）
-```
-
-#### 区别
-
-1. 二者都是用来做内存分配的。
-2. make只用于slice、map以及channel的初始化，返回的还是这三个引用类型本身；
-3. 而new用于类型的内存分配，并且内存对应的值为类型零值，返回的是指向类型的指针。
-
 ## 结构体struct
 
-#### 自定义类型
-
-> 通过`type`关键字的定义，`MyInt`就是一种新的类型，它具有`int`的特性。
+#### 定义结构体
 
 ```go
-type MyInt int
-```
-
-#### 类型别名
-
-> 类型别名规定：TypeAlias只是Type的别名，本质上TypeAlias与Type是同一个类型。就像一个孩子小时候有小名、乳名，上学后用学名，英语老师又会给他起英文名，但这些名字都指的是他本人。
-
-```go
-type MyInt = int
-//我们之前见过的rune和byte就是类型别名，他们的定义如下：
-type byte = uint8
-type rune = int32
-```
-
-
-
-#### 实例化
-
-```go
-type 类型名 struct {
-    字段名 字段类型
-    字段名 字段类型
-    …
+//先声明 结构体类型
+type Demo struct {
+    name string
+    age,phone int
 }
-//定义一个 Person （人）结构体
-type person struct {
-	name string
-	city string
-	age  int8
+//实例化结构体
+var demo Demo
+```
+
+#### 定义方法
+
+```go
+//值类型
+func (demo Demoo) print(name string){
+    demo.name = name
+    fmt.Println("不可改变值name")
+}
+//引用类型
+func (demo *Demoo) print(name string){
+    demo.name = name
+    fmt.Println("可以改变值name")
 }
 ```
 
-#### 匿名结构体
-
-> 定义一些临时数据结构等场景下还可以使用匿名结构体
+#### 值接收者与指针接收者
 
 ```go
-var user struct{Name string; Age int}
-user.Name = "小王子"
-user.Age = 18
-fmt.Printf("%#v\n", user)
+//要改变内容必须使用指针接收者
+//结构过大也考虑使用指针接收者
+//如果有指针接收者，最好都是指针接收者
 ```
 
-### 方法和接收者
+#### 包和封装
 
-接收者分两种，一种是引用类型接收者，一种事值类型引用者
+1. 为结构体定义的方法必须放在同一个包内
+2. 包名和文件名可以不一致
 
-#### 方法声明 
+## Go的依赖管理
 
-```go
-func(p Person) 方法名(参数列表) 返回参数{
-    函数体
-}
-```
+### go mod
 
-#### 结构体字段可见性
-
-结构体中字段大写开头表示可公开访问，小写表示私有（仅在定义当前结构体的包中可访问）。
-
-#### 结构体标签
-
-```go
-//Student 学生
-type Student struct {
-	ID     int    `json:"id" form:"id"` //通过指定tag实现json序列化该字段时的key，有多种类型时，用空格分开
-	Gender string //json序列化是默认使用字段名作为key
-	name   string //私有不能被json包访问
-}
-```
-
-
-
-### json
-
-```go
-//序列号  go数据结构 -> json
-data,err := json.Marshal(obj)
-//反序列化 json-> go数据结构
-err :=json.Unmarshal([]byte(data),obj)
-```
-
-## 包
+- 由go命令统一的管理，用户不必关心目录结构
+- 初始化: go mod init
+- 增加依赖: go get
+- 更新依赖: go get[@v...], go mod tidy
+- 将就项目迁移到go mod: go mod init, go build ./ ...
 
 ##  接口
 
