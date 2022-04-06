@@ -476,6 +476,151 @@ func main(){
 
 for循环定义的变量也只在for语句种生效
 
+
+
+## 指针
+
+go语言只有值传递，没有引用传递
+
+#### 符号
+
+```go 
+&：取 值的地址
+*：根据指针地址取指针指向的值
+s := 1
+fmt.Printf("s的地址：%p\n", &s)
+```
+
+## 结构体struct
+
+#### 定义结构体
+
+```go
+//先声明 结构体类型
+type Demo struct {
+    name string
+    age,phone int
+}
+//实例化结构体
+var demo Demo
+demo := Demo{}
+
+//匿名结构体
+m := struct {
+    Person []struct {
+        Name string `json:"name"`
+        Age  int    `json:"age"`
+    } `json:"person"`
+}{}
+```
+
+#### 定义方法
+
+```go
+//值类型
+func (demo Demoo) print(name string){
+    demo.name = name
+    fmt.Println("不可改变值name")
+}
+//引用类型
+func (demo *Demoo) print(name string){
+    demo.name = name
+    fmt.Println("可以改变值name")
+}
+```
+
+#### 值接收者与指针接收者
+
+```go
+//要改变内容必须使用指针接收者
+//结构过大也考虑使用指针接收者
+//如果有指针接收者，最好都是指针接收者
+```
+
+#### tag
+
+```go
+type Person struct {
+	Name string `json:"name,omitempty"` //omitempty：表示如果字段为空则不显示字段
+	Age  int
+}
+```
+
+
+
+#### 包和封装
+
+1. 为结构体定义的方法必须放在同一个包内
+2. 包名和文件名可以不一致
+
+## Go的依赖管理
+
+### go mod
+
+- 由go命令统一的管理，用户不必关心目录结构
+- 初始化: go mod init
+- 增加依赖: go get
+- 更新依赖: go get[@v...], go mod tidy
+- 将就项目迁移到go mod: go mod init, go build ./ ...
+
+##  接口
+
+### 定义接口
+
+> 接口就是一种数据类型
+>
+> 接口内部就是一堆方法的集合，
+>
+> 在go语言中只要实现了接口里的所有方法，那么就可以认为两者是同一个类型的数据，从而达到多态的效果
+
+```go
+type 接口类型名 interface{
+    方法名1( 参数列表1 ) 返回值列表1
+    方法名2( 参数列表2 ) 返回值列表2
+    …
+}
+```
+
+> 例子
+
+```go
+package main
+
+import "fmt"
+
+type person struct {
+}
+//结构体person的方法say
+func (p person) say() {
+	fmt.Println("人说话了，啊啊啊")
+}
+//接口sayer里有方法 say
+type sayer interface {
+	say()
+}
+//因为person实现了sayer接口里的say方法，所以p1可以等于person{}
+func main() {
+	p1 := person{}
+	say(p1)
+}
+```
+
+### 接口嵌套
+
+> 类似于Java中的接口继承接口
+
+```go
+type mover interface {
+	run()
+}
+type sayer interface {
+	say()
+    mover//将mover接口嵌套进来，就相当于添加了mover中的方法
+}
+```
+
+## 错误机制
+
 ### defer语句
 
 > Go语言中的`defer`语句会将其后面跟随的语句进行延迟处理。在`defer`归属的函数即将返回时，将延迟处理的语句按`defer`定义的逆序进行执行，也就是说，先被`defer`的语句最后被执行，最后被`defer`的语句，最先被执行。
@@ -485,6 +630,12 @@ for循环定义的变量也只在for语句种生效
 > 在Go语言的函数中`return`语句在底层并不是原子操作，它分为给返回值赋值和RET指令两步。而`defer`语句执行的时机就在返回值赋值操作后，RET指令执行前。
 >
 > **defer注册要延迟执行的函数时该函数所有的参数都需要确定其值**
+
+#### 自定义error
+
+```go
+err := errors.New("这是一个自定义错误")
+```
 
 ###  panic与recover
 
@@ -542,128 +693,6 @@ func main() {
 1. `recover()`必须搭配`defer`使用。
 2. `defer`一定要在可能引发`panic`的语句之前定义。
 
-## 指针
-
-go语言只有值传递，没有引用传递
-
-#### 符号
-
-```go 
-&：取 值的地址
-*：根据指针地址取指针指向的值
-s := 1
-fmt.Printf("s的地址：%p\n", &s)
-```
-
-## 结构体struct
-
-#### 定义结构体
-
-```go
-//先声明 结构体类型
-type Demo struct {
-    name string
-    age,phone int
-}
-//实例化结构体
-var demo Demo
-```
-
-#### 定义方法
-
-```go
-//值类型
-func (demo Demoo) print(name string){
-    demo.name = name
-    fmt.Println("不可改变值name")
-}
-//引用类型
-func (demo *Demoo) print(name string){
-    demo.name = name
-    fmt.Println("可以改变值name")
-}
-```
-
-#### 值接收者与指针接收者
-
-```go
-//要改变内容必须使用指针接收者
-//结构过大也考虑使用指针接收者
-//如果有指针接收者，最好都是指针接收者
-```
-
-#### 包和封装
-
-1. 为结构体定义的方法必须放在同一个包内
-2. 包名和文件名可以不一致
-
-## Go的依赖管理
-
-### go mod
-
-- 由go命令统一的管理，用户不必关心目录结构
-- 初始化: go mod init
-- 增加依赖: go get
-- 更新依赖: go get[@v...], go mod tidy
-- 将就项目迁移到go mod: go mod init, go build ./ ...
-
-##  接口
-
-### 定义接口
-
-> 接口就是一种数据类型
->
-> 接口内部就是一堆方法的集合，
->
-> 只要实现了接口里的所有方法，那么就可以认为两者是同一个类型的数据，从而达到多态的效果
-
-```go
-type 接口类型名 interface{
-    方法名1( 参数列表1 ) 返回值列表1
-    方法名2( 参数列表2 ) 返回值列表2
-    …
-}
-```
-
-> 例子
-
-```go
-package main
-
-import "fmt"
-
-type person struct {
-}
-
-func (p person) say() {
-	fmt.Println("人说话了，啊啊啊")
-}
-
-type sayer interface {
-	say()
-}
-
-func say(args sayer) {
-	args.say()
-}
-func main() {
-	p1 := person{}
-	say(p1)
-}
-```
-
-### 接口嵌套
-
-```go
-type sayer interface {
-	say()
-    mover//将mover接口嵌套进来，就相当于添加了mover中的方法
-}
-type mover interface {
-	run()
-}
-```
-
 ## 反射reflect
 
 #### 概念
@@ -710,7 +739,15 @@ func reflectSetValue(x interface{}){
 
 ### goroutine
 
-go中，通过在函数前面添加一个 go 的声明则开启一个线程
+go中，通过在函数前面添加一个 go 的声明则开启一个协程
+
+协程是轻量级线程
+
+非抢占式多任务处理，由协程主动交出控制权
+
+编译器/解释器/虚拟机层面的多任务
+
+多个协程可能在一个或多个线程上运行
 
 ```go
 package main
@@ -849,13 +886,4 @@ rwlock.Unlock()
 
 ```go
 var m sync.Map
-
 ```
-
-## 网络
-
-### 服务端流程
-
-1. 开启服务端口
-2. 循环监听端口，如果有请求则启动一个单独的goroutine去单独处理
-3. 处理服务，读取流需要使用`[]byte`，处理完请求数据后 要关闭服务
