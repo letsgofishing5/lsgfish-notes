@@ -240,3 +240,39 @@ let demo: 200|300|500
 3. 对象的字段可以是函数
 4. 函数的参数可以是函数
 5. 函数的返回值可以是函数
+
+### 接口
+
+#### 声明接口
+
+```ts
+interface Demo {
+    name:string
+    salary:number
+    bouns?:number
+    updateFun(age:number):void
+}
+```
+
+#### 接口使用技巧
+
+```ts
+interface Person {
+    info?:{
+        name?:string,
+        age:number
+    },
+    level:number
+}
+function demo(p:Person){
+    console.log("！作用是告诉编译器这个一定有值",p.info!.name);
+    console.log("？是ES6语法，如果info后面没有值则不会继续向下查找，返回一个undefined",p.info?.name);
+}
+```
+
+
+
+### 类
+
+### 泛型
+
