@@ -19,9 +19,6 @@ go version
 #cmd下设置代理：
 go env -w GOPROXY=https://goproxy.cn,direct
 go env -w GO111MODULE=on
-#或者如下命令，二者目的一样
-set GO111MODULE=on
-set GOPROXY=https://goproxy.cn,direct
 ```
 
 #### 配置vscode编辑环境
