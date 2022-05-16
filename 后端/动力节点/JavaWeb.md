@@ -133,17 +133,14 @@ public class BankServlet implements Servlet{
 
   - 第四步：在WEB-INF目录下新建一个目录：lib
 
-    - 注意：这个目录不是必须的。但如果一个webapp需要第三方的jar包的话，这个jar包要放到这个lib目录下，这个目录的名字
-      也不能随意编写，必须是全部小写的lib。例如java语言连接数据库需要数据库的驱动jar包。那么这个jar包就一定要放到lib目
-      录下。这Servlet规范中规定的。
-
+    - 注意：这个目录不是必须的。但如果一个webapp需要第三方的jar包的话，这个jar包要放到这个lib目录下，这个目录的名字也不能随意编写，必须是全部小写的lib。例如java语言连接数据库需要数据库的驱动jar包。那么这个jar包就一定要放到lib目录下。这Servlet规范中规定的。
+    
   - 第五步：在WEB-INF目录下新建一个文件：web.xml
 
-    - 注意：这个文件是必须的，这个文件名必须叫做web.xml。这个文件必须放在这里。一个合法的webapp，web.xml文件是必
-      须的，这个web.xml文件就是一个配置文件，在这个配置文件中描述了请求路径和Servlet类之间的对照关系。
-
+    - 注意：这个文件是必须的，这个文件名必须叫做web.xml。这个文件必须放在这里。一个合法的webapp，web.xml文件是必须的，这个web.xml文件就是一个配置文件，在这个配置文件中描述了请求路径和Servlet类之间的对照关系。
+      
     - 这个文件最好从其他的webapp中拷贝，最好别手写。没必要。复制粘贴
-
+    
     - ```xml
       <?xml version="1.0" encoding="UTF-8"?>
       
@@ -157,18 +154,17 @@ public class BankServlet implements Servlet{
       
       </web-app>
       ```
-
+    
   - 第六步：编写一个ava程序，这个小ava程序也不能随意开发，这个小java程序必须实现Servlet接口。
-
+  
     - 这个Servlet接口不在IDK当中。（因为Servlet不是lavaSE了。Servlet属于lavaEE，是另外的一套类库。）
     - Servlet接口（Servlet.class文件）是Oracle提供的。（最原始的是sun公司提供的。
     - Servlet接口是JavaEE的规范中的一员。
-    - Tomcat服务器实现了Servlet规范，所以Tomcat服务器也需要使用Servlet接口。Tomcat服务器中应该有这个接口，Tomcat
-      服务器的CATALINA_HOME\lib目录下有一个servlet-api.jar，解压这个servlet-api.jar之后，你会看到里面有一个
+    - Tomcat服务器实现了Servlet规范，所以Tomcat服务器也需要使用Servlet接口。Tomcat服务器中应该有这个接口，Tomcat服务器的CATALINA_HOME\lib目录下有一个servlet-api.jar，解压这个servlet-api.jar之后，你会看到里面有一个
       Servlet.class文件。
-
+    
   - 第七步：编译我们编写的HelloServlet
-
+  
     - 重点：你怎么能让你的HelloServlet编译通过呢？配置环境变量CLASSPATH
 
       CLASSPATH=.;C:\dev\apache-tomcat-10.0.12\lib\servlet-api.jar
@@ -214,9 +210,9 @@ public class BankServlet implements Servlet{
       </web-app>
       
       ```
-
+  
   - 第十步：启动Tomcat服务器
-
+  
   - 第十一步：打开浏览器，在浏览器地址栏上输入一个url，这个URL必须是：
 
     - http://127.0.0.1:8080/crm/fdsa/fd/saf/d/sa/fd/sa/fd   
@@ -224,7 +220,7 @@ public class BankServlet implements Servlet{
     - 注意：浏览器上的请求路径和web.xml文件中的url-pattern的唯一区别就是：浏览器上的请求路径带项目名：/crm
 
   - 浏览器上编写的路径太复杂，可以使用超链接。（**非常重要：html页面只能放到WEB-INF目录外面。**）
-
+  
   - 以后不需要我们编写main方法了。tomcat服务器负责调用main方法，Tomcat服务器启动的时候执行的就是main方法。我们javaweb程序员只需要编写Servlet接口的实现类，然后将其注册到web.xml文件中，即可。
 
   - 总结一下：一个合法的webapp目录结构应该是怎样的？
@@ -241,9 +237,9 @@ public class BankServlet implements Servlet{
          |------image
          ....
     ```
-
+  
   - 浏览器发送请求，到最终服务器调用Servlet中的方法，是怎样的一个过程？（以下这个过程描述的很粗糙。其中还有很多步骤我省略了。）
-
+  
     - 用户输入URL，或者直接点击超链接：http://127.0.0.1:8080/crm/fdsa/fd/saf/d/sa/fd/sa/fd  
     - 然后Tomcat服务器接收到请求，截取路径：/crm/fdsa/fd/saf/d/sa/fd/sa/fd  
     - Tomcat服务器找到crm项目
@@ -254,6 +250,8 @@ public class BankServlet implements Servlet{
 ### Servlet生命周期
 
 #### servlet 家族
+
+tomcat服务器在启动的时候，并没有创建servlet对象。但是他创建了servletContext上下文对象。当访问第一个servlet服务时，先创建该servlet对象（执行无参构造），然后执行 init 方法，然后执行 service 方法。第二次访问该servlet服务时，则只执行 service 方法。当tomcat服务关闭时，servletContext 对象也随之销毁
 
 - 一个**webapp**就是一个应用，一个应用对应着一个**servletContext**，
 - 而一个**servlet**对应着一个**servletConfig**，一个应用中可能有多个**servlet**，而这多个**servlet**则共享同一个**servletContext**
@@ -304,3 +302,80 @@ HTTP的请求协议包括：4部分
   - 第三部分：状态的描述信息
     - ok 表示正常成功结束。
     - not found 表示资源找不到。
+
+### 欢迎页
+
+> 设置欢迎页面的时候，**这个路径不需要以 / 开头**。并且这个路径默认是从 webapp 目录下开始查找。webapp目录下的多级目录欢迎页面：**文件夹名称/文件夹名称/index.html**
+
+```xml
+<welcome-file-list>
+    <!--默认在web目录下找-->
+    <welcome-file>index.html</welcome-file>
+</welcome-file-list>
+```
+
+你有没有注意一件事：当我的文件名设置为index.html的时候，不需要在web.xml文件中进行配置欢迎页面。这是为什么？
+
+- 这是因为小猫咪Tomcat服务器已经提前配置好了。
+
+- 实际上配置欢迎页面有两个地方可以配置：
+
+  - 一个是在webapp内部的web.xml文件中。（在这个地方配置的属于局部配置）
+
+  - 一个是在CATALINA_HOME/conf/web.xml文件中进行配置。（在这个地方配置的属于全局配置）
+
+    - ```xml
+      <welcome-file-list>
+          <welcome-file>index.html</welcome-file>
+          <welcome-file>index.htm</welcome-file>
+          <welcome-file>index.jsp</welcome-file>
+      </welcome-file-list>
+      ```
+
+    - Tomcat服务器的全局欢迎页面是：index.html index.htm index.jsp。如果你一个web站点没有设置局部的欢迎页面，Tomcat服务器就会以index.html index.htm index.jsp作为一个web站点的欢迎页面。
+
+  - 注意原则：局部优先原则。（就近原则）
+
+### HttpServletRequest接口详解
+
+> request 的生命周期很短，一次请求即完成了request、response对象的创建到销毁。每次请求时，request对象都不是同一个request对象
+
+#### 常用方法
+
+- 转发与重定向
+
+  ```java
+  //转发：转发不需要添加根路径，因为本身就已经在当前项目里面了
+  req.getRequestDispatcher("/three").forward(req,resp);
+  //重定向：重定向需要添加应用根路径
+  resp.sendRedirect(req.getContextPath() + "/hello.html";);
+  ```
+
+  
+
+### 注解式开发
+
+```java
+@WebServlet
+```
+
+### JSP
+
+```jsp
+<%Java代码块%>
+<%=内容输出%>
+<%!方法块%>
+```
+
+JSP基础语法总结：
+
+- JSP中直接编写普通字符串
+  - 翻译到service方法的out.write("这里")
+- <%%>
+  - 翻译到service方法体内部，里面是一条一条的java语句。
+- <%! %>
+  - 翻译到service方法之外。
+- <%= %>
+  - 翻译到service方法体内部，翻译为：out.print();
+- <%@page  contentType="text/html;charset=UTF-8"%>
+  - page指令，通过contentType属性用来设置响应的内容类型。
