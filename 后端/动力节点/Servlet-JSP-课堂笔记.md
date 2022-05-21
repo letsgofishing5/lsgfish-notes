@@ -2599,7 +2599,7 @@ public abstract class HttpServlet extends GenericServlet {
 
   - java.lang.Throwable exception   
 
-  - jakarta.servlet.ServletConfig config
+  - jakarta.servlet.ServletConfig config  （servletConfig)
 
   - java.lang.Object page  （其实是this，当前的servlet对象）
 
