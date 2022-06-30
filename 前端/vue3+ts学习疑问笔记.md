@@ -1,5 +1,9 @@
 # vue3
 
+## vue3+TS学习文章
+
+https://www.jianshu.com/c/c7172221b9c7
+
 ## 响应式API
 
 ### ref
@@ -543,20 +547,17 @@ npm i unplugin-auto-import -D
 
 # typescript
 
+## .d.ts文件
+
+https://www.jianshu.com/p/c3f4d6e29bbd
 
 
 
-
-## tsconfig.ts
+## 路径
 
 #### 配置简单的映射路径
 
 https://www.tslang.cn/docs/handbook/module-resolution.html#path-mapping
-
-```bash
-#安装
-npm i @types/node -D
-```
 
 ```ts
 //vite.config.ts
@@ -575,18 +576,29 @@ export default defineConfig {
 }
 ```
 
-```ts
+#### 解决别名导入ts文件报错
+
+```json
 //tsconfig.ts
 {
     "compilerOptions""{
     "baseUrl": ".",
     "paths": {
-        "@": [
+        "@/*": [
             "src/*"
-        ]
-    }
+        	]
+    	}
+	}
 }
-}
+```
+
+#### path导入报错
+
+> 找不到模块“path”或其相应的类型声明
+
+```bash
+#安装
+npm i @types/node -D
 ```
 
 ## vue3+ts语法问题
@@ -618,13 +630,9 @@ const wrap = document.querySelector(".wrap") as HTMLElement;
         "src/*"
     ]
 }
-
-
-  const wrap = <HTMLElement>document.querySelector(".wrap");
-  wrap.style.lineHeight = document.documentElement.clientHeight / 2 + "px";
+const wrap = <HTMLElement>document.querySelector(".wrap");
+wrap.style.lineHeight = document.documentElement.clientHeight / 2 + "px";
 ```
-
-
 
 #### UI样式穿透
 

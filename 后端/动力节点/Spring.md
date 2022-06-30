@@ -163,8 +163,8 @@ private School school;
 ### 加载属性配置文件
 
 ```xml
+<!--加载的属性配置文件中的key-value，可以搭配springEL表达式取值-->
 <context:property-placeholder location="classpath:test.properties"/>
-<!--可以搭配springEL表达式-->
 ```
 
 ## AOP
