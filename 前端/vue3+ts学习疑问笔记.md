@@ -127,6 +127,15 @@ type Leixing = {
     msg:string
 }
 defineProps<Leixing>()
+    
+    
+//默认值（仅限于在ts中使用）
+type Leixing = {
+    msg:String
+}
+withDefaults(defineProps<Leixing>(),{
+    msg:"我是默认值"
+})
 </script>
 ```
 
@@ -186,13 +195,13 @@ const props = defineProps({
 })
 //第三种方式
 type Leixing = {
-    msg:string
+    msg:String
 }
 defineProps<Leixing>()
     
 //默认值（仅限于在ts中使用）
 type Leixing = {
-    msg:string
+    msg:String
 }
 withDefaults(defineProps<Leixing>(),{
     msg:"我是默认值"
@@ -644,6 +653,10 @@ wrap.style.lineHeight = document.documentElement.clientHeight / 2 + "px";
 ```
 
 ## scss
+
+#### vite scss全局变量不生效
+
+https://www.cnblogs.com/hpx2020/p/16265850.html
 
 #### 函数
 
