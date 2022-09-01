@@ -111,6 +111,27 @@ extendViteConf(viteConf) {
 </div>
 ```
 
+## quasar.config.js
+
+### 配置插件
+
+framework>plugin中配置
+
+然后可以在framework>config中进行配置
+
+> 配置Notify插件
+
+```json
+framework: {
+    config: {
+        notify: {
+            position: 'top',
+        },
+    },
+    plugins: ['Notify'],
+},
+```
+
 
 
 ## ts

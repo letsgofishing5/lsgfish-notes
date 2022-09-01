@@ -270,6 +270,30 @@ onMounted(()=>{
 </script>
 ```
 
+#### inject与provide
+
+父组件
+
+```vue
+<script setup lang="ts">
+import { provide, ref } from 'vue';
+const serveApp = ref('我是app');
+provide('iApp', serveApp.value);
+</script>
+```
+
+子组件
+
+```vue
+<script setup lang="ts">
+import { inject } from 'vue';
+const res = inject('iApp');
+console.log(res);//我是app
+</script>
+```
+
+
+
 ### 组件
 
 
