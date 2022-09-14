@@ -13,6 +13,10 @@
 >use lgf;
 #展示表的设计结构
 >desc tables_name;
+#执行sql脚本导入数据
+source D:\demo.sql
+#查看建表语句
+show create table tb_table
 ```
 
 ### 查询条件
@@ -24,21 +28,21 @@ select * from user where age between 12 and 15;
 select * from user where age is null;
 ```
 
-| 运算符       | 说明                                            |
-| ------------ | ----------------------------------------------- |
-| =            | 等于                                            |
-| <> 或 !=     | 不等于                                          |
-| <            | 小于                                            |
-| <=           | 小于等于                                        |
-| >            | 大于                                            |
-| >=           | 大于等于                                        |
-| between…and… | 两个值之间，等同于 `>= and <=`                  |
-| is null      | 为 `null`（`is not null` 不为空）               |
-| and          | 并且                                            |
-| or           | 或者                                            |
-| in           | 包含，相当于多个`or`（`not in` 不在这个范围中） |
-| not          | `not` 可以取非，主要用在 `is` 或 `in` 中        |
-| like         | `like` 称为模糊查询，支持 % 或下划线匹配        |
+| 运算符       | 说明                                                         |
+| ------------ | ------------------------------------------------------------ |
+| =            | 等于                                                         |
+| <> 或 !=     | 不等于                                                       |
+| <            | 小于                                                         |
+| <=           | 小于等于                                                     |
+| >            | 大于                                                         |
+| >=           | 大于等于                                                     |
+| between…and… | 两个值之间，等同于 `>= and <=`                               |
+| is null      | 为 `null`（`is not null` 不为空）                            |
+| and          | 并且                                                         |
+| or           | 或者                                                         |
+| in           | 包含，相当于多个`or`（`not in` 不在这个范围中）              |
+| not          | `not` 可以取非，主要用在 `is` 或 `in` 中                     |
+| like         | `like` 称为模糊查询，支持 % 或下划线\_匹配，\_ 代表一个字符，% 代表任意 |
 
 ### 排序
 
@@ -56,36 +60,45 @@ select * from user where name LIKE '%' ORDER BY `name`;
 
 `SQL`函数大全：http://c.biancheng.net/mysql/function/
 
-分组函数自动忽略`null`
-
-`SQL`中，任何与`null`值相加的值都为`null`
+**分组函数自动忽略`null`**
 
 ```sql
 #所有的分组函数都是对某一组数据进行操作
 select SUM(age) age from user;
 ```
 
-| 函数  | 说明   |
-| ----- | ------ |
-| count | 计数   |
-| sum   | 求和   |
-| avg   | 平均值 |
-| max   | 最大值 |
-| min   | 最小值 |
 
-### 分组查询
 
-| 分组     | 说明                                       |
-| -------- | ------------------------------------------ |
-| group by | 按某个字段分组，group by是在where          |
-| having   | 对分组之后的数据经行筛选，可以使用分组函数 |
-
-一旦使用了`group by`后，`select`后面只能跟**分组字段**，或者**分组函数**字段
-
-#### 去重
+**`SQL`中，任何与`null`值相加的值都为`null`**
 
 ```sql
-#distinct只能出现在所有字段最前面
+#处理null值计算问题 ifnull(null字段,替换值)
+select name,(salary + ifnull(null_column,0)) as '年薪' from tb_test;
+```
+
+> 分组函数自动忽略 null 值计算
+
+| 分组函数 | 说明   |
+| -------- | ------ |
+| count    | 计数   |
+| sum      | 求和   |
+| avg      | 平均值 |
+| max      | 最大值 |
+| min      | 最小值 |
+
+### 分组筛选查询
+
+| 分组     | 说明                                                         |
+| -------- | ------------------------------------------------------------ |
+| group by | 按某个字段分组，group by是在where                            |
+| having   | **对分组之后的数据**经行筛选过滤（同where作用），可以使用**分组函数** |
+
+一旦使用了`group by`后，`select`后面只能跟**分组字段**，或者**分组函数**字段，**其他字段取值毫无意义**
+
+### 去重
+
+```sql
+#distinct只能出现在所有字段最前面，联合去重
 select distinct * from user;
 ```
 
