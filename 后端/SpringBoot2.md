@@ -451,12 +451,35 @@ SpringBoot中使用事务：上面的两种方式都可以。
 
 ## Redis
 
-Redis:一个NoSQL数据库，常用作缓存使用(cache)
+在application.properties中配置redis连接信息
 
-Redis的数据类型：string,hash,set,zset,list
+```properties
+#redis（host、port、password）
+spring.redis.host=localhost
+spring.redis.port=6379
+#spring.redis.password=123456
+```
 
-Redis是一个中间件：是一个独立的服务器。
+代码
 
-java中著名的客户端：Jedis,lettuce,Redisson
+```java
+@RestController
+public class Hello{
+    @Resource
+    private RedisTemplate redisTemplate;
 
-Spring,SpringBoot中有一个RedisTemplate(StringRedisTemplate),处理和redis?交互
+    @RequestMapping("/setk")
+    public String setK(String key,String value){
+        ValueOperations ops = redisTemplate.opsForValue();
+        ops.set(key,value);
+        return "向redis中存入key:" + key + " value:" + value;
+    }
+    @RequestMapping("/getk")
+    public String setK(String key){
+        ValueOperations ops = redisTemplate.opsForValue();
+        Object value = ops.get(key);
+        return "从redis中取值key:" + key + " value:" + value;
+    }
+}
+```
+
