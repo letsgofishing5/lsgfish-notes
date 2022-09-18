@@ -1,32 +1,4 @@
-# 初始化项目
-
-1. 通过访问 https://start.spring.io 地址进行模板创建
-2. 通过访问国内地址 https://start.springboot.io 地址进行模板创建
-
-# Spring Boot入门
-
-### 注解使用
-
-```java
-1.@SpringBootConfiguration
-  public @interface SpringBootConfiguration{
-    @AliasFor(
-    	annotation = Configuration.class
-    )
-    boolean proxyBeanMethods()
-}
-说明：使用了@SpringBootConfiguration注解标注的类，可以作为配置文件使用。可以使用 Bean 声明对象，注入到容器中
-    
-    
-2.EnableAutoConfiguration
-说明：启用自动配置，把Java对象配置好，注入到spring容器中。例如可以把mybatis的对象创建好，放入到容器中
-    
-    
-3.ComponentScan
-说明：组件扫描器，扫描组件注解，根据注解的功能创建对象，给属性赋值等
-```
-
-### 配置文件
+## 读取配置文件属性值
 
 默认properties后缀文件
 
@@ -44,8 +16,6 @@ Test.class
 @value("${server.port}")
 private Integer port;
 ```
-
-
 
 #### @ConfigurationProperties属性配置
 
@@ -90,164 +60,41 @@ public class School {
                 '}';
     }
 }
-
 ```
 
 
 
-### 使用JSP
+## 拦截器
 
-> 需要用什么技术就加入对应的依赖
+1. 先实现 HandlerInterceptor 接口，重写里面的三个方法，
 
-1）加入一个处理JSP的依赖，负责编译JSP文件
+   ```
+   preHandler(HttpServletRequest request, HttpServletResponse response, Object handler) 方法在请求处理之前被调用。该方法在 Interceptor 类中最先执行，用来进行一些前置初始化操作或是对当前请求做预处理，也可以进行一些判断来决定请求是否要继续进行下去。该方法的返回至是 Boolean 类型，当它返回 false 时，表示请求结束，后续的 Interceptor 和 Controller 都不会再执行；当它返回为 true 时会继续调用下一个 Interceptor 的 preHandle 方法，如果已经是最后一个 Interceptor 的时候就会调用当前请求的 Controller 方法。
+       
+   postHandler(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) 方法在当前请求处理完成之后，也就是 Controller 方法调用之后执行，但是它会在  DispatcherServlet  进行视图返回渲染之前被调用，所以我们可以在这个方法中对 Controller 处理之后的 ModelAndView 对象进行操作。
+       
+   afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handle, Exception ex) 方法需要在当前对应的 Interceptor 类的 postHandler 方法返回值为 true 时才会执行。顾名思义，该方法将在整个请求结束之后，也就是在 DispatcherServlet  渲染了对应的视图之后执行。此方法主要用来进行资源清理。
+   ```
 
-```xml
-<dependency>
-    <groupId>org.apache.tomcat.embed</groupId>
-    <artifactId>tomcat-embed-jasper</artifactId>
-</dependency>
-```
+2. 再实现拦截器路径配置，实现 WebMvcConfigurer 接口
 
-2）如果使用servlet，JSP，JSTL的功能
+   ```java
+   @Configuration
+   public class AuthConfiguration implements WebMvcConfigurer {
+       @Override
+       public void addInterceptors(InterceptorRegistry registry) {
+           String[] includePath = {"/*"};
+           String[] excludePath = {"/login", "/logout"};
+           registry.addInterceptor(new AuthIntercepter())
+                   .addPathPatterns(includePath)
+                   .excludePathPatterns(excludePath);
+       }
+   }
+   ```
 
-```xml
-<dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>jstl</artifactId>
-</dependency>
-<dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>javax.servlet-api</artifactId>
-</dependency>
-<dependency>
-    <groupId>javax.servlet.jsp</groupId>
-    <artifactId>javax.servlet.jsp-api</artifactId>
-</dependency>
-```
+   
 
-3）创建一个存放jsp的目录，一般叫做 webapp（创建好目录后，进入项目结构管理中，选择当前项目，在web选项下，选择刚刚创建的webapp目录为web目录即可）
-
-​		index.jsp
-
-4）需要在pom.xml指定jsp文件编译后的存放目录
-
-​		META-INF/resource
-
-```xml
-<build>
-    <resources>
-        <resource>
-            <!--jsp原来的目录-->
-            <directory>src/main/webapp</directory>
-            <!--指定编译后的存放目录-->
-            <targetPath>META-INF/resource</targetPath>
-            <!--指定处理的目录与文件-->
-            <includes>
-                <include>**/*.*</include>
-            </includes>
-        </resource>
-    </resources>
-</build>
-```
-
-
-
-5）创建Controller，访问JSP
-
-6）在application.properties文件中配置视图解析器
-
-```properties
-spring.mvc.view.prefix=/
-spring.mvc.view.suffix=.jsp
-```
-
-### 在容器创建后立即执行程序
-
-> 开发中可能会有这样的情景。需要在容器启动后执行一些内容。比如读取配置文件，数据库连接之类的。SpringBoot给我们提供了两个接口来帮助我们实现这种需求。这两个接口分别为**CommandLineRunner**和**ApplicationRunner**。他们的执行时机为容器启动完成的时候。
-> 这两个接口中有一个run方法，我们只需要实现这个方法即可。这两个接口的不同之处在于：**ApplicationRunner**中**run**方法的参数为**ApplicationArguments**,而**CommandLineRunner**接口中的**run**方法的参数为**String数组**
-
-这两个接口，在容器创建后会自动执行
-
-```java
-@FunctionalInterface
-public interface ApplicationRunner {
-    void run(ApplicationArguments args) throws Exception;
-}
-@FunctionalInterface
-public interface CommandLineRunner {
-    void run(String... args) throws Exception;
-}
-```
-
-# Springboot与Web组件
-
-### 拦截器
-
-> 拦截器是SpringMVC中一种对象，能拦截器对Controller的请求。
-> 拦截器框架中有系统的拦截器，还可以自定义拦截器。实现对请求预先处理。
-
-#### 自定义拦截器
-
-1）先实现 HandlerInterceptor 接口，重写里面的三个方法，
-
-```java
-preHandler(HttpServletRequest request, HttpServletResponse response, Object handler) 方法在请求处理之前被调用。该方法在 Interceptor 类中最先执行，用来进行一些前置初始化操作或是对当前请求做预处理，也可以进行一些判断来决定请求是否要继续进行下去。该方法的返回至是 Boolean 类型，当它返回 false 时，表示请求结束，后续的 Interceptor 和 Controller 都不会再执行；当它返回为 true 时会继续调用下一个 Interceptor 的 preHandle 方法，如果已经是最后一个 Interceptor 的时候就会调用当前请求的 Controller 方法。
-    
-postHandler(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) 方法在当前请求处理完成之后，也就是 Controller 方法调用之后执行，但是它会在  DispatcherServlet  进行视图返回渲染之前被调用，所以我们可以在这个方法中对 Controller 处理之后的 ModelAndView 对象进行操作。
-    
-afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handle, Exception ex) 方法需要在当前对应的 Interceptor 类的 postHandler 方法返回值为 true 时才会执行。顾名思义，该方法将在整个请求结束之后，也就是在 DispatcherServlet  渲染了对应的视图之后执行。此方法主要用来进行资源清理。
-```
-
-
-
-2）再实现拦截器路径配置，实现 WebMvcConfigurer 接口，在里面添加需要拦截和不被拦截的路径，然后给当前拦截配置类添加 @Configuration 注解，将其注入到容器中
-
-### Servlet
-
-在SpringBooti框架中使用Servleti对象。
-使用步骤：
-
-1. 创建Servlet类。创建类继承HttpServlet
-2. 注册Servlet,让框架能找到Servlet
-
-自定义Servlet
-
-```java
-public class MyServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
-        System.out.println("get执行了==========");
-        PrintWriter writer = resp.getWriter();
-        writer.print("执行了");
-        writer.flush();
-        writer.close();
-    }
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    }
-}
-
-```
-
-配置类
-
-```java
-@Configuration
-public class ServletConfiguration {
-
-    @Bean
-    public ServletRegistrationBean servletRegistrationBean(){
-        System.out.println("servletRegistrationBean");
-        ServletRegistrationBean bean = new ServletRegistrationBean<>(new MyServlet(),"/test");
-        return bean;
-    }
-}
-```
-
-
-
-### Filter
+## 过滤器
 
 Filter是Servleti规范中的过滤器，可以处理请求，对请求的参数，属性进行调整。常常在过滤器中处理字符编码
 在框架中使用过滤器：
@@ -294,7 +141,6 @@ CharacterEncodingFilter:解决post请求中乱码的问题
 1）配置字符集过滤器
 
 ```java
-
 @Configuration
 public class FilterConfiguration {
 
@@ -328,24 +174,18 @@ server.servlet.encoding.charset=UTF-8
 server.servlet.encoding.force=true
 ```
 
-# ORM操作MySQL
+## 连接数据库，操作mybatis
+
+### 实现步骤
 
 使用MyBatis框架操作数据，在SpringBoot框架集成MyBatis
 使用步骤：
 
 1. mybatis起步依赖：完成mybatis对象自动配置，对象放在容器中
+
 2. pom.xml指定把src/main/java目录中的xml文件包含到classpath中
-3. 创建实体类Student
-4. .创建Dao接口StudentDao,创建一个查询学生的方法
-5. 创建Dao接口对应的Mapper文件，xml文件，写sql语句
-6. 创建Service层对象，创建StudentService:接口和他的实现类。去dao对象的方法。完成数据库的操作
-7. 创建Controller对象，访问Service。
-8. 写application.properties.文件
-   配置数据库的连接信息。
 
-#### 实现步骤
-
-2. ```xml
+   ```xml
    <resources>
        <resource>
            <directory>src/main/java</directory>
@@ -356,16 +196,35 @@ server.servlet.encoding.force=true
    </resources>
    ```
 
-8. ```properties
+3. 创建实体类Student
+
+4. .创建Dao接口StudentDao，使用注解**@Mapper**
+
+5. 创建Dao接口对应的Mapper文件，xml文件，写sql语句
+
+6. 创建Service层对象，创建StudentService:接口和他的实现类。去dao对象的方法。完成数据库的操作
+
+7. 创建Controller对象，访问Service。
+
+8. 写application.properties.文件
+   配置数据库的连接信息。
+
+   ```properties
    spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
    spring.datasource.url=jdbc:mysql://localhost:3306/lsgfish?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT2B8
    spring.datasource.username=root
    spring.datasource.password=123456
    ```
 
+   
 
+### dao层对象管理方式
 
-### @MapperScan
+#### 方式一
+
+使用 @Mapper 注解，注解在dao层接口上
+
+#### 方式二
 
 扫描多个dao时，@Mapper注解不方便。使用@MapperScan，只要放在主启动类上，写上dao包路径即可
 
@@ -380,7 +239,7 @@ public class Springboot01Application {
 }
 ```
 
-### Mapper文件与接口文件分离
+### xml文件与接口文件分离 
 
 1. 所有的xml文件，都放在了resource/mapper 文件夹下，
 
@@ -414,25 +273,23 @@ mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
 
 Spring框架中的事务：
 
-1. 管理事务的对象：事务管理器（接口，接口有很多的实现类）】
+1. 管理事务的对象：事务管理器（接口，接口有很多的实现类）
    例如：使用dbc或mybatisi访问数据库，使用的事务管理器：DataSourceTransactionManager
 2. 声明式事务：在配置文件或者使用注解说明事务控制的内容
 3. 事务处理方式：
    - Spring框架中的@Transactional
    - aspectjf框架可以在xml配置文件中，声明事务控制的内容
 
-
-
 SpringBoot中使用事务：上面的两种方式都可以。
 
-1. 在业务方法的上面加入@Transactio,加入注解后，方法有事务功能了。
+使用步骤
+
+1. 在业务方法的上面加入@Transactional,加入注解后，方法有事务功能了。
 2. 明确的在主启动类的上面，加入@EnableTransactionManager
 
-## 接口架构风格RESTful
+## RESTful风格注解
 
-### Springboot对RESTful风格支持的注解
-
-```java
+```
 @PathVariable:从url中获取数据
     
 @GetMapping:支持的get请求方式，等同于@RequestMapping(method=RequestMethod.GET)
@@ -447,7 +304,7 @@ SpringBoot中使用事务：上面的两种方式都可以。
 				在类的上面使用@RestController,表示当前类者的所有方法都加入了@ResponseBody
 ```
 
-# Redis
+## Redis
 
 #### 操作RedistTemplate
 
@@ -513,11 +370,7 @@ public String getStrk(String k){
 }
 ```
 
-
-
-
-
-# SpringBoot 集成 JWT
+## 集成JWT
 
 添加依赖
 
