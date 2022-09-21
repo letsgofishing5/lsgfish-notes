@@ -605,3 +605,9 @@ public class JwtUtil {
 }
 ```
 
+# Shiro
+
+- Apache Shiro是一个)ava的安全（权限）框架。
+- Shiro可以非常容易的开发出足够好的应用，其不仅可以用在vaSE环境，也可以用在到avaEE:环境。
+- Shiro可以完成，认证，授权，加密，会话管理，Web集成，缓存等。
+- 下载地址：http://shiro.apache.org
