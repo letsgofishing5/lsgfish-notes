@@ -314,7 +314,7 @@ public class FilterConfiguration {
 2）修改application.properties文件，让自定义的过滤器起作用
 
 ```properties
-#Spr ingBoot中默认已经配置了Char acterEncodingFi1ter。编码默认Is0-8859-1
+#Spr ingBoot中默认已经配置了CharacterEncodingFi1ter。编码默认Is0-8859-1
 #设置enabled=false作用是关闭系统中配置好的过滤器，使用自定义的CharacterEncodingFilter
 server.servlet.encoding.enabled=false
 ```
