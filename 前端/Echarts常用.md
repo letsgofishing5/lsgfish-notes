@@ -5,10 +5,10 @@
 ```json
 xAxis: {
     data: ['消防烟感', '摄像机', '环境烟感', '路灯', '地磁'],
-    axisLine: {//坐标轴轴线相关设置
+    axisLine: {//坐标轴 轴线 相关设置
         show: false //隐藏X轴轴线（x轴单轴线）
     },
-    axisTick: {//坐标轴刻度相关设置
+    axisTick: {//坐标轴 刻度 相关设置
         show: false //隐藏X轴坐标轴刻度
     },
     splitLine: {//坐标轴在 grid 区域中的分隔线。
@@ -29,23 +29,62 @@ xAxis: {
 },
 ```
 
-
-
-#### y轴
-
-##### 坐标轴字体颜色
+### 区域缩放
 
 ```js
-const yAxis = {
-    type: 'value',
-    axisLine: {
-        lineStyle:{
-            color:"#fff",//设置字体颜色为白色
-        },
-        show: false,//隐藏Y轴刻度线
-    }
-},
+dataZoom: [{
+    type: 'slider',
+    backgroundColor: "#030D25",
+    show: true,
+    left: '8%',
+    bottom: 5,
+    start: 0,
+    end: 10, 
+    fillerColor: "#2C59BC",
+    showDetail: false,
+    height: 18,//滚动条高度
+}],
 ```
 
-#### x轴
+### 柱状图渐变色
+
+![image-20221026195815824](C:\Users\lsgfish\AppData\Roaming\Typora\typora-user-images\image-20221026195815824.png)
+
+```js
+series: [{
+    itemStyle: {
+        normal: {
+            color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+                offset: 0,
+                color: "red" // 0% 处的颜色
+            }, {
+                offset: 0.6,
+                color: "blue" // 60% 处的颜色
+            }, {
+                offset: 1,
+                color: "yellow" // 100% 处的颜色
+            }], false)
+        }
+    }
+}]
+```
+
+### tooltip动态加载数据
+
+```js
+tooltip: {
+    trigger: 'item',
+        formatter: function (params, ticket, callback) {
+            let html = `
+                                <span style='display:block;width:10px;height:10px;border-radius:50%;margin-bottom:10px;padding:5px;'>${params.seriesName}</span>
+                                <span style='background:${params.color};display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:10px'></span>${params.name}: ${params.value}
+                            `
+            setTimeout(function () {
+                // 仅为了模拟异步回调  
+                callback(ticket, html);
+            }, 800)
+            return html;
+        }
+},
+```
 
