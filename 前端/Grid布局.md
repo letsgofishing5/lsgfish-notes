@@ -307,4 +307,62 @@ grid-template-columns: 100px auto 100px;
 
    上面代码中，`minmax(100px, 1fr)`表示列宽不小于`100px`，不大于`1fr`。
 
-2. 
+
+
+
+
+# 总结
+
+基础行列布局
+
+
+
+grid布局，可以随意混搭 auto、minmax等关键字与函数
+
+
+
+## 网格区域
+
+grid-template-areas
+
+### 使用方式
+
+```css
+/*定义区域*/
+.grid:{
+  grid-template-areas:
+    "header header"
+    "sider content"
+    "footer footer"
+}
+/*关联区域*/
+.grid-item-1{
+  grid-area: header;
+}
+.grid-item-2{
+  grid-area：sider;
+}
+```
+
+## 行列单独布局
+
+```css
+// 分开写
+.grid-item-1{
+  grid-row-start: 2;
+  grid-row-end: 4;
+  grid-column-start: 1;
+  grid-column-end: 3;
+
+}
+// 简写
+.grid-item-1{
+  grid-row: 2/4;
+  grid-column: 1/3;
+}
+// 合并单元写法 span 单位
+.grid-item-1{
+    grid-row: span 2;
+    grid-column: span 2;
+}
+```
