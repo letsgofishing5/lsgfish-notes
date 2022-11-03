@@ -485,3 +485,12 @@ btn.element.addEventListener('click', e => {
     btn.liked = !btn.liked
 })
 ```
+
+
+
+
+
+## 策略模式
+
+> 将定义的一组算法封装起来，
+> 使其相互之间可以替换。封装的算法具有一定独立性，不会随客户端变而变化

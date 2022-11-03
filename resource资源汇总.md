@@ -20,3 +20,13 @@ https://uc5bky0t6t.feishu.cn/docs/doccnX2jciwrdCLvzydNQENWAYf
 注意：如果软件分享链接失败，请在软件里面登录下载
 ```
 
+
+
+
+
+```
+https://www.mhhanman.xyz/
+https://18comic.org/
+https://hanime1.me/
+```
+
