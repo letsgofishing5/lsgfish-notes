@@ -493,4 +493,33 @@ btn.element.addEventListener('click', e => {
 ## 策略模式
 
 > 将定义的一组算法封装起来，
-> 使其相互之间可以替换。封装的算法具有一定独立性，不会随客户端变而变化
+> 使其相互之间可以替换。封装的算法具有一定独立性，不会随客户端变而变化，避免大量 if/else
+
+```js
+class Customer {
+    constructor(kind) {
+        this.kind = kind
+    }
+    pay(money) {
+        this.kind.pay(money)
+    }
+}
+class Normal {
+    pay(money) {
+        console.log(money);
+    }
+}
+class VIP {
+    pay(money) {
+        console.log(money * .8);
+    }
+}
+const normal = new Normal()
+const vip = new VIP()
+const customer1 = new Customer(normal)
+const customer2 = new Customer(vip)
+customer1.pay(100)
+customer2.pay(100)
+
+```
+
