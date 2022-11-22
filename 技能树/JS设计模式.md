@@ -523,3 +523,60 @@ customer2.pay(100)
 
 ```
 
+## 原型模式
+
+js中，函数是对象，而对象都是通过函数创建来的。
+
+提问：第一个函数是如何出现的
+
+- 自定义函数的prototype是由Object创建，所以它的proto指向的就是Object..prototype
+- Object.prototypel的proto指向的是null
+
+## 桥接模式
+
+- 将抽象部分与他的实现部分分高这样抽像化与实现化解辑，使他们可以独立的变化
+- 应用场景是实现系统可能有多个角度分类，每一种角度都可能变化
+- 桥方可以通过实现桥接口进行单方面扩展，而另一方可以继承抽象类而单方面扩展，而之间的调用就从桥接口来作为突破口，不会受到双方扩展的任何影响
+
+```js
+class A {
+    constructor(bridge) {
+        this.position = bridge.to()
+    }
+    from() {
+        return new Error("子类必须实现该方法")
+    }
+    to() {
+        console.log(`从${this.from()}到${this.position}`);
+    }
+}
+class A1 extends A{
+    from() {
+        return "A1"
+    }
+}
+class B{
+    to() {
+        return new Error("子类必须实现该方法")
+    }
+}
+class B1 extends B{
+    to() {
+        return "B1"
+    }
+}
+const b1 = new B1()
+const a1 = new A1(b1)
+a1.to()
+```
+
+### 应用场景
+
+1. 解耦合
+2. 分离变化
+
+## 组合模式
+
+又称整体-部分模式
+将对象组合成树形结构以表示部分-整体的层次结构
+客户可以使用统一的方式对待组合对象和叶子对象
