@@ -245,7 +245,13 @@ location / {
 
 
 
-## nginx 笔记
+
+
+# nginx 点对点笔记
+
+### 大佬笔记
+
+[ 腾讯云开发者社区-腾讯云](https://cloud.tencent.com/developer/user/1717940/search/article-nginx)
 
 ### 路径匹配
 
@@ -263,6 +269,8 @@ location ~* /js/.*/\.js
 
 
 ### 请求缓存
+
+[009.Nginx缓存及配置 - 腾讯云开发者社区-腾讯云 ](https://cloud.tencent.com/developer/article/1663336)
 
 ```tex
 # 控制请求不缓存
