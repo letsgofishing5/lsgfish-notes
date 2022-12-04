@@ -88,3 +88,25 @@ tooltip: {
 },
 ```
 
+
+
+
+
+## 3D
+
+### 柱状图示例
+
+[- category-work,grid直角坐标,legend,series-bar柱状图,series-pictorialBar,toolbox工具栏,tooltip提示框 - makeapie echarts图表可视化案例](https://www.makeapie.cn/echarts_content/xMQLI9VAFHa.html)
+
+### 饼图示例
+
+[3d饼图 - category-work,grid3D,series-pie饼图,series-surface,tooltip提示框 - makeapie echarts图表可视化案例](https://www.makeapie.cn/echarts_content/xVbXSrh979.html)
+
+
+
+
+
+## 社区
+
+https://www.isqqw.com/homepage
+

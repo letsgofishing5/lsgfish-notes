@@ -102,7 +102,13 @@ div {
                         'g . i';
    ```
 
-### grid-auto-flow 放置顺序
+### grid-auto-rows 指定行高
+
+
+
+### grid-auto-flow 自动布局
+
+[grid-auto-flow - CSS（层叠样式表)](https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid-auto-flow?qs=grid-auto-flow)
 
 > 划分网格以后，容器的子元素会按照顺序，自动放置在每一个网格。默认的放置顺序是"先行后列"，即先填满第一行，再开始放入第二行，即下图数字的顺序。这个顺序由`grid-auto-flow`属性决定，默认值是`row`，即"先行后列"。也可以将它设成`column`，变成"先列后行"。
 
@@ -253,7 +259,7 @@ grid-template-columns: 100px auto 100px;
 
 ### auto-fill
 
-> 有时，单元格的大小是固定的，但是容器的大小不确定。如果希望每一行（或每一列）容纳尽可能多的单元格，这时可以使用`auto-fill`关键字表示自动填充。
+> 有时，单元格的大小是固定的，但是**容器**的大小不确定。如果希望**容器的**每一行（或每一列）容纳尽可能多的单元格，这时可以使用`auto-fill`关键字表示自动填充。
 
 ```css
 .container {
@@ -266,7 +272,13 @@ grid-template-columns: 100px auto 100px;
 
 **效果：**![image-20221027152855545](./Grid布局.assets/image-20221027152855545.png)
 
+### min-content
 
+指明由网格元素中占用空间最小的那一个来决定轨道的尺寸。
+
+### max-content
+
+指明由网格元素中占用空间最大的那一个来决定轨道的尺寸。
 
 ## 函数
 
@@ -378,3 +390,6 @@ grid-template-areas
 # Flex布局
 
 align-content 与 align-items 的区别是 items 布局垂直方向，content 也是布局垂直方向，但是只有在一行放不下换行后才生效
+
+# 最新笔记
+
