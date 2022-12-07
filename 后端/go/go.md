@@ -739,7 +739,7 @@ func reflectSetValue(x interface{}){
 
 ### goroutine
 
-go中，通过在函数前面添加一个 go 的声明则开启一个协程
+go中，通过在调用函数语句前面添加一个 go 的声明则开启一个协程，不会造成阻塞
 
 协程是轻量级线程
 
