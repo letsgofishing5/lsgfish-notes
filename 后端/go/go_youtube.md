@@ -276,6 +276,112 @@ func main(){
 | %      | 求余。即被整除后剩余的数 100 % 9 = 1                         |
 | ++、-- | 自增与自减，在Go语言中是单独的语句，并不是运算符，<br />1. 不能参与赋值运算： num := i++ （错误，不能参与赋值运算）<br />2. 没有前置运算：++i   （错误，只有后置++ 、--） |
 
+### 位运算符
+
+位运算符对整数在内存中的二进制位进行操作
+
+| 运算符 | 描述                                                         |
+| ------ | ------------------------------------------------------------ |
+| &      | 参与运算的两数各对应的二进制位相与（两位均为1 才为 1）       |
+| \|     | 参与运算的两数各对应的二进制位相与（两位有一个为 1 就为 1）  |
+| ^      | 参与运算的两数各对应的二进制位相异，或当两对应的二进制位相异时，结果为 1（两位不一样则为 1） |
+| <<     | 左移n位就是乘以2的n次方。“a<<b”是把a的各二进位全部左移b位，高位丢弃，低位补0。 |
+| >>     | 右移n位就是除以2的n次方。“a>>b”是把a的各二进位全部右移b位。  |
+
+```go
+func main(){
+    a := 5                         //二进制 101
+    b := 2                         //二进制 010
+    fmt.Printf("a|b:,%v\n", a|b)   //二进制 000     二进制两位都为1才为1，十进制：0
+    fmt.Printf("a&b:,%v\n", a&b)   //二进制 111		二进制一位为1则为1，十进制：7
+    fmt.Printf("a^b:,%v\n", a^b)   //二进制 111		两位不同则为1，十进制：7
+    fmt.Printf("a<<b:,%v\n", a<<b) // 5 * 2的2次方  101向左进两位，低位补0 10100 十进制：20
+    fmt.Printf("a>>b:,%v\n", a>>b) // 5 / 2的2次方  101向右进两位，高位补0 001	 十进制：1
+}
+```
+
+## 流程控制
+
+### 循环
+
+```go
+// for无限循环
+for{
+    fmt.Println("无线循环执行")
+}
+
+// for范围循环
+for index,value : range slice {
+    fmt.Print(index)
+    fmt.Print(value)
+}
+// for条件循环
+for len(slice)<50{
+    fmt.Println("当slice长度小于50时，执行循环语句")
+}
+```
+
+#### break、continue
+
+break：终止当前语句并跳出循环
+
+continue：跳过当前循环执行下一个循环语句
+
+### switch
+
+```go
+func main() {
+	str := "你好"
+    
+    //基础用法
+	switch str {
+	case "nihao":
+		fmt.Println("nihao")
+	case "你好呀":
+		fmt.Println("你好")
+	default:
+		fmt.Println("default")
+	}
+    
+    
+    //一个分支多个值，多个case值可以使用英文逗号分隔
+	switch str {
+	case "nihao":
+		fmt.Println("nihao")
+        break//break可以写也可以不写
+	case "你好呀","你好":
+		fmt.Println("你好")
+	default:
+		fmt.Println("default")
+	}
+   
+    
+    //分支后面可以使用表达式
+    num := 59
+	switch num {
+	case num>60:
+		fmt.Println("及格了")
+        break//break可以写也可以不写
+	case num<60:
+		fmt.Println("不及格")
+	default:
+		fmt.Println("刚好60分")
+	}
+    
+    // case 穿透
+	switch str {
+	case "nihao":
+		fmt.Println("nihao")
+        fallthrough//只会穿透一层case，不会多层穿透
+	case "你好呀":
+		fmt.Println("你好")
+	default:
+		fmt.Println("default")
+	}
+    
+}
+```
+
 
 
 ### Array
@@ -356,14 +462,11 @@ slice = append(slice,ele)//将ele追加到slice中
 
 ### 数据类型默认值
 
-| 数据类型 | 默认值 |
-| -------- | ------ |
-| bool     | false  |
-| float    | 0      |
-| int      | 0      |
-|          |        |
-|          |        |
-|          |        |
+| 数据类型 | 默认值 | 类型    |
+| -------- | ------ | ------- |
+| bool     | false  |         |
+| float    | 0      | float64 |
+| int      | 0      | int     |
 
 
 
@@ -397,32 +500,7 @@ func main(){
 //%t 输出布尔值
 ```
 
-## 流程控制
 
-### 循环
-
-```go
-// for无限循环
-for{
-    fmt.Println("无线循环执行")
-}
-
-// for范围循环
-for index,item : range slice {
-    fmt.Print(index)
-    fmt.Print(item)
-}
-// for条件循环
-for len(slice)<50{
-    fmt.Println("当slice长度小于50时，执行循环语句")
-}
-```
-
-#### break、continue
-
-break：终止当前语句并跳出循环
-
-continue：跳过当前循环执行下一个循环语句
 
 ### 开关switch
 
