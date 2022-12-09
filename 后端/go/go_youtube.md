@@ -321,11 +321,97 @@ for len(slice)<50{
 }
 ```
 
-#### break、continue
+### break、continue，goto
 
-break：终止当前语句并跳出循环
+#### break
 
-continue：跳过当前循环执行下一个循环语句
+break默认跳出一层循环，并终止后面的执行语句
+
+```go
+//break：只能终止一层循环，并且不执行break后面的语句
+for i:=0;i<10;i++{
+    fmt.Println("i:",i)
+    if i==2{
+        break
+    }
+    fmt.Println("继续执行")
+}
+```
+
+break跳出多层循环，需要结合标记 label，标记出break想要跳出的位置
+
+```go
+func main() {
+label_b:
+	for j := 0; j < 10; j++ {
+		fmt.Printf("j层：%v\n", j)
+		for i := 0; i < 10; i++ {
+			fmt.Printf("i:%v\n", i)
+			if i == 2 {
+				break label_b
+			}
+			fmt.Println("继续执行")
+		}
+	}
+}
+```
+
+#### continue
+
+语句可以结束当前循环，开始下一次的循环迭代过程，仅限在f0循环内使用
+
+```go
+func main() {
+	for i := 0; i < 5; i++ {
+		fmt.Printf("i:%v\n", i)
+		if i == 2 {
+			continue
+		}
+		fmt.Println("继续执行")
+	}
+}
+```
+
+控制跳出循环后的开始执行位置，类似于break跳出多层循环一个意思
+
+```go
+func main() {
+label1:
+	for j := 0; j < 5; j++ {
+		for i := 0; i < 5; i++ {
+			fmt.Printf("j:%v, i:%v\n", j, i)
+			if i == 2 {
+				continue label1
+			}
+		}
+	}
+}
+```
+
+#### 小结
+
+可以通过在关键字后面追加标签形式，以达到跨循环操作
+
+### goto
+
+got0语句通过标签进行代码间的无条件跳转。
+
+```go
+func main() {
+	num := 10
+	if num > 9 {
+		goto label1
+	}
+	fmt.Println("执行第一条")
+	fmt.Println("执行第二条")
+label1:
+	fmt.Println("执行第三条")
+	fmt.Println("执行第四条")
+}
+
+```
+
+
 
 ### switch
 
@@ -382,54 +468,208 @@ func main() {
 }
 ```
 
-
+## Array与slice
 
 ### Array
 
-值类型
+**值类型**
 
 声明数组
 
 ```go
 func main(){
-    var arr [10]string//声明一个长度为10的字符串数组
+    var arr1 [10]string//声明一个长度为10的字符串数组
+    var arr2 = [10]string{"java","html"}//初始化并赋值
+    var arr2 = [...]string{"java","html"}//初始化并赋值，根据初始化赋值，自动推算数组长度 
+    var num4 = [...]int{3:5,5:6}//第四种，根据下标来决定数组长度，下标为3的赋值5，下标为5赋值6
+    arr := [2][2]int{}//二维数组
+    arr := [2][2]int{{1,2},{3,4}}//二维数组赋值
 }
 ```
 
 ### slice
 
-引用类型
+切片是一个引用类型，它的内部结构包含**地址、长度和容量**。
 
 声明切片
 
 ```go
 func main(){
-    var sli []string
+    var slice []string//切片声明
+    //make函数创建切片 make([]T,len,cap)
+    slice2 := make([]int,8,8)
 }
 ```
 
-切片的增删改
+#### slice的长度与容量
+
+我们可以通过 len() 求长度，通过 cap() 求容量
+
+1. 切片的**长度**就是它所包含的元素个数。
+2. 切片的**容量**是从它的第一个元素开始数，到其**底层数组元素末尾的个数**。
 
 ```go
 func main(){
-    var sli = []string{}
-    sli = append(sli,"hello")//增
+   slice := []int{1, 2, 3, 4, 5, 6, 7}
+	fmt.Printf("slice的长度%v与容量%v\n", len(slice), cap(slice)) //7,7
+	slice1 := slice[4:]
+	fmt.Printf("slice1的长度%v与容量%v\n", len(slice1), cap(slice1)) //3,3
+	slice2 := slice[1:3]
+	fmt.Printf("slice2的长度%v与容量%v\n", len(slice2), cap(slice2)) //2,6
+	slice3 := slice[:3]
+	fmt.Printf("slice3的长度%v与容量%v\n", len(slice3), cap(slice3)) //3,7
 }
 ```
 
-### map
+#### 切片的本质
+
+切片的本质就是**对底层数组**的封装，它包含了三个信息：底层数组的指针、切片的长度和切片的容量
+
+![image-20221209142312737](./go_youtube.assets/image-20221209142312737.png)
+
+![image-20221209142446484](./go_youtube.assets/image-20221209142446484.png)
+
+#### 切片扩容策略
+
+每次扩容时，扩容的大小是上次容量的两倍，如果就**切片长度**大于1024，则每次扩容时**新容量**只会增加**旧容量的四分之一**大小
+
+需要注意的是，切片扩容还会根据切片中元素的类型不同而做不同的处理，比如 int 和 string类型的处理方式就不一样。
+
+```go
+func main() {
+	var slice = []int{}
+	for i := 0; i < 10; i++ {
+		slice = append(slice, i)
+		fmt.Printf("大小：%v，长度：%v，容量：%v\n", slice, len(slice), cap(slice))
+	}
+}
+```
+
+#### 切片的增删改查
+
+```go
+//切片的截取
+func interceptSlice(){
+    slice := []int{1,2,3,4,5,6,7}
+    //区间截取
+    slice1 := slice[1:4]//截取切片，截取下标1到4之间的数据，左闭右开：[2,3,4]
+    slice2 := slice[:4]//从头截取到下标为4的区间：[1,2,3,4]
+    slice3 := slice[4:]//从下标为4开始截取：[5,6,7]
+    slice4 := slice[:]//复制切片内容：[1,2,3,4,5,6,7]
+}
+
+//切片拷贝
+func sliceCopy(){
+    slice1 := []int{1, 2, 3, 4, 5}
+    var slice2 = make([]int, 5)
+    copy(slice2, slice1)
+    fmt.Printf("slice2:%v,slice1:%v\n", slice2, slice1)
+}
+
+//切片新增
+func sliceAdd(){
+    slice := []int{1,2}
+    slice = append(slice,slice...)
+    fmt.Printf("slice：%v\n",slice)
+}
+
+//切片删除：go中没有切片删除的方法，只能通过自己去实现
+func sliceDel(){
+    slice := []int{1,2}
+    slice = slice[:1]
+}
+```
+
+### sort包排序
+
+```go
+func main() {
+	slice := []int{4, 2, 35, 2, 6, 4, 3, 0, 6, 7, 4}
+	sort.Ints(slice) //默认升序
+	fmt.Println(slice)
+	sort.Sort(sort.Reverse(sort.IntSlice(slice))) //降序处理
+	fmt.Println(slice)
+}
+```
+
+## map
 
 引用类型
 
+map是一种无序的基于**key-value**的数据结构，Go语言中的map是引用类型，**必须初始化**才能使用。
+
 ```go
-//定义map[key]value
-var m1 map[string]string//声明map类型变量
-var m2 = make(map[string]string)//通过make内建方法创建map
-//只要创建map，就需要make函数，
-var m3 = make([]map[string]string,1)//创建一个map集合，需要为 m3 集合指定一个集合初始值大小，这是一个动态集合（slice），后期可以自动扩展数据
+var uMap = make(map[string]string)//初始化map
+uMap['name'] = "张三"
+uMap['age'] = "24"
+//初始化赋值
+var uMap2 = map[string]string{
+    "name":"张三",
+    "age":"20"
+}
 ```
 
-### 结构体 struct
+#### 循环map
+
+```go
+func main(){
+   	uMap := map[string]string{
+		"name": "漳卅",
+		"age":  "24",
+	}
+	for k, v := range uMap {
+		fmt.Printf("key:%v,value:%v\n", k, v)
+	}
+}
+```
+
+#### map类型crud
+
+```go
+func main(){
+   uMap := map[string]string{
+		"name": "漳卅",
+		"age":  "24",
+	}
+	//查找属性值，并判断属性是否存在
+	value, ok := uMap["xxx"]
+	if ok {
+		fmt.Println("name属性值：", value)
+	}
+    //删除属性值
+    delete(uMap,"name")
+}
+```
+
+#### map类型切片
+
+```go
+func main() {
+	slice := make([]map[string]string, 3)
+	if slice[0] == nil {
+		slice[0] = map[string]string{
+			"name": "张三",
+		}
+	}
+	if slice[1] == nil {
+		slice[1] = map[string]string{
+			"name": "张三",
+		}
+	}
+	if slice[2] == nil {
+		slice[2] = map[string]string{
+			"name": "张三",
+		}
+	}
+	for k, v := range slice {
+		fmt.Printf("k:%v,v:%v\n", k, v)
+	}
+}
+```
+
+
+
+## 结构体 struct
 
 ```go
 type User struct {
@@ -460,13 +700,21 @@ len(varible)//查询varible变量的长度
 slice = append(slice,ele)//将ele追加到slice中
 ```
 
-### 数据类型默认值
+## 数据类型默认值
 
-| 数据类型 | 默认值 | 类型    |
-| -------- | ------ | ------- |
-| bool     | false  |         |
-| float    | 0      | float64 |
-| int      | 0      | int     |
+不同类型数据声明未赋值时的默认值
+
+| 数据类型   | 默认值 |
+| ---------- | ------ |
+| bool       | false  |
+| number     | 0      |
+| string     | ""     |
+| slice      | nil    |
+| maps       | nil    |
+| channels   | nil    |
+| functions  | nil    |
+| interfaces | nil    |
+|            |        |
 
 
 
@@ -539,6 +787,10 @@ func main() {
 1. go只有类型强转
 2. 布尔值不能与其他类型互换（没意义）
 3. string与其他类型转换可以通过 Sprintf，或者 strconv 包，进行转换
+4. 值类型：改变变量副本值的时候，不会改变变量本身的值
+   (基本数据类型、数组)
+   引用类型：改变变量副本值的时候，会改变变量本身的值
+   (切片、map)
 
 ## 练手demo
 
