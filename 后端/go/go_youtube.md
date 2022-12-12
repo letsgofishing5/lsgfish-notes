@@ -319,6 +319,11 @@ for index,value : range slice {
 for len(slice)<50{
     fmt.Println("当slice长度小于50时，执行循环语句")
 }
+
+//该 i 变量只能在for循环中使用，属于局部变量
+for i:=0;i<10;i++{
+    fmt.Println("i:",i)
+}
 ```
 
 ### break、continue，goto
@@ -669,6 +674,429 @@ func main() {
 
 
 
+## 函数
+
+G0语言中支持：函数、匿名函数和闭包
+
+```go
+func test() string {
+	fmt.Print("这是一个函数")
+	return "这是函数的返回值"
+}
+```
+
+### 参数
+
+```go
+//最常见的基础写法
+func test(a int,b int){
+    
+}
+//参数类型相同时的简写
+func test(a ,b int){
+    
+}
+```
+
+#### 可变参数
+
+```go
+func test(arr ...int){
+    for _,v := range arr{
+        fmt.Printf("value:%v",v)
+    }
+    fmt.Println("接收一个int类型arr的切片")
+}
+```
+
+### 返回值
+
+```go
+//一个返回值
+func test() int{
+    fmt.Println("返回一个int类型数据")
+    return 1
+}
+
+//返回多个返回值
+func test()(int,string){
+    fmt.Println("返回两个参数，类型分别为int与string")
+    return 1,"2"
+}
+```
+
+#### 返回值命名
+
+```go
+func test()(sum int){
+    fmt.Println("这里返回值不需要把返回变量放在return 后面")
+    sum = 1 + 2
+    return 
+}
+//返回值变量简化声明
+func test(a, b int) (sum1, sum2 int) {
+	sum1 = a
+	sum2 = b
+	fmt.Println("这里返回值不需要把返回变量放在return 后面")
+	return
+}
+```
+
+### 作用域
+
+**全局变量：**全局变量是定义在函数外部的变量，它在程序整个运行周期内都有效
+**局部变量：**局部变量是函数内部定义的变量，函数内定义的变量无法在该函数外使用
+
+## 函数类型与变量
+
+我们可以使用type关键字来定义一个函数类型**（不仅仅是函数类型，还可以用type定义其他自定义的类型）**, type 字段可以用来声明自定义类型
+
+```go
+type calc func(int,int) int
+```
+
+上面语句定义了一个**calc类型**，它是一种函数类型，这种函数接收两个 int 类型的参数并且返回一个 int 类型的返回值。
+
+```go
+type calc func(int, int) int
+
+func main() {
+	var c calc
+	c = test
+	fmt.Printf("c:%v\n%T", c(1, 3), c)
+}
+
+func test(a, b int) int {
+	return a + b
+}
+```
+
+### 函数作为参数
+
+```go
+func test(x,y int,callback func(f string)){
+    fmt.Println("callback是函数类型参数")
+}
+```
+
+类型声明与参数调用
+
+```go
+//声明一个函数类型
+type calcType func(int, int) int
+
+func main() {
+	fmt.Printf("%v", calc(1, 2, add))
+}
+func add(x, y int) int {
+	return x + y
+}
+func calc(x, y int, callback calcType) int {
+    //将函数作为返回值
+	return callback(x, y)
+}
+```
+
+### 函数作为返回值
+
+```go
+type calcType func(int, int) int
+
+func main() {
+	calc := do("-")
+	fmt.Printf("%v", calc(5, 2))
+}
+func do(o string) calcType {
+	switch o {
+	case "+":
+		return add//函数作为返回值
+	case "-":
+		return minus//函数作为返回值
+	default:
+		return nil
+	}
+}
+func add(x, y int) int {
+	return x + y
+}
+func minus(x, y int) int {
+	return x - y
+}
+```
+
+### 匿名函数
+
+```go
+func main(){
+    func(){
+        fmt.Println("匿名函数自执行")
+    }()//匿名函数自执行
+    fn := func()string{
+        return "匿名函数赋值"
+    }
+    fmt.Println(fn())
+}
+```
+
+### 闭包
+
+常驻内存，不污染全局
+
+```go
+func main() {
+	fn := add()
+	fmt.Printf("fn:%v\n", fn(10))
+	fmt.Printf("fn:%v\n", fn(10))
+	fmt.Printf("fn:%v\n", fn(10))
+}
+func add() func(int) int {
+	i := 0
+	return func(y int) int {
+		i += y
+		return i
+	}
+}
+```
+
+## 错误处理
+
+### defer
+
+Go语言中的defer语句会将其后面跟随的语句进行延迟处理。在defer归属的函数即将返回时，将延迟处理的语句按defer定义的逆序进行执行，也就是说，先被defer的语句最后被执行，最后被defer的语句，最先被执行
+
+```go
+func main() {
+	defer fmt.Println("1")
+	defer fmt.Println("2")
+	defer fmt.Println("3")
+}
+```
+
+在Go语言的函数中return语句在底层并不是原子操作，它分为给**返回值变量**赋值和**RET指令**两步。而defr语句执行的时机就在 返回值变量赋值 操作后，RET（return）指令执行前。具体如下图所示：
+
+![image-20221211112633768](./go_youtube.assets/image-20221211112633768.png)
+
+```go
+func main() {
+	fmt.Println(fn1())
+	fmt.Println(fn2())
+}
+//匿名返回值结果为0
+/*
+解释：方法体内部，变量a，在执行到return这步时，程序会执行如下操作
+	xxx(即将作为return的变量) = a（a这时还是0）
+	defer语句执行 a++ （a = 1），
+	但是由于是值传递，所以 xxx 的值还是 0 
+	最后执行 return xxx
+*/
+func fn1() int {
+	var a int
+	defer func() {
+		a++
+	}()
+	return a
+}
+//命名返回值结果为1
+/*
+解释：程序声明时对返回值变量进行了命名，在执行到return这步时，
+程序操作如下
+	a(命名的返回值变量) = 0
+	defer语句执行 a++ (a = 1)
+	最后执行 return a 
+*/
+func fn2() (a int) {
+	defer func() {
+		a++
+	}()
+	return a
+}
+```
+
+##### defer注册执行函数
+
+defer注册的要延迟执行的函数时，该函数的所有参数都需要确定其值
+
+```go
+func calc(s string, a, b int) int {
+	ret := a + b
+	fmt.Println(s, a, b, ret)
+	return ret
+}
+func main() {
+	x := 1
+	y := 2
+	defer calc("AA", x, calc("A", x, y))
+	x = 10
+	defer calc("BB", x, calc("B", x, y))
+	y = 20
+}
+```
+
+**解释**
+
+![image-20221211132742870](./go_youtube.assets/image-20221211132742870.png)
+
+
+
+### panic/recover
+
+Go语言中目前(Go1.12)是没有异常机制，但是使用panic/recover模式来处理错误。panic可以在任何地方引发，**但recover只有在defer调用的函数中有效**。
+
+```go
+func main() {
+	defer func() {
+		err := recover()
+		if err != nil {
+			fmt.Printf("err:%v", err)
+		}
+	}()
+	panic("抛出一个异常")
+}
+```
+
+## time包与日期函数
+
+```go
+func main() {
+	uTime := time.Now()
+
+	fmt.Printf("uTime:%v\n", uTime)
+	year := uTime.Year()
+	month := uTime.Month()
+	day := uTime.Day()
+	hour := uTime.Hour()
+	minutes := uTime.Minute()
+	second := uTime.Second()
+	fmt.Printf("%d-%02d-%02d %02d:%02d:%02d\n", year, month, day, hour, minutes, second)
+}
+```
+
+### 日期格式化
+
+```go
+func main() {
+	uTime := time.Now()
+	/*
+		使用Go的诞生时间2006年1月2号15点84分（记忆口诀为2006 1 2 3 4 5）
+		2006 年
+		01 月
+		02 日
+		03 时 12小时制	+ 12 = 15 24小时制
+		04 分
+		05 秒
+	*/
+	// 模板格式化输出 12小时制
+	formatTime := uTime.Format("2006-01-02 03:04:05")
+	fmt.Printf("模板格式化输出 12小时制：%v\n", formatTime)
+
+	// 模板格式化输出 24小时制
+	formatTime = uTime.Format("2006-01-02 15:04:05")
+	fmt.Printf("模板格式化输出 24小时制：%v\n", formatTime)
+}
+```
+
+### 常用方法
+
+1. 获取当前时间
+2. 获取时间戳
+3. 获取纳秒时间戳
+4. 时间戳格式化
+5. 纳秒时间戳格式化
+6. 日期字符串转时间戳
+
+```go
+func main() {
+	// 获取当前时间
+	uTime := time.Now()
+	fmt.Printf("获取当前时间：%v\n", uTime)
+	/*
+	   时间戳是自1970年1月1日(08：00：00GMT)至当前时间的总毫秒数。它也被称为Uniⅸ时
+	   间戳(UnixTimestamp)
+	*/
+	//获取时间戳
+	uTimestamp := uTime.Unix()
+	fmt.Printf("获取时间戳：%v\n", uTimestamp)
+	//获取纳秒时间戳
+	uNaTimestamp := uTime.UnixNano()
+	fmt.Printf("获取纳秒时间戳：%v\n", uNaTimestamp)
+	//时间戳格式化
+	nowTime := time.Unix(int64(uTimestamp), 0)
+	nowTimeFormat := nowTime.Format("2006-01-02 15:04:05")
+	fmt.Printf("时间戳格式化：%v\n", nowTimeFormat)
+	//纳秒时间戳格式化
+	nowNaTime := time.Unix(0, int64(uNaTimestamp))
+	nowNaTimeFormat := nowNaTime.Format("2006-01-02 15:04:05")
+	fmt.Printf("纳秒时间戳格式化：%v\n", nowNaTimeFormat)
+
+	// 日期字符串转时间戳
+	timeStr := "2022-12-12 21:16:59"
+	patternFormat := "2006-01-02 15:04:05"
+	uTimestamp2, ok := time.ParseInLocation(patternFormat, timeStr, time.Local)
+	if ok == nil {
+		fmt.Printf("日期字符串转时间戳：%v\n", uTimestamp2.Unix())
+	}
+}
+```
+
+### 时间间隔
+
+![image-20221212212058824](./go_youtube.assets/image-20221212212058824.png)
+
+
+
+### 时间操作函数
+
+对时间进行加减乘除
+
+```go
+func main(){
+    // 获取当前时间
+	uTime := time.Now()
+	fmt.Printf("获取当前时间：%v\n", uTime)
+    //加时间
+	uTime = uTime.Add(time.Hour)
+	fmt.Printf("一小时后：%v\n", uTime)
+    //减时间
+	uTime = uTime.Sub(time.Hour)
+    //加时间
+	uTime = uTime.Add(time.Hour)
+    //时间对比
+	uTime = uTime.Equal(time.Hour)
+}
+```
+
+
+
+### 定时器
+
+```go
+func main() {
+	ticker := time.NewTicker(time.Second)
+	i := 0
+	// 这里range循环只有一个value
+	for task := range ticker.C {
+		fmt.Printf("定时器执行%v\n", task)
+		i++
+		if i == 5 {
+			// 取消定时器
+			ticker.Stop()
+			break
+		}
+	}
+    
+    for{
+        time.Sleep(time.Second)
+        fmt.Println("休眠定时器")
+    }
+}
+```
+
+
+
+
+
+
+
 ## 结构体 struct
 
 ```go
@@ -744,26 +1172,14 @@ func main(){
 //%x 十六进制输出
 //%f 输出浮点型，与%v的打印区别在于 %f 会输出6位小数位
 //%.2f 输出浮点型，保存两位小数
+//%02d 输出十进制，如果输出的数值不够两位数，高位补零，在日期输出时，可以使用
 //%c 输出字符，原样输出字符
 //%t 输出布尔值
 ```
 
 
 
-### 开关switch
 
-```go
-func main(){
-    city := "大连"
-    switch city{
-        case "大连":
-        //执行代码
-
-        default:
-        fmt.Println("无匹配条件执行语句")
-    }
-}
-```
 
 ## package分包
 
@@ -785,12 +1201,37 @@ func main() {
 # 总结
 
 1. go只有类型强转
+
 2. 布尔值不能与其他类型互换（没意义）
+
 3. string与其他类型转换可以通过 Sprintf，或者 strconv 包，进行转换
+
 4. 值类型：改变变量副本值的时候，不会改变变量本身的值
    (基本数据类型、数组)
    引用类型：改变变量副本值的时候，会改变变量本身的值
    (切片、map)
+
+5. 引用类型必须初始化才能使用，初始化通过 make 内置函数创建
+
+6. 函数可以声明返回值变量，声明了返回值变量后，则不必在return 后面追加已声明的返回值变量
+
+7. defer 语句
+
+   1. defer 语句先声明的后执行，后声明的先执行
+   2. defer注册的要延迟执行的函数时，该函数的所有参数都需要确定其值
+
+8. Go语言中的return语句并不是原子操作，分两步，
+
+   1. 第一步：对返回值变量（xxx）进行赋值
+   2. 第二步：执行RET(return)指令，返回返回值变量（xxx）
+
+   如果有defer语句的存在，则分三步
+
+   1. 第一步：对返回值变量（xxx）进行赋值
+   2. 第二步：执行defer语句
+   3. 第二步：执行RET(return)指令，返回返回值变量（xxx）
+
+9. 
 
 ## 练手demo
 
