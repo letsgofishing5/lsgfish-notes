@@ -243,6 +243,11 @@ func main() {
 func main(){
     str := "1234"
     //string 转 int
+    /*
+    	参数1：字符串变量
+    	参数2：输出的进制（2，8，10，16）
+    	参数3：输出的数据类型 （8，16，32，64）int8,int16...
+    */
     num, ok := strconv.ParseInt(str, 10, 16)
     if ok == nil {
         fmt.Printf("num:%v", num)
@@ -1019,6 +1024,7 @@ func main() {
 	//获取纳秒时间戳
 	uNaTimestamp := uTime.UnixNano()
 	fmt.Printf("获取纳秒时间戳：%v\n", uNaTimestamp)
+    
 	//时间戳格式化
 	nowTime := time.Unix(int64(uTimestamp), 0)
 	nowTimeFormat := nowTime.Format("2006-01-02 15:04:05")
@@ -1091,7 +1097,47 @@ func main() {
 }
 ```
 
+### 日期语法练习
 
+![image-20221213094157437](./go_youtube.assets/image-20221213094157437.png)
+
+### 小结
+
+1. 日期类的转换，都先把字符串或者数字 使用 time 方法转成 time.Time 类型，然后调用 time 方法进行互相转换
+
+
+
+## 指针
+
+指针也是一个变量，但它是一种特殊的变量，它存储的数据不是一个普通的值，而是另一个变量的内存地址。
+
+![image-20221213120402818](./go_youtube.assets/image-20221213120402818.png)
+
+要搞明白G0语言中的指针需要先知道3个概念：指针地址、指针类型和指针取值G0语言中的指针操作非常简单，我们只需要记住两个符号：**&（取地址）和*（根据地取值)**
+
+### 指针地址与类型
+
+每个变量在运行时都拥有一个地址，这个地址代表变量在内存中的位置。G0语言中使用&字符放在变量前面对变量进行取地址操作。Go语言中的值类型(int、float、bool、string、array、struct)都有对应的指针类型，如：\*int  \*int64、\*string等。
+
+```go
+func main(){
+    b := 10
+    ptr := &b
+    fmt.Printf("ptr的值：%v,ptr的指针值:%v",ptr,*ptr)
+    *ptr = 20
+    fmt.Printf("改变后的ptr的值：%v,ptr的指针值:%v",ptr,*ptr)
+}
+/*
+b：代表被取地址的变量，类型为T
+ptr:用于接收地址的变量，ptr的类型就为*T,称做T的指针类型。*代表指针。
+*/
+```
+
+### new与make
+
+1. 二者都是用来做内存分配的。
+2. make只用于**slice、map以及channel**的初始化，返回的还是这三个引用类型本身
+3. 而new用于**类型的内存分配**，并且内存对应的值为类型零值，返回的是指向**类型的指针**。
 
 
 
@@ -1099,20 +1145,60 @@ func main() {
 
 ## 结构体 struct
 
+使用type和struct关键字来定义结构体。
+
+![image-20221213140214897](./go_youtube.assets/image-20221213140214897.png)
+
 ```go
 type User struct {
-    name string
-    age uint8
+	Name string
+	Age  uint8
 }
-func main(){
-    user := User{
-        name = "张三",
-        age:16
-    }
+
+func main() {
+    //实例化方式一
+	var user User
+	user.Age = 12
+	user.Name = "曹瑾昆"
+	fmt.Printf("user:%v,类型：%T\n", user, user)
+    //实例化方式二
+	user1 := User{
+		Name: "张三",
+		Age:  23,
+	}
+	fmt.Printf("user1：%v,类型：%T\n", user1, user1)
+    //实例化方式三
+	user2 := new(User)
+	user2.Age = 24
+	user2.Name = "里斯"
+	fmt.Printf("user2:%v，类型：%T\n", user2, user2)
+    //实例化方式四
+	user3 := &User{}
+	user3.Age = 25
+	user3.Name = "乌桑五"
+	fmt.Printf("user3:%v，类型：%T\n", user3, user3)
+    //实例化方式五
+	user4 := &User{
+		Name: "张三",
+		Age:  23,
+	}
+	fmt.Printf("user4：%v,类型：%T\n", user4, user4)
+    //实例化方式六
+	user5 := &User{
+		Name: "张三",
+	}
+	fmt.Printf("user5：%v,类型：%T\n", user5, user5)
+    //实例化方式七
+	// 初始化结构体的时候可以简写，也就是初始化的时候不写键，直接写值，但是要保证值的顺序与类型声明时的顺序一致
+	user6 := &User{
+		"张三",
+		12,
+	}
+	fmt.Printf("user6：%v,类型：%T\n", user6, user6)
 }
 ```
 
-
+注意：在Golang中支持对结构体指针直接使用 . 来访问结构体的成员。user.name="张三" 其实在底层是 (*user).name="张三"
 
 ### 内置函数
 
@@ -1175,6 +1261,7 @@ func main(){
 //%02d 输出十进制，如果输出的数值不够两位数，高位补零，在日期输出时，可以使用
 //%c 输出字符，原样输出字符
 //%t 输出布尔值
+//%p 输出内存地址
 ```
 
 
@@ -1211,7 +1298,16 @@ func main() {
    引用类型：改变变量副本值的时候，会改变变量本身的值
    (切片、map)
 
-5. 引用类型必须初始化才能使用，初始化通过 make 内置函数创建
+5. 引用类型必须**初始化分配内存空间**才能使用，初始化通过 make 内置函数创建
+
+   1. ```go
+      var num *int
+      *num = 123//错误，没有初始化分配内存
+      var num2 = new(int)//通过new分配内存空间
+      *num2 = 456//正确
+      ```
+
+   2. 
 
 6. 函数可以声明返回值变量，声明了返回值变量后，则不必在return 后面追加已声明的返回值变量
 
@@ -1231,7 +1327,7 @@ func main() {
    2. 第二步：执行defer语句
    3. 第二步：执行RET(return)指令，返回返回值变量（xxx）
 
-9. 
+9. 作用域：Go语言中的变量（属性）首字母区分大小写，大写字面代表公有，小写字母代表私有
 
 ## 练手demo
 
