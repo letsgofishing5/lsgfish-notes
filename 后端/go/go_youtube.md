@@ -1145,6 +1145,8 @@ ptr:用于接收地址的变量，ptr的类型就为*T,称做T的指针类型。
 
 ## 结构体 struct
 
+值类型
+
 使用type和struct关键字来定义结构体。
 
 ![image-20221213140214897](./go_youtube.assets/image-20221213140214897.png)
@@ -1200,7 +1202,209 @@ func main() {
 
 注意：在Golang中支持对结构体指针直接使用 . 来访问结构体的成员。user.name="张三" 其实在底层是 (*user).name="张三"
 
-### 内置函数
+### 结构体方法和接收者
+
+在Go语言中，没有类的概念但是可以给类型（结构体，自定义类型）定义方法。所谓方法就是定义了接收者的函数。接收者的概念就类似于其他语言中的this或者self。
+
+![image-20221213144614066](./go_youtube.assets/image-20221213144614066.png)
+
+```go
+type User struct {
+	Name string
+	Age  uint8
+}
+
+func (u User) Print() {
+	fmt.Println(u.Name, "今年", u.Age, "岁")
+}
+// 传入指针类型，可以修改结构体数据
+func (u *User) SetName(name string) {
+	u.Name = name
+}
+func main() {
+	user := User{
+		Name: "漳卅",
+		Age:  24,
+	}
+	user.Print()
+	user.SetName("里斯")
+	user.Print()
+}
+```
+
+### 结构体嵌套
+
+结构体的字段类型可以是：基本数据类型、也可以是切片、Map以及结构体
+如果结构体的字段类型是：指针，slice,和map的零值都是ni1,即还没有分配空间
+如果需要使用这样的字段，需要先make,才能使用
+
+```go
+type User struct {
+	Name  string
+	Age   uint8
+	Hobby []string
+	prop  map[string]string
+}
+
+func main() {
+	user := &User{}
+	user.Name = "张三"
+	user.Age = 25
+	user.prop = make(map[string]string)
+	user.prop["weight"] = "180kg"
+	user.Hobby = make([]string, 5)
+	fmt.Printf("user:%v,类型：%T\n", user, user)
+}
+```
+
+#### 匿名字段与匿名嵌套结构体
+
+结构体允许其成员字段在声明时没有字段名而只有类型，这种没有名字的字段就称为匿名字段
+匿名字段默认采用类型名作为字段名，结构体要求字段名称必须唯一，因此一个结构体中同种类型的匿名字段则会报错
+
+```go
+type User struct {
+	Name string
+	Age  uint8
+	// 匿名属性
+	Address
+}
+type Address struct {
+	AddressName string
+}
+
+func main() {
+	user := &User{}
+	user.Name = "张三"
+	user.Age = 25
+	// 当访问结构体成员时会先在结构体中查找该字段，找不到再去匿名结构体中查找
+	user.AddressName = "东程"
+	fmt.Printf("user.Address.Name:%v\n", user.Address)
+	fmt.Printf("user:%v,类型：%T\n", user, user)
+}
+```
+
+
+
+### 结构体继承
+
+结构体的继承是通过结构体嵌套完成的
+
+```go
+type Person struct {
+	Name  string
+	Age   uint8
+	Phone uint32
+}
+
+func (p *Person) say() {
+	fmt.Printf("%v在说话\n", p.Name)
+}
+
+type Teacher struct {
+	Person
+}
+type Student struct {
+	Person
+}
+
+func main() {
+
+	teacher := &Teacher{}
+	teacher.Name = "顾超"
+	teacher.say()
+	stud := &Student{}
+	stud.Name = "韩运昊"
+	stud.say()
+}
+
+```
+
+## 序列化与反序列化
+
+### JSON序列号与结构体
+
+ JSON序列化是指把结构体数据转化成JSON格式的字符串
+
+反序列化是指把JSON数据转化成Golang中的结构体对象
+
+Golang中的序列化和反序列化主要通过"encoding/json"包
+
+**私有属性不能被 json 包访问**
+
+#### 序列化
+
+```go
+type Teacher struct {
+	Name  string
+	Age   uint8
+	Phone uint64
+}
+func main() {
+	teacher := &Teacher{}
+	teacher.Name = "顾超"
+	teacher.Age = 23
+	teacher.Phone = 18752945619
+	byteJson, err := json.Marshal(teacher)
+	if err != nil {
+		fmt.Printf("json转换错误：%v\n", err)
+	}
+	fmt.Printf("strJson:%v\n", string(byteJson)) //{"Name":"顾超","Age":23,"Phone":18752945619}
+}
+```
+
+#### 反序列化
+
+```go
+type Teacher struct {
+    Name  string
+    Age   uint8
+    Phone uint64
+}
+func main() {
+    str := `{"Name":"顾超","Age":23,"Phone":18752945619}`
+    var teach Teacher
+    json.Unmarshal([]byte(str), &teach)
+    fmt.Printf("反序列化：%v\n", teach)
+    fmt.Printf("name:%v\n", teach.Name)
+}
+```
+
+### 结构体Tag
+
+Tag是结构体的元信息，可以在运行的时候通过反射的机制读取出来。Tag在结构体字段的后方定义，由一对反引号包裹起来，具体的格式如下：
+
+key1:"value1"key2:"value2"
+
+结构体tg由一个或多个键值对组成。键与值使用冒号分隔，值用双引号括起来。同一个结构体字段可以设置多个键值对tag,不同的键值对之间使用空格分隔。
+
+注意事项：为结构体编写Tg时，必须严格遵守键值对的规则。结构体标签的解析代码的容错能力很差，一旦格式写错，编译和运行时都不会提示任何错误，通过反
+
+射也无法正确取值。例如不要在key和value之间添加空格。
+
+```go
+type Teacher struct {
+	Name  string `json:"name"`
+	Age   uint8  `json:"age"`
+	Phone uint64 `json:"phone"`
+}
+
+func main() {
+	teacher := &Teacher{}
+	teacher.Name = "顾超"
+	teacher.Age = 23
+	teacher.Phone = 18752945619
+	byteJson, err := json.Marshal(teacher)
+	if err != nil {
+		fmt.Printf("json转换错误：%v\n", err)
+	}
+	fmt.Printf("strJson:%v\n", string(byteJson)) //{"Name":"顾超","Age":23,"Phone":18752945619}
+}
+```
+
+
+
+## 内置函数
 
 #### 长度
 
@@ -1251,6 +1455,7 @@ func main(){
 }
 
 //%v 默认格式打印
+//%#v 打印数据详细格式
 //%T 输入数据类型
 //%d 十进制输出
 //%o 八进制输出
@@ -1294,7 +1499,7 @@ func main() {
 3. string与其他类型转换可以通过 Sprintf，或者 strconv 包，进行转换
 
 4. 值类型：改变变量副本值的时候，不会改变变量本身的值
-   (基本数据类型、数组)
+   (基本数据类型、数组、结构体)
    引用类型：改变变量副本值的时候，会改变变量本身的值
    (切片、map)
 
@@ -1329,7 +1534,7 @@ func main() {
 
 9. 作用域：Go语言中的变量（属性）首字母区分大小写，大写字面代表公有，小写字母代表私有
 
-## 练手demo
+# 练手demo
 
 ### 询问demo
 
