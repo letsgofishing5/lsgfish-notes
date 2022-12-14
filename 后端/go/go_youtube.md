@@ -1402,6 +1402,261 @@ func main() {
 }
 ```
 
+## package分包
+
+Golang中的包可以分为三种：
+
+1. 系统内置包
+   1. 系统内置包：Golang语言给我们提供的内置包，引入后可以直接使用，
+   2. 如fmt、strconv、strings、sort、errors、time、encoding/json、os、io等。
+2. 自定义包
+   1. 自定义包：开发者自己写的包
+3. 第三方包
+   1. 第三方包：属于自定义包的一种，需要下载安装到本地后才可以使用，
+   1. 如前面给大家介绍的"github.com/shopspring/decimal"包解决float精度丢失问题
+
+### 初始化项目
+
+```bash
+#生成一个 go.mod文件，用来管理项目依赖
+go mod init demo
+```
+
+### 自定义包
+
+同一个文件夹下文件属于同一个包，他们的包名相同，如果需要引入自定义的包的方法，只需要在 go.mod 文件中，找到 module 关键字声明的字段，以它为根路径，拼接上包名即可
+
+```go
+//导入demo包下的Tdemo方法
+package main //包名
+
+import (
+	"hello-golang/demo"
+    _ "hello-golang/demo2"//匿名引入包
+)//导入自定义包
+
+func main() {
+	demo.Tdemo()//自定义包方法
+}
+```
+
+**注意：**
+
+1. 一个文件夹下面直接包含的文件只能归属一个package,同样一个package的文件不能在多个文件夹下。
+2. 包名可以不和文件夹的名字一样，包名不能包含   **—**   符号。
+3. 包名为mai的包为应用程序的入口包，这种包编译后会得到一个可执行文件，而编译不包含main包的源代码则不会得到可执行文件。
+
+
+
+### init函数
+
+单个包执行顺序
+
+![image-20221214203320174](./go_youtube.assets/image-20221214203320174.png)
+
+多个包 init 函数执行顺序，先引入后执行，最后引入的先执行
+
+![image-20221214203354135](./go_youtube.assets/image-20221214203354135.png)
+
+
+
+### 第三方包使用
+
+在 [Go Packages](https://pkg.go.dev/) 查找看常见的golang第三方包
+
+#### 安装
+
+1. 第一种方法：go get 包名称（全局）
+
+   ```bash
+   go get github.com/shopspring/decimal
+   ```
+
+2. 第二种方法：go mod download （全局）
+
+   ```go
+   import "未下载的包名"
+   ```
+
+   ```bash
+   # 执行 go mod download，将未下载的已使用的包下载下来
+   go mod download
+   ```
+
+3. 第三种方法：go mod vendor（当前项目）
+
+   ```go
+   import "未下载的包名"
+   ```
+
+   ```bash
+   # 执行 go mod vendor，将未下载的已使用的包下载到本地来
+   go mod vendor
+   ```
+
+4. 第四种方法：在网络畅通的情况下，引入包可以直接使用，他会自动下载包
+
+### go mod命令
+
+```bash
+# 下载依赖的module到本地cache
+go mod download
+
+# 编辑go.mod文件
+go mod edit
+
+# 打印模块依赖图
+go mod graph
+
+# 再当前文件夹下初始化一个新的 module,创建go.mod文件
+go mod init
+
+# 增加丢失的module,去掉未用的 module
+go mod tidy
+
+# 将依赖复制到vendor下
+go mod vendor
+
+# 校验依赖检查下载的第三方库有没有本地修改，如果有修改则返回非 0，否则校验成功
+go mod verify
+```
+
+
+
+## 接口
+
+在Golang中接口是一种类型，**一种抽象的类型**。接口是一组函数 method 的集合，Golang中的接口不能包含任何变量。
+
+Golang中的接口也是一种数据类型，不需要显示实现。只需要一个变量含有接口类型中的所有方法，那么这个变量就实现了这个接口。
+
+![image-20221214210818826](./go_youtube.assets/image-20221214210818826.png)
+
+```go
+package main
+
+import "fmt"
+
+type Usb interface {
+	charge()
+}
+type Phone struct {
+	Name string
+}
+
+func (p Phone) charge() {
+	fmt.Println(p.Name, "充电")
+}
+func main() {
+	xm := Phone{
+		Name: "小米12",
+	}
+	var useb Usb = xm
+	useb.charge()
+}
+```
+
+### 空接口
+
+空接口就是任意类型
+
+```go
+import "fmt"
+
+type A interface{} //空类型，表示任意类型，就像js中的变量类型一样
+
+func main() {
+	var anyObj A
+	anyObj = "我是字符串"
+	fmt.Printf("anyObj值：%v,类型：%T\n", anyObj, anyObj)
+	anyObj = true
+	fmt.Printf("anyObj值：%v,类型：%T\n", anyObj, anyObj)
+	anyObj = 123
+	fmt.Printf("anyObj值：%v,类型：%T\n", anyObj, anyObj)
+}
+
+```
+
+#### 用例
+
+```go 
+type Person struct {
+	Name string
+}
+
+func (p Person) say(anyObj interface{}) {
+	fmt.Println(p.Name, anyObj)
+}
+func main() {
+		// 1.作为函数参数
+	p := Person{
+		Name: "张三",
+	}
+	p.say("我今年24岁了")
+
+	// 2.作为 map 的类型
+	uMap := map[string]interface{}{
+		"姓名": "张三",
+		"年龄": 24,
+		"身高": 174,
+	}
+	fmt.Printf("uMap:%v\n", uMap)
+
+	// 3. 切片类型
+	uSlice := []interface{}{1, 2, 3, "hello", "world"}
+	fmt.Printf("uSlice:%v\n", uSlice...)
+}
+```
+
+
+
+### 类型断言
+
+语法格式
+
+```go
+x.(T)
+```
+
+X：表示类型为interface}的变量
+T：表示断言×可能是的类型。
+
+该语法返回两个参数，第一个参数是×转化为T类型后的变量，第二个值是一个布尔值，若为true则表示断言成功，为false则表示断言失败。
+
+```go
+func main() {
+	var anyObj interface{} = "hello assert"
+	v, ok := anyObj.(string)
+	if ok {
+		fmt.Printf("断言成功：%v,类型：%T", v, v)
+	} else {
+		println("断言失败")
+	}
+}
+```
+
+**注意：类型.(type)**，判断类型，只能结合switch语句使用
+
+```go
+func test(anyObj interface{}) {
+	switch anyObj.(type) { //特殊语法，仅限switch使用
+	case string:
+		fmt.Println("string类型")
+	case int:
+		fmt.Println("int类型")
+	default:
+		fmt.Println("类型错误")
+	}
+}
+```
+
+
+
+### 小结
+
+1. 接口是一种抽象的**数据类型**
+2. 接口是一组方法的集合
+3. 只要实现了接口内部的所有方法，即实现了接口
+
 
 
 ## 内置函数
@@ -1473,21 +1728,6 @@ func main(){
 
 
 
-## package分包
-
-同一个文件夹下文件属于同一个包，他们的包名相同，如果需要引入自定义的包的方法，只需要在 go.mod 文件中，找到 module 关键字声明的字段，以它为根路径，拼接上包名即可
-
-```go
-//导入demo包下的Tdemo方法
-package main
-
-import "hello-golang/demo"
-
-func main() {
-	demo.Tdemo()
-}
-```
-
 
 
 # 总结
@@ -1533,6 +1773,13 @@ func main() {
    3. 第二步：执行RET(return)指令，返回返回值变量（xxx）
 
 9. 作用域：Go语言中的变量（属性）首字母区分大小写，大写字面代表公有，小写字母代表私有
+
+10. 接口
+
+    1. 是一种抽象的数据类型，是一组方法的集合，只要实现了接口中的所有方法，即实现了接口
+    2. 空接口表示任意类型，可以增加编程的类型使用灵活性
+
+11. 
 
 # 练手demo
 
