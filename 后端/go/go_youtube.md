@@ -478,6 +478,12 @@ func main() {
 }
 ```
 
+#### 小结
+
+1. switch中的case语句可以写表达式
+2. switch可以一个case分支判断多个条件，每个条件用逗号进行分割
+3. switch默认不穿透case
+
 ## Array与slice
 
 ### Array
@@ -1649,6 +1655,155 @@ func test(anyObj interface{}) {
 }
 ```
 
+### 空接口与类型断言补充
+
+```go
+type User struct {
+	Name string
+	Age  uint8
+}
+
+func main() {
+	uMap := map[string]interface{}{
+		"hobby": []string{"游泳", "唱歌"},
+		"name":  "张三",
+		"frends": User{
+			Name: "里斯",
+			Age:  13,
+		},
+	}
+	fmt.Printf("uMap：%v\n", uMap)
+	// fmt.Printf("uMap的朋友姓名：%v\n", uMap["frends"].Name) //报错：uMap["frends"].Name undefined (type interface{} has no field or method Name)
+	// fmt.Printf("uMap的兴趣爱好：%v\n", uMap["hobby"][1]) //报错：cannot index uMap["hobby"] (map index expression of type interface{})
+	// 正确取值方法：配置断言使用
+	frends, ok := uMap["frends"].(User)
+	if ok {
+		fmt.Printf("朋友的姓名：%v\n", frends.Name)
+	}
+	hobby2, ok2 := uMap["hobby"].([]string)
+	if ok2 {
+		fmt.Printf("第二个兴趣爱好：%v\n", hobby2[1])
+	}
+}
+```
+
+
+
+
+
+
+
+### 结构体值接收者与指针接收者实现接口的区别
+
+#### 值接收者
+
+如果结构体中的方法是值接收者，那么实例化后的结构体值类型和结构体指针类型都可以赋值给接口变量
+
+```go
+type Person struct {
+	Name string
+}
+
+func (p Person) stop() { //值接收者
+	fmt.Printf("%v停止了\n", p.Name)
+}
+func (p Person) start() { //值接收者
+	fmt.Printf("%v开始了\n", p.Name)
+}
+
+type Usb interface {
+    start()
+	stop()
+}
+
+func main() {
+	var p1 = Person{
+		Name: "张三",
+	}
+	var p2 = &Person{
+		Name: "里斯",
+	}
+
+	var usb1 Usb = &p1
+	var usb2 Usb = p2
+	usb1.start()
+	usb2.stop()
+}
+```
+
+
+
+#### 指针类型接收者
+
+如果结构体中的方法是指针接收者，那么实例化后的结构体指针类型可以被赋值给接口变量，结构体值类型没法赋值给接口变量
+
+```go
+type Person struct {
+	Name string
+}
+
+func (p *Person) stop() { //指针接收者
+	fmt.Printf("%v停止了\n", p.Name)
+}
+func (p *Person) start() { //指针接收者
+	fmt.Printf("%v开始了\n", p.Name)
+}
+
+type Usb interface {
+	start()
+	stop()
+}
+
+func main() {
+	var p1 = Person{
+		Name: "张三",
+	}
+	var p2 = &Person{
+		Name: "里斯",
+	}
+
+	var usb1 Usb = &p1
+	var usb2 Usb = p2
+	usb1.start()
+	usb2.start()
+}
+```
+
+### 接口嵌套
+
+```go
+type Ainterface interface {
+	stop()
+}
+type Binterface interface {
+	start()
+}
+type NestInterface interface {
+	Ainterface
+	Binterface
+}
+type Person struct {
+	Name string
+}
+
+func (p Person) stop() {
+	fmt.Printf("%v停止了\n", p.Name)
+}
+func (p Person) start() {
+	fmt.Printf("%v开始了\n", p.Name)
+}
+
+func main() {
+	var p1 = Person{
+		Name: "张三",
+	}
+
+	var nest NestInterface = p1
+	nest.start()
+}
+
+```
+
 
 
 ### 小结
@@ -1656,8 +1811,575 @@ func test(anyObj interface{}) {
 1. 接口是一种抽象的**数据类型**
 2. 接口是一组方法的集合
 3. 只要实现了接口内部的所有方法，即实现了接口
+4. 空接口与类型断言结合使用，解决空接口无类型访问问题
+5. **指针类型接收者**只接收指针类型数据，**值类型接收者**即接收值类型，也接受指针类型
+
+## 协程goroutine
+
+**并发：**多个线程同时竞争一个位置，竞争到的才可以执行，每一个时间段只有一个线程在执
+行。
+**并行：**多个线程可以同时执行，每一个时间段，可以有多个线程同时执行。
 
 
+
+**协程：**可以理解为用户级线程，这是对内核透明的，也就是系统并不知道有协程的存在，是
+完全由用户自己的程序进行调度的。Golang的一大特色就是从语言层面原生支持协程，在
+函数或者方法前面加go关键字就可创建一个协程。可以说Golang中的协程就是goroutine
+
+![image-20221217140039589](./go_youtube.assets/image-20221217140039589.png)
+
+### 线程等待
+
+```go
+var wg sync.WaitGroup
+
+func test() {
+	for i := 0; i < 10; i++ {
+		fmt.Printf("test()--%v\n", i)
+		time.Sleep(time.Millisecond * 50)
+	}
+	wg.Done()
+}
+func main() {
+	wg.Add(1)
+	go test()
+	for i := 0; i < 10; i++ {
+		fmt.Printf("main--%v\n", i)
+		time.Sleep(time.Millisecond * 20)
+	}
+	wg.Wait()
+}
+```
+
+### 设置计算机CPU使用个数
+
+```go
+// 获取电脑cpu数量
+cpuNums := runtime.NumCPU()
+// 设置使用CPU个数
+runtime.GOMAXPROCS(cpuNums)
+```
+
+
+
+## 管道channel
+
+管道是Go语言在语言级别上提供的goroutine间的通讯方式，我们可以使用channel在多个goroutine之间传递消息。如果说goroutine是Go程序并发的执行体，
+
+channel就是它们之间的连接。channel是可以让一个goroutine发送特定值到另一个goroutine的通信机制。Go语言的并发模型是CSP(Communicating 
+
+Sequential Processes),提倡通过通信共享内存而不是通过共享内存而实现通信。Go语言中的管道(channel)是一种特殊的类型。管道像一个传送带或者队列，总是
+
+遵循先入先出(First In First Out.)的规则，保证收发数据的顺序。每一个管道都是一个具体类型的导管，也就是声明channel的时候需要为其指定元素类型。
+
+
+
+![image-20221217171115902](./go_youtube.assets/image-20221217171115902.png)
+
+
+
+### 管道操作
+
+```go
+// 创建管道
+ch := make(chan int, 3) //管道类型，容量
+ch <- 10                //管道赋值
+ch <- 20
+ch <- 30
+a := <-ch //管道发送数据
+b := <-ch
+c := <-ch
+fmt.Printf("a:%v\n", a)
+fmt.Printf("b:%v\n", b)
+fmt.Printf("c:%v\n", c)
+```
+
+### 管道阻塞
+
+```go
+ch := make(chan int, 1)
+ch <- 1
+ch <- 2 //管道阻塞
+```
+
+#### 死锁
+
+在没有使用协程的情况下 
+
+1. 当管道内已经存满了值后，再往管道里存值就会出现死锁
+2. 当管理内值都已经取完后，再取值也会出现死锁
+3. 死锁是一种等待的状态
+
+
+
+### 管道循环与关闭
+
+```go
+ch := make(chan int, 10)
+for i := 0; i < 10; i++ {
+    ch <- i
+}
+close(ch)           //使用 for range 遍历通道，当通道被关闭的时候就会退出 for range，如果没有关闭管道就会死锁
+for v := range ch { //这里也没有ok
+    fmt.Printf("管道取值：%v\n", v)
+}
+
+ch := make(chan int, 10)
+for i := 0; i < 10; i++ {
+    ch <- i
+}
+// 使用for循环遍历管道的时候可以不关闭管道
+for i := 0; i < 10; i++ {
+    v := <-ch
+    fmt.Printf("管道取值：%v\n", v)
+}
+```
+
+
+
+### channel结合goroutine
+
+管道是安全的（死锁，等待取值），在协程中，如果管道取不到值会一直等待取值，直到取到值为止
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+func readChan(ch chan int) {
+	for i := 0; i < 10; i++ {
+		v := <-ch
+		fmt.Printf("【读取】管道值：%v\n", v)
+		time.Sleep(time.Millisecond * 500)
+	}
+	wg.Done()
+}
+func writeChan(ch chan int) {
+	for i := 0; i < 10; i++ {
+		ch <- i
+		fmt.Printf("【写入】管道值：%v\n", i)
+		time.Sleep(time.Millisecond * 50)
+	}
+	close(ch)
+	wg.Done()
+}
+
+var wg sync.WaitGroup
+
+func main() {
+	wg.Add(2)
+	ch := make(chan int, 10)
+	go readChan(ch)
+	go writeChan(ch)
+	wg.Wait()
+	fmt.Printf("退出程序。。。")
+}
+
+```
+
+#### 计算质数
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+// 初始化数量
+func initInputChan(inputChan chan int) {
+	for i := 2; i < 120000; i++ {
+		inputChan <- i
+	}
+	close(inputChan)
+	wg.Done()
+}
+
+// 计算质数
+func calcPrintChan(inputChan, printChan chan int, calcChan chan bool) {
+	for v := range inputChan {
+		flag := false
+		for i := 2; i < v; i++ {
+			if v%i == 0 {
+				flag = false
+				break
+			} else {
+				flag = true
+			}
+		}
+		if flag {
+			printChan <- v
+		}
+	}
+	calcChan <- true
+	wg.Done()
+}
+
+// 打印质数
+func printNumsChan(printChan chan int) {
+	for i := 2; i < 120000; i++ {
+		<-printChan
+	}
+	wg.Done()
+}
+
+// 等待关闭通道
+func waitClose(calcChan chan bool, printChan chan int) {
+	for i := 0; i < 16; i++ {
+		<-calcChan
+	}
+	close(printChan)
+	wg.Done()
+}
+
+var wg sync.WaitGroup
+
+// 计算质数
+func main() {
+	printChan := make(chan int, 100)
+	inputChan := make(chan int, 100)
+	calcChan := make(chan bool, 1)
+	start := startTime()
+	wg.Add(1)
+	go initInputChan(inputChan)
+	for i := 0; i < 16; i++ {
+		wg.Add(1)
+		go calcPrintChan(inputChan, printChan, calcChan)
+	}
+	wg.Add(1)
+	go printNumsChan(printChan)
+	wg.Add(1)
+	go waitClose(calcChan, printChan)
+	wg.Wait()
+	endTime(start)
+	fmt.Println("计算完成，退出。。。")
+}
+func startTime() int64 {
+	return time.Now().UnixMilli()
+}
+func endTime(startTime int64) {
+	fmt.Println("程序运行时间：", time.Now().UnixMilli()-startTime, "毫秒")
+}
+```
+
+### 单向管道
+
+多数用于定义参数类型
+
+有的时候我们会将管道作为参数在多个任务函数间传递，很多时候我们在不同的任务函数中使用管道都会对其进行限制，比如限制管道在函数中只能发送或只能接收。
+
+在默认情况下下，管道是双向的
+
+```go
+func main(){
+    //声明只读管道
+    var ch <- chan int//将箭头放置在变量与chan关键字之间为只读
+    //或者以下
+    ch := make(<- chan int,10)
+    
+    
+    //声明只写管道
+    var ch chan <- int//将箭头放置在chan关键字与类型之间为只写
+    //或者以下
+    ch := make(chan <- int,10)
+    
+}
+//只读取管道
+func readChan(ch <- chan int){
+    ...
+}
+//只写入管道
+func writeChan(ch chan <- int){
+    ...
+}
+```
+
+
+
+### 管道复用select
+
+select的使用类似于switch语句，它有一系列case分支和一个默认的分支。每个case会对应一个管道的通信（接收或发送）过程。select会一直等待，直到某个case的通信操作完成时，就会执行case分支对应的语句。具体格式如下：
+
+```go
+func main() {
+	intChan := make(chan int, 10)
+	stringChan := make(chan string, 10)
+	for i := 0; i < 10; i++ {
+		intChan <- i
+		stringChan <- "hello" + strconv.FormatInt(int64(i), 10)
+	}
+    //select要结合for循环使用
+	for {
+		select {
+		case i := <-intChan:
+			fmt.Println(i)
+		case v := <-stringChan:
+			fmt.Println(v)
+		default:
+			return
+		}
+	}
+}
+```
+
+
+
+### 互斥锁
+
+读写都上锁，调用 sync.Mutex 包
+
+```go
+var wg sync.WaitGroup
+var metx sync.Mutex
+var count = 0
+
+func test() {
+	metx.Lock()
+	count++
+	fmt.Println("count:", count)
+	wg.Done()
+	metx.Unlock()
+}
+
+func main() {
+	for i := 0; i < 20; i++ {
+		wg.Add(1)
+		go test()
+	}
+	wg.Wait()
+}
+
+```
+
+
+
+### 读写互斥锁
+
+读写锁可以让多个读操作并发，同时读取，但是对于写操作是完全互斥的。也就是说，当一
+个goroutine进行写操作的时候，其他goroutine既不能进行读操作，也不能进行写操作。
+
+```go
+var wg sync.WaitGroup
+var rwMutex sync.RWMutex
+
+func read() {
+	// 读互斥锁
+	rwMutex.RLock()
+	fmt.Println("执行了读操作")
+	time.Sleep(time.Second * 2)
+	rwMutex.RUnlock()
+	wg.Done()
+}
+func write() {
+	// 写互斥锁
+	rwMutex.Lock()
+	fmt.Println("---执行了写操作")
+	time.Sleep(time.Second * 2)
+	rwMutex.Unlock()
+	wg.Done()
+}
+func main() {
+	for i := 0; i < 20; i++ {
+		wg.Add(1)
+		go write()
+		wg.Add(1)
+		go read()
+	}
+	wg.Wait()
+}
+```
+
+
+
+### 小结
+
+1. 管道是一种引用类型
+2. 管道在接收数据时，如果没有数据可以接收将会发生阻塞。
+3. 使用**for range**遍历管道时，记得遍历前关闭管道
+4. 单项管道多数使用于函数参数定义
+5. 多路复用select
+   1. 同时从多个管道获取数据时，可以使用**select**搭配**for**循环
+   2. select每次会随机从一个case中获取数据并执行对应代码
+   3. 复用select时，不能关闭管道
+
+
+## 反射
+
+Go语言中的变量分为两部分
+
+1. 类型信息：预先定义好的元信息。
+2. 值信息：程序运行过程中可动态变化的。
+
+在G0语言的反射机制中，任何接口值都由是一个 **具体类型** 和 **具体类型的值** 两部分组成的。在Go语言中反射的相关功能由内置的reflect包提供，任意接口值在反
+
+射中都可以理解为由 **reflect.Type** 和 **reflect.Value** 两部分组成，并且reflect包提供了 **reflect..TypeOf** 种 **reflect..ValueOf** 两个重要函数来获取任意对象的Value和Type。
+
+### reflect.TypeOf 获取任意值的类型对象
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+func getType(x interface{}) {
+	v := reflect.TypeOf(x)
+	fmt.Printf("%v的类型：%v\n", x, v)
+	fmt.Println("--------")
+}
+func main() {
+	a := 1
+	b := 3.14
+	c := true
+	d := "hello"
+	getType(a)
+	getType(b)
+	getType(c)
+	getType(d)
+	getType(&d)
+}
+```
+
+#### Type 和 Kind
+
+在反射中关于类型还划分为两种：类型(Type)和种类(Kind)。因为在Go语言中我们可以使用type关键字构造很多自定义类型，而种类(Kind)就是指**底层的类型**，但
+
+在反射中，当需要区分指针、结构体等大品种的类型时，就会用到种类(Kind)。举个例子，我们定义了两个指针类型和两个结构体类型，通过反射查看它们的类型
+
+和种类。
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+type Person struct {
+	Name string
+	Age  uint8
+}
+type myInt int8
+
+func getType(x interface{}) {
+	v := reflect.TypeOf(x)
+	fmt.Printf("%v的类型：%v\n", x, v)
+	fmt.Printf("%v的底层类型（种类）:%v\n", v, v.Kind())
+	fmt.Printf("%v的类型名称：%v\n", v, v.Name())
+	fmt.Println("--------")
+}
+func main() {
+	e := Person{
+		"张三",
+		19,
+	}
+	var f myInt = 10
+	getType(e)//底层类型：struct
+	getType(f)//底层类型：int8
+}
+```
+
+### reflect.ValueOf获取值
+
+reflect.ValueOf() 方法获取的值类型是 reflect.Value，可以通过 **.类型()** 来获取原始值
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+type Person struct {
+	Name string
+	Age  uint8
+}
+type myInt int8
+
+func getValue(x interface{}) {
+	v := reflect.ValueOf(x)
+	switch v.Kind() {
+	case reflect.Int:
+		num := v.Int() + 10
+		fmt.Printf("int类型，值：%v，与10相加后等于：%v\n", v, num)
+	case reflect.Float32:
+		f := 3.3 + v.Float()
+		fmt.Printf("Float32类型，值：%v，与3.3相加后等于：%v\n", v, f)
+	case reflect.Float64:
+		f := 3.3 + v.Float()
+		fmt.Printf("Float64类型，值：%v，与3.3相加后等于：%v\n", v, f)
+	case reflect.Bool:
+		fmt.Printf("Bool类型，值：%v\n", v)
+	case reflect.String:
+		fmt.Printf("String类型，值：%v\n", v)
+	case reflect.Pointer:
+		fmt.Printf("Pointer类型，值：%v\n", v)
+	default:
+		fmt.Println("没有该类型")
+	}
+
+}
+func main() {
+	a := 1
+	b := 3.14
+	c := true
+	d := "hello"
+	e := Person{
+		"张三",
+		19,
+	}
+	var f myInt = 10
+	getValue(a)
+	getValue(b)
+	getValue(c)
+	getValue(d)
+	getValue(&d)
+	getValue(e)
+	getValue(f)
+}
+```
+
+#### 设置值
+
+基础类型，传入变量地址，反射中使用 **Elem()** 方法获取指针变量的**原始类型与值**
+
+```go
+func setValueByReflect(x interface{}) {
+	v := reflect.ValueOf(x)
+	fmt.Printf("v.Kind：%v，%T\n", v.Kind(), v.Kind())
+	fmt.Printf("v.Elem：%v，%T\n", v.Elem(), v.Elem())
+	if v.Elem().Kind() == reflect.Int {
+		v.Elem().SetInt(128)
+	}
+}
+func main() {
+	a := 1
+	setValueByReflect(&a)
+	fmt.Println("a的值：", a)
+}
+```
+
+### 结构体反射
+
+
+
+### 小结
+
+1. 可以通过reflect包下的 TypeOf、ValueOf 两个方法去获取任意值的**类型与值**
+2. 通过 reflect 包函数获取的变量对象，都包含有 Kind、Name 两个方法，
+   1. Kind：获取任意值的底层类型
+   2. Name：获取任意值的类型名称
+3. 
 
 ## 内置函数
 
