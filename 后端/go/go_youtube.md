@@ -63,7 +63,7 @@ fmt.Printf("size:%v", unsafe.Sizeof(num))
 
 #### 类型转换
 
-go语言中只有强转类型，没有隐式转换，高位向低位转换要注意不能超出低位类型范围
+go语言中只有强转类型，没有隐式转换，高位向低位转换要注意不能超出低位类型范围，推荐低位向高位转换
 
 ```go
 var num1 int16 = 130
@@ -298,8 +298,8 @@ func main(){
     a := 5                         //二进制 101
     b := 2                         //二进制 010
     fmt.Printf("a|b:,%v\n", a|b)   //二进制 000     二进制两位都为1才为1，十进制：0
-    fmt.Printf("a&b:,%v\n", a&b)   //二进制 111		二进制一位为1则为1，十进制：7
-    fmt.Printf("a^b:,%v\n", a^b)   //二进制 111		两位不同则为1，十进制：7
+    fmt.Printf("a&b:,%v\n", a&b)   //二进制 111	 二进制一位为1则为1，十进制：7
+    fmt.Printf("a^b:,%v\n", a^b)   //二进制 111	 两位不同则为1，十进制：7
     fmt.Printf("a<<b:,%v\n", a<<b) // 5 * 2的2次方  101向左进两位，低位补0 10100 十进制：20
     fmt.Printf("a>>b:,%v\n", a>>b) // 5 / 2的2次方  101向右进两位，高位补0 001	 十进制：1
 }
@@ -335,7 +335,7 @@ for i:=0;i<10;i++{
 
 #### break
 
-break默认跳出一层循环，并终止后面的执行语句
+break默认跳出一层循环，并终止**当前循环层的break**后面的执行语句
 
 ```go
 //break：只能终止一层循环，并且不执行break后面的语句
@@ -368,7 +368,7 @@ label_b:
 
 #### continue
 
-语句可以结束当前循环，开始下一次的循环迭代过程，仅限在f0循环内使用
+语句可以结束当前循环，开始下一次的循环迭代过程，仅限在for循环内使用
 
 ```go
 func main() {
@@ -404,7 +404,7 @@ label1:
 
 ### goto
 
-got0语句通过标签进行代码间的无条件跳转。
+goto语句通过标签进行代码间的无条件跳转。
 
 ```go
 func main() {
@@ -883,7 +883,7 @@ func main() {
 }
 ```
 
-在Go语言的函数中return语句在底层并不是原子操作，它分为给**返回值变量**赋值和**RET指令**两步。而defr语句执行的时机就在 返回值变量赋值 操作后，RET（return）指令执行前。具体如下图所示：
+在Go语言的函数中return语句在底层并不是原子操作，它分为给**返回值变量**赋值和**RET指令**两步。而defer语句执行的时机就在 返回值变量赋值 操作后，RET（return）指令执行前。具体如下图所示：
 
 ![image-20221211112633768](./go_youtube.assets/image-20221211112633768.png)
 
@@ -936,9 +936,9 @@ func calc(s string, a, b int) int {
 func main() {
 	x := 1
 	y := 2
-	defer calc("AA", x, calc("A", x, y))
+	defer calc("AA", x, calc("A", x, y))//AA 1 2 3
 	x = 10
-	defer calc("BB", x, calc("B", x, y))
+	defer calc("BB", x, calc("B", x, y))//BB 10 2 12
 	y = 20
 }
 ```
@@ -948,6 +948,11 @@ func main() {
 ![image-20221211132742870](./go_youtube.assets/image-20221211132742870.png)
 
 
+
+#### 小结
+
+1. defer注册函数时，同步执行代码，这时候就需要确定函数参数值
+2. defer注册的函数**执行的时机**在 return 赋值后，ret 返回前
 
 ### panic/recover
 
@@ -970,7 +975,6 @@ func main() {
 ```go
 func main() {
 	uTime := time.Now()
-
 	fmt.Printf("uTime:%v\n", uTime)
 	year := uTime.Year()
 	month := uTime.Month()
@@ -2351,7 +2355,9 @@ func main() {
 
 #### 设置值
 
-基础类型，传入变量地址，反射中使用 **Elem()** 方法获取指针变量的**原始类型与值**
+给基础类型属性设置值（非引用类型），需要传入变量地址，反射中使用 **Elem()** 方法获取指针变量的**原始类型与值**
+
+Elem() 方法仅当传入的是指针类型才能使用，可以通过 v.Kind() == reflect.Ptr 来判断是否是指针类型
 
 ```go
 func setValueByReflect(x interface{}) {
@@ -2371,6 +2377,34 @@ func main() {
 
 ### 结构体反射
 
+任意值通过reflect.TypeOf(0获得反射对象信息后，如果它的类型是结构体，可以通过反射值对象
+
+(reflect..Type)的NumField0和Field0方法获得结构体成员的详细信息。
+
+
+
+#### StructField
+
+![image-20221221160504352](./go_youtube.assets/image-20221221160504352.png)
+
+#### 常用方法
+
+##### 获取属性
+
+![image-20221221161443383](./go_youtube.assets/image-20221221161443383.png)
+
+![image-20221221161510721](./go_youtube.assets/image-20221221161510721.png)
+
+![image-20221221161705383](./go_youtube.assets/image-20221221161705383.png)
+
+##### 获取方法
+
+![image-20221224190654333](./go_youtube.assets/image-20221224190654333.png)
+
+![image-20221224190711192](./go_youtube.assets/image-20221224190711192.png)
+
+
+
 
 
 ### 小结
@@ -2379,7 +2413,177 @@ func main() {
 2. 通过 reflect 包函数获取的变量对象，都包含有 Kind、Name 两个方法，
    1. Kind：获取任意值的底层类型
    2. Name：获取任意值的类型名称
-3. 
+
+
+
+## 文件操作
+
+### 读取文件
+
+![image-20221224193707747](./go_youtube.assets/image-20221224193707747.png)
+
+![image-20221224193725277](./go_youtube.assets/image-20221224193725277.png)
+
+#### os 读取文件
+
+```go
+func readFile(path string) {
+	file, err := os.Open(path)
+	if err != nil {
+		fmt.Println("文件异常")
+		return
+	}
+	var readSlice []byte
+	fileSlice := make([]byte, 128)
+	for {
+		num, readErr := file.Read(fileSlice)
+		if readErr == io.EOF {
+			fmt.Println("文件读取完毕")
+			break
+		}
+		if readErr != nil {
+			fmt.Println("文件读取异常:", readErr)
+			break
+		}
+		readSlice = append(readSlice, fileSlice[:num]...)
+	}
+	defer file.Close()
+	fmt.Println("读取的文件：")
+	fmt.Println(string(readSlice))
+}
+func main() {
+	path := "E:/workspace/markdown-notes/工作日志/安徽建云/工作日志.md"
+	readFile(path)
+}
+```
+
+#### bufio 读取文件
+
+```go
+
+func readFileBuff(path string) {
+	file, err := os.Open(path)
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			fmt.Println("文件关闭错误：", err)
+		}
+	}()
+	if err != nil {
+		fmt.Println("文件异常")
+		return
+	}
+	var content string
+	reader := bufio.NewReader(file)
+	for {
+		str, readErr := reader.ReadString('\n')
+		if readErr == io.EOF {
+			content += str // 需要在此处再次拼接内容
+			break
+		}
+		if readErr != nil {
+			fmt.Println("文件读取异常：", readErr)
+			break
+		}
+		content += str
+	}
+	fmt.Println("文件内容：")
+	fmt.Println(content)
+}
+func main() {
+	path := "E:/workspace/markdown-notes/工作日志/安徽建云/工作日志.md"
+	readFileBuff(path)
+}
+```
+
+#### ioutil 读取文件
+
+一次读取文件全部内容，自动关闭文件
+
+```go
+func readFile3(path string) {
+	// 一次性读取文件内容并返回
+	bt, err := ioutil.ReadFile(path)
+	if err != nil {
+		fmt.Println("文件读取异常：", err)
+		return
+	}
+	fmt.Println("读取的文件内容：", string(bt))
+}
+func main() {
+	path := "E:/workspace/markdown-notes/工作日志/安徽建云/工作日志.md"
+	readFile3(path)
+}
+```
+
+
+
+### 写入文件
+
+![image-20221225172212856](./go_youtube.assets/image-20221225172212856.png)
+
+![image-20221225172301377](./go_youtube.assets/image-20221225172301377.png)
+
+#### 文件操作模式
+
+| 模式        | 含义     |
+| ----------- | -------- |
+| os.O_WRONLY | 只写     |
+| os.O_CREATE | 创建文件 |
+| os.O_RDONLY | 只读     |
+| os.O_RDWR   | 读写     |
+| os.O_TRUNC  | 清空     |
+| os.O_APPEND | 追加     |
+
+perm:文件权限，一个八进制数。r (读) 4，w (写) 2，x (执行) 1。
+
+```go
+func writeTxt() {
+	// 文件创建，文件仅写入，文件内容清空
+	file, err := os.OpenFile("E:/test.txt", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0666)
+	defer func() {
+		closeErr := file.Close()
+		if closeErr != nil {
+			fmt.Println(closeErr)
+		}
+	}()
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for i := 0; i < 5; i++ {
+		file.WriteString("写入一段话：这是一段废11话\r\n")
+	}
+
+}
+func main() {
+	writeTxt()
+}
+```
+
+
+
+### 文件crud
+
+```go
+//创建文件、目录
+os.Mkdir("./abc.txt",0666)
+//创建多层级目录
+os.MkdirAll("./a/b/c",0666)
+//删除文件、目录
+os.Remove("./abc.txt")
+//删除多级目录
+os.RemoveAll("./a/b/c")
+//文件重命名
+os.Rename("需要重命名的文件","重新的命名")
+```
+
+
+
+### 小结
+
+1. os.Open() 函数打开的文件是**只读状态**
 
 ## 内置函数
 
@@ -2576,3 +2780,4 @@ func createUser(name string, age uint) {
 }
 ```
 
+ 
