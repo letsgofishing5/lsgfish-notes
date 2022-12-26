@@ -44,6 +44,24 @@ func main(){
     var useName string//初始化指定 string 类型
     var valiable = 10;//使用关键字 var 声明变量
     valiable := 123//字面量声明 字面量语法：当前电脑是64位则为64位，电脑为32位，则为32位
+    
+    //一次声明多个变量
+    name,address := "张三","五道口"
+    
+    var (
+    	name string
+        age int
+    )
+    
+    var name,address string
+    
+    
+    //常量 iota
+    const (
+    	a1 = iota//0，第一次出现设置为0，后面每行常量声明都自增1
+        _
+        a3 = iota //2
+    )
 }
 ```
 
