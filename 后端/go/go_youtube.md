@@ -334,7 +334,7 @@ for{
 }
 
 // for范围循环
-for index,value : range slice {
+for index,value :=  range slice {
     fmt.Print(index)
     fmt.Print(value)
 }

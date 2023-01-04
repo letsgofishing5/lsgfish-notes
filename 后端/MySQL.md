@@ -227,6 +227,28 @@ delete from 表名 where 条件
 3. 主键约束：primary key。不能为null，不能重复
 4. 外键约束：foreign key
 
+### 索引
+
+Mysql中常见的索引类型有**普通索引、唯一索引、全文索引、空间索引Spatial**
+
+```bash
+#查看索引
+show index from table_name;
+#格式化输出
+show index from table_name\G;
+#创建索引
+create index index_name on table_name(column_name)
+#删除索引
+drop index index_name on table_name;
+
+#创建索引另外一种方式
+alter table table_name add index index_name(column_name);
+#删除索引
+alter table table_name drop index index_name;
+```
+
+
+
 ### 事务
 
 #### 什么是事务
@@ -254,6 +276,49 @@ delete from 表名 where 条件
 4. 第四级别：序列化读/串行化读
    1. 解决了 所有问题
    2. 效率低，需要事务排队
+
+#### mysql中使用事务
+
+```bash
+#开启事务
+begin;
+#执行数据更新操作
+update users set balance = balance - 100 where name = '张三'
+
+#如果在更新数据过程中出现错误，可以通过rollback;进行手动回滚
+#rollback
+update users set balance = balance + 100 where name = '里斯'
+#提交事务，同步数据到数据库中
+commit;
+```
+
+
+
+### 锁
+
+Mysql中的锁有**表级锁和行级锁**，这里主要给大家讲讲最常用的表级锁
+
+#### 添加读锁
+
+可以并发读，但是不能并发写，读锁期间，没释放锁之前不能进行写操作。
+
+```bash
+lock table user read;
+
+unlock tables;
+```
+
+#### 添加写锁
+
+只有锁表的用户可以进行读写操作，其他用户不行
+
+```bash
+lock table user write;
+
+unlock tables;
+```
+
+
 
 ### 数据库设计三范式
 
