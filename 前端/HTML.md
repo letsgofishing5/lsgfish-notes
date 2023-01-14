@@ -362,13 +362,13 @@ background-color: rgba(0,0,0,0.5);
 
       5. 行内样式style=""
 
-      6. limportant重要的
+      6. !important
 
          ```css
          color:red!important;
          ```
 
-   2. 总结：定位越是清晰明确，权重越高，！important不可阻挡
+   2. 总结：定位越是清晰明确，权重越高，!important不可阻挡
 
 ### 页面布局
 
@@ -515,7 +515,7 @@ clear: left;
 clear: right;
 clear: both;
 /*实际工作中基本上都只用：clear:both 
-	清除浮动的策略时：闭合浮动
+	清除浮动的策略：闭合浮动
 */
 ```
 

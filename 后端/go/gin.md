@@ -149,6 +149,8 @@ r.POST("/post", func(ctx *gin.Context) {
 
 ### 解析xml数据
 
+也可以接收 json 数据
+
 ```go
 r.POST("/xml", func(ctx *gin.Context) {
     b, _ := ctx.GetRawData()
@@ -173,6 +175,14 @@ r.GET("/user/:id",func(ctx *gin.Context){
     ctx.String(200,"id",id)
 })
 ```
+
+### 获取token 
+
+```go
+c.Request.Header.Get("token")
+```
+
+
 
 ## 路由分组
 
@@ -528,92 +538,47 @@ db.Exec("delete from user where id = ?",5)
 db.Exec("update user set name = ? where id = ?","张三",3)
 ```
 
+### 模糊查
+
+```
+Where(fmt.Sprintf(" dns like '%%%s' ", name))
+或者
+Where(fmt.Sprintf(" dns like %q ", ("%" + name)))
+
+```
+
+
+
 ### 关联查询
 
-#### 默认关联外键
+https://blog.csdn.net/Douz_lungfish/article/details/121614898
+
+#### belongs to
+
+外键在主表中
+
+#### has one
+
+外键在子表中
+
+#### many2many
+
+学生与教师，多对多的关系，建立如下模型，gorm会根据引用关系自动创建中间表：student_teachers
 
 ```go
-//article
-type Article struct {
-	Id            int
-	Title         string
-	ArticleCateId string //默认的关联外键，命名要和关联表保持一致
-	State         int
-    ArticleCate   ArticleCate //关联表，Preload时传入该字段名称：Preload("ArticleCate")
-}
-//article_cate
-type ArticleCate struct {
-	Id    int
-	Title string
-	State int
-}
-```
-
-#### 重写外键
-
-```go
-//article
-type Article struct {
-	Id            int
-	Title         string
-	CateId string //重写的关联外键
-	State         int
-    ArticleCate   ArticleCate `gorm:"foreignKey:CateId"`
-}
-//article_cate
-type ArticleCate struct {
-	Id    int
-	Title string
-	State int
-}
-```
-
-##### 一对多
-
-一个文章分类对应多篇文章
-
-```go
-//article 多
-type Article struct {
-	Id     int
-	Title  string
-	CateId string
-	State  int
-	// ArticleCate ArticleCate `gorm:"foreignKey:CateId"`
-}
-//article_cate 一
-type ArticleCate struct {
-	Id      int
-	Title   string
-	State   int
-	Article []Article `gorm:"foreignKey:CateId"`
-}
-```
-
-#### 多对多
-
-```go
-//student
 type Student struct {
-	Id       int
-	Number   string
-	Password string
-	ClassId  int
+	Id       int `gorm:"autoIncrement:true"`
 	Name     string
-	Lesson   []Lesson `gorm:"many2many:lesson_student;"`//对中间表进行关系描述
+	Teachers []Teacher `gorm:"many2many:student_teachers"`//自定义需要关联的中间表表名，需要与关联表定义一致
 }
-//lesson
-type Lesson struct {
-	Id      int       `json:"id"`
-	Name    string    `json:"name"`
-	Student []Student `gorm:"many2many:lesson_student;"`//对中间表进行关系描述
-}
-//LessonStudent
-type LessonStudent struct {
-	LessonId  int `json:"lesson_id"`
-	StudentId int `json:"student_id"`
+type Teacher struct {
+	Id       int `gorm:"autoIncrement:true"`
+	Name     string
+	Students []Student `gorm:"many2many:student_teachers"`//自定义需要关联的中间表表名，需要与关联表定义一致
 }
 ```
+
+
 
 ### 事务
 
