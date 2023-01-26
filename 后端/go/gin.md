@@ -561,6 +561,10 @@ https://blog.csdn.net/Douz_lungfish/article/details/121614898
 
 外键在子表中
 
+#### has many
+
+
+
 #### many2many
 
 学生与教师，多对多的关系，建立如下模型，gorm会根据引用关系自动创建中间表：student_teachers
