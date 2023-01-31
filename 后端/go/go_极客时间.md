@@ -228,3 +228,50 @@ if v,ok := m["Name"];!ok{
 
 ## 字符串
 
+![image-20230130135152589](./go_极客时间.assets/image-20230130135152589.png)
+
+
+
+## 函数
+
+![image-20230130141400090](./go_极客时间.assets/image-20230130141400090.png)
+
+
+
+## 接口
+
+![image-20230130145139200](./go_极客时间.assets/image-20230130145139200.png)
+
+### 多态
+
+```go
+type Programmer interface {
+	Eat()
+}
+
+func Eat(p Programmer) {
+	p.Eat()
+}
+
+type Dog struct{}
+type Cat struct{}
+
+func (d Dog) Eat() {
+	fmt.Println("小狗吃")
+}
+func (c Cat) Eat() {
+	fmt.Println("小猫吃")
+}
+
+func TestImp(t *testing.T) {
+	d := new(Dog)
+	c := new(Cat)
+	Eat(d)
+	Eat(c)
+}
+```
+
+## 学习进度18讲
+
+
+

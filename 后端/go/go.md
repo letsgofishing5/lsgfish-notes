@@ -615,6 +615,39 @@ type sayer interface {
 }
 ```
 
+### 多态
+
+```go
+type Programmer interface {
+	Eat()
+}
+
+func Eat(p Programmer) {
+	p.Eat()
+}
+
+type Dog struct{}
+type Cat struct{}
+
+func (d Dog) Eat() {
+	fmt.Println("小狗吃")
+}
+func (c Cat) Eat() {
+	fmt.Println("小猫吃")
+}
+
+func TestImp(t *testing.T) {
+	d := new(Dog)
+	c := new(Cat)
+	Eat(d)
+	Eat(c)
+}
+```
+
+
+
+
+
 ## 错误机制
 
 1. defer要声明在panic之前
