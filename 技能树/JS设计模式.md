@@ -548,35 +548,32 @@ js中，函数是对象，而对象都是通过函数创建来的。
 - 桥方可以通过实现桥接口进行单方面扩展，而另一方可以继承抽象类而单方面扩展，而之间的调用就从桥接口来作为突破口，不会受到双方扩展的任何影响
 
 ```js
-class A {
-    constructor(bridge) {
-        this.position = bridge.to()
+// 汽车
+class Automobile {
+    constructor(engine) {
+        this.engine = engine
     }
-    from() {
-        return new Error("子类必须实现该方法")
-    }
-    to() {
-        console.log(`从${this.from()}到${this.position}`);
+    loadEnginInfo() {
+        console.log(this.engine.name, '发动机');
     }
 }
-class A1 extends A{
-    from() {
-        return "A1"
+// 发动机
+class V6 {
+    constructor() {
+        this.name = "V6"
     }
 }
-class B{
-    to() {
-        return new Error("子类必须实现该方法")
+class V8 {
+    constructor() {
+        this.name = "V8"
     }
 }
-class B1 extends B{
-    to() {
-        return "B1"
-    }
-}
-const b1 = new B1()
-const a1 = new A1(b1)
-a1.to()
+const v6 = new V6()
+const v8 = new V8()
+const bc = new Automobile(v6)
+const bm = new Automobile(v8)
+bc.loadEnginInfo()
+bm.loadEnginInfo()
 ```
 
 ### 应用场景
@@ -589,3 +586,119 @@ a1.to()
 又称整体-部分模式
 将对象组合成树形结构以表示部分-整体的层次结构
 客户可以使用统一的方式对待组合对象和叶子对象
+
+### 应用场景
+
+创建侧边菜单
+
+```js
+const options = [
+    {
+        name: "系统管理",
+        children: [
+            {
+                name: "用户管理",
+            },
+            {
+                name: "用户管理",
+                children: [
+                    {
+                        name: "角色管理"
+                    },
+                    {
+                        name: "权限管理"
+                    }
+                ]
+            }
+        ]
+    }
+]
+function createItemDOM(name) {
+    const li = document.createElement("li")
+    li.innerHTML = name
+    return li
+}
+function createMenuDOM(name) {
+    const ul = document.createElement("ul")
+    ul.innerHTML = name
+    return ul
+}
+function createMenuItem(options) {
+    const fragement = new DocumentFragment()
+    options?.forEach(item => {
+        if (item?.children?.length) {
+            const ul = createMenuDOM(item.name)
+            const dom = createMenuItem(item.children)
+            ul.append(dom)
+            fragement.append(ul)
+
+        } else {
+            const li = createItemDOM(item.name)
+            fragement.append(li)
+
+        }
+    })
+    return fragement
+}
+function init() {
+    const dom = createMenuItem(options)
+    document.body.append(dom)
+}
+init()
+```
+
+## 发布订阅模式
+
+简单模拟发布订阅
+
+```js
+// 发布订阅中心
+class PubSub {
+    list = []
+    // 发布
+    publish(name) {
+        this.list.forEach(item => {
+            if (item.name == name) {
+                item.todo()
+            }
+        })
+    }
+    // 订阅
+    subscribe(cb) {
+        console.log('arguments:', arguments);
+        for (let item of arguments) {
+            this.list.push(item)
+        }
+    }
+    // 取消订阅
+    unSubscribe(cb) {
+        const idx = this.list.findIndex(item => item === cb)
+        this.list.splice(idx, 1)
+    }
+}
+// 订阅
+class Subscribe {
+    constructor(name) {
+        this.name = name
+    }
+    todo() {
+        console.log(this.name, '执行了发布功能');
+    }
+}
+const pub = new PubSub()
+
+const sub1 = new Subscribe("石林")
+const sub2 = new Subscribe("万佳惠")
+// 注册订阅信息
+pub.subscribe(sub1, sub2)
+// 发布订阅
+pub.publish("石林")
+
+```
+
+## 职责链模式
+
+
+
+
+
