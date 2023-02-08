@@ -35,3 +35,9 @@ Star.prototype = {
 ### 原型查找机制
 
 ![image-20230129112017790](./2023-Javascript深度学习.assets/image-20230129112017790.png)
+
+## 数据类型
+
+### 对象
+
+对象的key类型只能有三种：string|number|Symbol

@@ -95,3 +95,130 @@
 
 
 
+# 类型
+
+### 类型
+
+#### any与unknow的区别
+
+any表示typescript会**关闭类型检查**，
+
+而unknow则需要在使用之前确定其类型，进行验证
+
+### 关键字
+
+#### typeof
+
+K typeof T ：在typescript中，typeof的作用是克隆 T 的类型，包含了 T 的属性类型
+
+```ts
+const person = {
+    name: "wan",
+    age: 28
+}
+
+type Person = typeof person // {name: string, age: number}, in javascript it will show "object"
+
+const anotherPerson: Person = {
+   name: 'whatever'.
+   age: 31
+}
+```
+
+相关链接：
+
+- [“typeof” Type Queries_51CTO博客_](https://blog.51cto.com/u_15127640/3455896)
+
+
+
+#### keyof
+
+可以获取一个对象接口的所有`key`值
+
+```tsx
+interface Person {
+    name: string
+    age: number
+}
+type p = keyof Person
+```
+
+
+
+#### infer
+
+使用角度来说，要配合 extends 关键字使用
+
+```tsx
+type GetLabelTypeFromObject<T> = T extends ? { label: infer R } ? R : never
+//如果 T 传入的类型结构符合 {label: any}，则返回 any，否则返回 never
+
+type Result = GetLabelTypeFromObject<{ label: string }>;
+// type Result = string
+```
+
+##### 推断类型，与推断值
+
+```tsx
+//推断类型
+type GetLabelTypeFromObject<T> = T extends ? { label: infer R } ? R : never
+//推断值
+type First<T extends any[]> = T extends [infer Item, ...any[]] ? Item : never;
+//如果数组中存在一个元素，则返回第一个元素值，否则返回 never
+```
+
+
+
+##### 协变与逆变
+
+协变或逆变与 `infer` 参数位置有关。
+
+在 TypeScript 中，
+
+- 对象、类、数组和**函数的返回值**类型都是协变关系；
+- 而**函数的参数**类型是逆变关系，所以 `infer` 位置如果在函数参数上，就会遵循逆变原则
+
+```tsx
+//协变 |
+type item3 = ArrayElementType<[number, string]>;// string | number
+
+//逆变 &
+type Bar<T> = T extends { a: (x: infer U) => void; b: (x: infer U) => void }
+  ? U : never
+type T21 = Bar<{ a: (x: string) => void; b: (x: number) => void }>; // string & number
+```
+
+##### 总结
+
+1. 只能配合 extends 进行条件运算使用
+2. 如果在 函数参数中出现则是逆变&，否则协变|
+
+#### extends
+
+- 继承并扩展类型
+- 条件判断
+- 分配条件
+  - 如果extends前面的参数是一个**泛型类型**，当传入该参数的是**联合类型**，则使用分配律计算最终的结果。分配律是指，将联合类型的联合项拆成单项，分别代入条件类型，然后将每个单项代入得到的结果再联合起来，得到最终的判断结果。
+
+```tsx
+//继承并扩展类型
+interface Dog {
+    eat: () => void
+}
+interface Cat {
+    run: () => void
+}
+interface Animal extends Dog, Cat {}
+
+//条件判断
+type A = Animal extends Dog ? string : number
+
+//分配条件
+type P<T> = T extends 'x' ? string : number;
+type A3 = P<'x' | 'y'>  // A3的类型是 string | number
+```
+
+相关链接：
+
+- https://juejin.cn/post/6998736350841143326#heading-4
+
