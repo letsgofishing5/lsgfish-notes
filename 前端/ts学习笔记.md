@@ -113,6 +113,40 @@ Object的key的类型只能有三种：string|number|Symbol
 
 
 
+### 类型断言
+
+类型断言只能够「欺骗」TypeScript 编译器，无法避免运行时的错误
+
+```tsx
+//案例一
+//此时可以使用类型断言，将 animal 断言成 Fish：
+interface Cat {
+    name: string;
+    run(): void;
+}
+interface Fish {
+    name: string;
+    swim(): void;
+}
+
+function isFish(animal: Cat | Fish) {
+    if (typeof (animal as Fish).swim === 'function') {
+        return true;
+    }
+    return false;
+}
+
+//案例二
+type MyOmit<T, K extends keyof T> = {
+    // 这里使用了类型断言，判断当 key 是 K 的子类时返回一个错误，不是 K 的子集时返回 key
+    [key in keyof T as key extends K ? never : key]: T[key]
+}
+```
+
+
+
+
+
 ### 关键字
 
 #### typeof
