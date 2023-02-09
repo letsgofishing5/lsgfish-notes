@@ -105,11 +105,19 @@ any表示typescript会**关闭类型检查**，
 
 而unknow则需要在使用之前确定其类型，进行验证
 
+
+
+#### Object的key类型
+
+Object的key的类型只能有三种：string|number|Symbol
+
+
+
 ### 关键字
 
 #### typeof
 
-K typeof T ：在typescript中，typeof的作用是克隆 T 的类型，包含了 T 的属性类型
+K typeof T ：在typescript中，typeof的作用是克隆 T 的类型，包含了 T 的属性与属性类型
 
 ```ts
 const person = {
@@ -196,7 +204,9 @@ type T21 = Bar<{ a: (x: string) => void; b: (x: number) => void }>; // string & 
 #### extends
 
 - 继承并扩展类型
-- 条件判断
+- **类型**条件判断
+  - 判断 **左侧类型** 是否是 **右侧类型** 的**子集**
+
 - 分配条件
   - 如果extends前面的参数是一个**泛型类型**，当传入该参数的是**联合类型**，则使用分配律计算最终的结果。分配律是指，将联合类型的联合项拆成单项，分别代入条件类型，然后将每个单项代入得到的结果再联合起来，得到最终的判断结果。
 
@@ -215,7 +225,7 @@ type A = Animal extends Dog ? string : number
 
 //分配条件
 type P<T> = T extends 'x' ? string : number;
-type A3 = P<'x' | 'y'>  // A3的类型是 string | number
+type A3 = P<'x' | 'y'>  // A3的类型是 string | number。执行过程会被解析成：P<'X'>|P<'Y'>
 ```
 
 相关链接：

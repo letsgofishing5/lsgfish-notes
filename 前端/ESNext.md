@@ -117,7 +117,7 @@ function objPro() {
             return {
                 next() {
                     return {
-                        value: 0,
+                        value: undefined,
                         done: true,//为true时，终止迭代
                     }
                 }
@@ -128,6 +128,14 @@ function objPro() {
         console.log('item:', item);
     }
 },
+```
+
+迭代数组
+
+```js
+const arr = [1,2,3,4,5]
+let ite = arr[Symbol.iterator]()
+console.log(ite.next())
 ```
 
 
