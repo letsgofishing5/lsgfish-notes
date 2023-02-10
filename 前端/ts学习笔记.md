@@ -266,3 +266,101 @@ type A3 = P<'x' | 'y'>  // A3的类型是 string | number。执行过程会被�
 
 - https://juejin.cn/post/6998736350841143326#heading-4
 
+
+
+#### Pick
+
+```tsx
+type Obj = {
+    name:string
+    age:number
+}
+Pick<Obj,"age">//{age:number}
+```
+
+左侧是一个完整类型，根据右侧属性进行选择，返回一个新的类型
+
+与 Omit 功能相反
+
+
+
+#### Omit
+
+```tsx
+Omit<T,V>
+```
+
+左侧是一个完整类型，根据右侧属性进行剔除，并返回新的类型
+
+```tsx
+type InfoProps = {
+    name :string
+    age :number
+}
+type Props = Omit<InfoProps,"name">
+//type Props = {
+//	age :number
+//}
+```
+
+与 Pick 功能相反
+
+
+
+#### Exclude
+
+```tsx
+Exclude<T,V>
+```
+
+对 T 类型中的 V 类型进行剔除，
+
+与Omit相比，
+
+1. Omit左右两个参数属于不同类型，左是一个完整的类型，包含key、value
+2. Exclude左右两个参数属于同种类型
+
+```tsx
+type res = Exclude<1 | 2 | 3, 2 | 3 | 4>; //1
+type Obj = {
+  name: string;
+  age: number;
+};
+type Obj2 = {
+  age: number;
+};
+type numProps3 = Exclude<Obj, Obj2>; //never
+```
+
+对象类型，则无法进行类型剔除，会返回一个never
+
+#### Record
+
+```tsx
+Record<K,V>
+```
+
+将 K 中的属性的类型都 转换成 V 类型
+
+```tsx
+interface Props {
+    name: string,
+    age: number
+}
+
+type InfoProps = 'JS' | 'TS'
+
+const Info: Record<InfoProps, Props> = {
+    JS: {
+        name: '小杜杜',
+        age: 7
+    },
+    TS: {
+        name: 'TypeScript',
+        age: 11
+    }
+}
+```
+
+
+
