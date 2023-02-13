@@ -153,3 +153,119 @@ deQ.pop()
 console.log('deQ:', deQ);
 ```
 
+
+
+### 单链表封装
+
+#### 特点
+
+1. 插入、删除效率高，随机访问效率低
+2. 和数组相比，内存空间消耗更大，
+
+```tsx
+class LinkedList {
+  head: CusNode | null;
+  count: number;
+  constructor() {
+    this.head = null;
+    this.count = 0;
+  }
+  push(element: PropertyKey) {
+    const node = new CusNode(element);
+    if (!this.head) {
+      this.head = node;
+    } else {
+      let current = this.head;
+      while (current.next !== null) {
+        current = current.next;
+      }
+      current.next = node;
+    }
+    this.count++;
+  }
+  remove(element: any) {
+    const idx = this.indexOf(element);
+    if (idx != -1) {
+      this.removeAt(idx);
+    }
+  }
+  equals(obj: any, obj2: any) {
+    return obj === obj2;
+  }
+  indexOf(element: any) {
+    let i = 0;
+    let current = this.head;
+    for (; i < this.count; i++) {
+      if (this.equals(current?.element, element)) {
+        break;
+      }
+      current = current?.next || null;
+    }
+    return i === this.count ? -1 : i;
+  }
+  removeAt(index: number) {
+    let current = this.head;
+    let i = 0;
+    if (index >= 0 && index < this.count) {
+      if (index === 0) {
+        this.head = this.head?.next || null;
+      } else {
+        let pre: CusNode | null;
+
+        for (; i < index; i++) {
+          pre = current;
+          current = current?.next || null;
+        }
+        pre!.next = current?.next || null;
+      }
+      this.count--;
+      return i;
+    }
+    return -1;
+  }
+  // 任意位置插入
+  insert(element: PropertyKey, index: number) {
+    let current = this.head;
+    const node = new CusNode(element);
+    if (index === 0) {
+      node.next = current;
+      this.head = node;
+      this.count++;
+      return true;
+    } else if (index > 0 && index <= this.count) {
+      for (let i = 0; i < this.count; i++) {
+        let previous = current;
+
+        if (i === index - 1) {
+          node.next = current?.next || null;
+          previous!.next = node;
+          break;
+        }
+        current = current?.next || null;
+      }
+      this.count++;
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+class CusNode {
+  element: PropertyKey;
+  next: CusNode | null;
+  constructor(element: PropertyKey) {
+    this.element = element;
+    this.next = null;
+  }
+}
+
+const list = new LinkedList();
+list.insert(100, 0);
+list.insert(200, 1);
+list.insert(300, 2);
+list.insert(400, 2);
+list.insert(500, 2);
+
+console.log("list:", list);
+```
+
