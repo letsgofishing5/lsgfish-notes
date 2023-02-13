@@ -96,3 +96,60 @@ function Result(arr, times) {
 Result(arr, 6)
 ```
 
+
+
+### 双端队列
+
+对首，队尾都可以进行插入，删除操作
+
+```js
+class DeQueue {
+    #items = {}
+    #count = 0
+    size = 0
+    push(val) {
+        this.#items[this.#count++] = val
+        this.size++
+    }
+    unshift(val) {
+        for (let i = this.size; i > 0; i--) {
+            this.#items[i] = this.#items[i - 1]
+        }
+        this.#items[0] = val
+        this.size++
+        this.#count++
+    }
+    pop() {
+        if (this.size <= 0) {
+            return
+        }
+        const item = Reflect.get(this.#items, --this.#count)
+        Reflect.deleteProperty(this.#items, this.#count)
+        this.size--
+        return item
+    }
+    shift() {
+        if (this.size <= 0) {
+            return
+        }
+        const item = Reflect.get(this.#items, 0)
+        for (let i = 0; i < this.size; i++) {
+            this.#items[i] = this.#items[i + 1]
+        }
+        Reflect.deleteProperty(this.#items, --this.#count)
+        this.size--
+        return item
+    }
+}
+const deQ = new DeQueue()
+deQ.push("史诗悦")
+deQ.push("邹欣汝")
+deQ.push("萧强")
+deQ.push("谭晶滢")
+deQ.push("邵明远")
+deQ.unshift("朱秀兰")
+deQ.shift()
+deQ.pop()
+console.log('deQ:', deQ);
+```
+

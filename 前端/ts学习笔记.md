@@ -336,6 +336,8 @@ type numProps3 = Exclude<Obj, Obj2>; //never
 
 #### Record
 
+// TODO 待搜索
+
 ```tsx
 Record<K,V>
 ```
