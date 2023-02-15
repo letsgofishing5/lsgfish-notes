@@ -159,113 +159,125 @@ console.log('deQ:', deQ);
 
 #### 特点
 
-1. 插入、删除效率高，随机访问效率低
-2. 和数组相比，内存空间消耗更大，
+1. 有一个表头
+2. 插入、删除效率高，随机访问效率低
+3. 和数组相比，内存空间消耗更大，
 
 ```tsx
+class SigleNode {
+  data: any;
+  next: SigleNode | null;
+  constructor(data: any) {
+    this.data = data;
+    this.next = null;
+  }
+}
 class LinkedList {
-  head: CusNode | null;
+  head: SigleNode | null;
   count: number;
   constructor() {
     this.head = null;
     this.count = 0;
   }
-  push(element: PropertyKey) {
-    const node = new CusNode(element);
+  // 插入操作
+  insert(data: any, index: number) {
+    if (index >= 0 && index <= this.count) {
+      const node = new SigleNode(data);
+      let currentNode = this.head;
+      let previous: SigleNode | null;
+      if (index === 0) {
+        node.next = this.head;
+        this.head = node;
+        this.count++;
+        return true;
+      } else {
+        for (let i = 0; i <= this.count; i++) {
+          if (i === index) {
+            previous!.next = node;
+            node.next = currentNode;
+            this.count++;
+            return true;
+          }
+          previous = currentNode;
+          currentNode = currentNode?.next || null;
+        }
+      }
+    }
+    return false;
+  }
+  // 链表添加
+  push(data: any) {
+    const node = new SigleNode(data);
     if (!this.head) {
       this.head = node;
     } else {
-      let current = this.head;
-      while (current.next !== null) {
-        current = current.next;
+      let currentNode = this.head;
+      while (currentNode.next !== null) {
+        currentNode = currentNode.next;
       }
-      current.next = node;
+      currentNode.next = node;
     }
     this.count++;
   }
-  remove(element: any) {
-    const idx = this.indexOf(element);
-    if (idx != -1) {
-      this.removeAt(idx);
+  remove(data: any) {
+    // 先找到对应下标
+    const idx = this.indexOf(data);
+    if (idx !== -1) {
+      return this.removeAt(idx);
     }
+    return -1;
+    // 根据下标删除
   }
-  equals(obj: any, obj2: any) {
-    return obj === obj2;
-  }
-  indexOf(element: any) {
-    let i = 0;
-    let current = this.head;
-    for (; i < this.count; i++) {
-      if (this.equals(current?.element, element)) {
-        break;
+  indexOf(data: any) {
+    let currentNode = this.head;
+    for (let i = 0; i < this.count; i++) {
+      if (this.equals(currentNode?.data, data)) {
+        return i;
       }
-      current = current?.next || null;
-    }
-    return i === this.count ? -1 : i;
-  }
-  removeAt(index: number) {
-    let current = this.head;
-    let i = 0;
-    if (index >= 0 && index < this.count) {
-      if (index === 0) {
-        this.head = this.head?.next || null;
-      } else {
-        let pre: CusNode | null;
-
-        for (; i < index; i++) {
-          pre = current;
-          current = current?.next || null;
-        }
-        pre!.next = current?.next || null;
-      }
-      this.count--;
-      return i;
+      currentNode = currentNode?.next || null;
     }
     return -1;
   }
-  // 任意位置插入
-  insert(element: PropertyKey, index: number) {
-    let current = this.head;
-    const node = new CusNode(element);
-    if (index === 0) {
-      node.next = current;
-      this.head = node;
-      this.count++;
-      return true;
-    } else if (index > 0 && index <= this.count) {
-      for (let i = 0; i < this.count; i++) {
-        let previous = current;
-
-        if (i === index - 1) {
-          node.next = current?.next || null;
-          previous!.next = node;
-          break;
+  equals(data1: any, data2: any) {
+    return data1 === data2;
+  }
+  // 链表删除:根据下标来删除
+  removeAt(index: number) {
+    if (index >= 0 && this.count > index) {
+      let currentNode = this.head;
+      let previous: SigleNode | null;
+      if (index === 0) {
+        currentNode = currentNode?.next || null;
+        this.head = currentNode;
+        return 0;
+      } else {
+        for (let i = 0; i < this.count; i++) {
+          if (i === index) {
+            previous!.next = currentNode?.next || null;
+            this.count--;
+            return i;
+          }
+          previous = currentNode;
+          currentNode = currentNode?.next || null;
         }
-        current = current?.next || null;
       }
-      this.count++;
-      return true;
-    } else {
-      return false;
     }
+    return -1;
   }
 }
-class CusNode {
-  element: PropertyKey;
-  next: CusNode | null;
-  constructor(element: PropertyKey) {
-    this.element = element;
-    this.next = null;
-  }
-}
-
-const list = new LinkedList();
-list.insert(100, 0);
-list.insert(200, 1);
-list.insert(300, 2);
-list.insert(400, 2);
-list.insert(500, 2);
-
-console.log("list:", list);
+const link = new LinkedList();
+link.push(100);
+link.push(200);
+link.push(300);
+link.push(400);
+console.log("link:", link);
 ```
+
+
+
+
+
+### 双向链表
+
+
 

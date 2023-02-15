@@ -222,6 +222,10 @@ update 表名 set 字段名=值 where 条件;
 delete from 表名 where 条件
 ```
 
+### union
+
+union与union all
+
 ### 约束
 
 1. 非空约束：not null
@@ -384,3 +388,18 @@ unlock tables;
    ```
 
    
+
+#### 分组函数字段拼接
+
+1. group_concat
+
+   ```sql
+   select group_concat(distinct name) as name
+   from users
+   group by name
+   ```
+
+   
+
+
+
