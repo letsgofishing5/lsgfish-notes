@@ -113,6 +113,10 @@ Object的key的类型只能有三种：string|number|Symbol
 
 
 
+#### PromiseLike
+
+
+
 ### 类型断言
 
 类型断言只能够「欺骗」TypeScript 编译器，无法避免运行时的错误
