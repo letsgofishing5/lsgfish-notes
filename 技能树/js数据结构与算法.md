@@ -1050,3 +1050,73 @@ console.log("heap:", heap);
 ## 算法
 
 演示动画网站：https://visualgo.net/zh/sorting
+
+#### 冒泡排序
+
+```tsx
+const arr = [1, 231, 31, 23, 12, 3, 424, 2, 42, 342, 4, 234];
+// 冒泡排序
+function BubblingSort() {
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr.length - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        const temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+      }
+    }
+  }
+}
+```
+
+#### 选择排序
+
+```tsx
+const choiceArr = [21, 32, 34, 24, 24, 23, 42, 5, 235345, 3, 52, 34, 2, 4];
+// 选择排序
+function ChoiceSort() {
+  for (let i = 0; i < choiceArr.length; i++) {
+    let idx = i;
+    for (let j = i + 1; j < choiceArr.length; j++) {
+      if (choiceArr[idx] > choiceArr[j]) {
+        idx = j;
+      }
+    }
+    let temp = choiceArr[idx];
+    choiceArr[idx] = choiceArr[i];
+    choiceArr[i] = temp;
+  }
+}
+```
+
+
+
+#### 插入排序
+
+```tsx
+const insertArr = [
+  23, 123, 1, 313, 1, 3, 13, 4, 2, 423, 5, 3, 72, 43, 23, 6, 24, 78, 53, 25,
+];
+// 插入排序
+function InsertSort() {
+  for (let i = 0; i < insertArr.length - 1; i++) {
+    let j = i + 1;
+    let temp = insertArr[j];
+    while (j > 0 && temp < insertArr[j - 1]) {
+      insertArr[j] = insertArr[j - 1];
+      j--;
+    }
+    insertArr[j] = temp;
+  }
+}
+```
+
+
+
+
+
+#### 归并排序
+
+归并排序是一种分而治之算法。其思想是将原始数组切分成较小的数组，直到每个小数组只有一个位置，接着将小数组归并成较大的数组，直到最后只有一个排序完毕的大数组。
+
+![image-20230223112304059](./js数据结构与算法.assets/image-20230223112304059.png)
