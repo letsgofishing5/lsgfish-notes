@@ -1071,6 +1071,8 @@ function BubblingSort() {
 
 #### 选择排序
 
+选择排序是一种简单直观的排序算法，无论什么数据进去都是 O(n²) 的时间复杂度。所以用到它的时候，数据规模越小越好。唯一的好处可能就是不占用额外的内存空间了吧。
+
 ```tsx
 const choiceArr = [21, 32, 34, 24, 24, 23, 42, 5, 235345, 3, 52, 34, 2, 4];
 // 选择排序
@@ -1091,23 +1093,61 @@ function ChoiceSort() {
 
 
 
-#### 插入排序
+#### 插入排序（待复习）
+
+对于少量元素的排序，它是一个有效的算法。插入排序是一种最简单的排序方法，它的基本思想是将一个记录插入到已经排好序的有序表中，从而一个新的、记录数增 1 的有序表。在其实现过程使用双层循环，外层循环对除了第一个元素之外的所有元素，内层循环对当前元素前面有序表进行待插入位置查找，并进行移动
 
 ```tsx
 const insertArr = [
   23, 123, 1, 313, 1, 3, 13, 4, 2, 423, 5, 3, 72, 43, 23, 6, 24, 78, 53, 25,
 ];
 // 插入排序
-function InsertSort() {
-  for (let i = 0; i < insertArr.length - 1; i++) {
+function InsertSort(arr: Array<number>) {
+  for (let i = 0; i < arr.length - 1; i++) {
     let j = i + 1;
-    let temp = insertArr[j];
-    while (j > 0 && temp < insertArr[j - 1]) {
-      insertArr[j] = insertArr[j - 1];
+    let temp = arr[j];
+    while (j > 0 && temp < arr[j - 1]) {
+      arr[j] = arr[j - 1];
       j--;
     }
-    insertArr[j] = temp;
+    arr[j] = temp;
   }
+}
+```
+
+
+
+#### 归并排序
+
+归并排序是一种**分而治之**算法。其思想是将原始数组切分成较小的数组，直到每个小数组只有一个位置，接着将小数组归并成较大的数组，直到最后只有一个排序完毕的大数组。
+
+![image-20230223112304059](./js数据结构与算法.assets/image-20230223112304059.png)
+
+```tsx
+// 归并排序
+function MergeSort(arr: Array<number>): Array<number> {
+  const { length } = arr;
+  debugger;
+  if (length > 1) {
+    const middle = Math.floor(length / 2);
+    const leftArr = MergeSort(arr.slice(0, middle));
+    const rightArr = MergeSort(arr.slice(middle, length));
+    arr = Merge(leftArr, rightArr);
+  }
+  return arr;
+}
+function Merge(leftArr: Array<number>, rightArr: Array<number>): Array<number> {
+  let i = 0,
+    j = 0;
+  const result = [];
+  // 核心精髓代码：当leftArr.length>1的时候，while循环不停的对比左右两个数组的元素大小，挨个对比。
+  while (i < leftArr.length && j < rightArr.length) {
+    result.push(leftArr[i] < rightArr[j] ? leftArr[i++] : rightArr[j++]);
+  }
+  // 核心精髓代码
+  return result.concat(
+    i < leftArr.length ? leftArr.slice(i) : rightArr.slice(j)
+  );
 }
 ```
 
@@ -1115,8 +1155,295 @@ function InsertSort() {
 
 
 
-#### 归并排序
+#### 快速排序（待复习）
 
-归并排序是一种分而治之算法。其思想是将原始数组切分成较小的数组，直到每个小数组只有一个位置，接着将小数组归并成较大的数组，直到最后只有一个排序完毕的大数组。
+对数组设置一个基数（随便取值），然后将小于这个基数的数组元素归为一类，大于基数的数组元素归为一类；然后对分类后的数组再次同操作递归处理
 
-![image-20230223112304059](./js数据结构与算法.assets/image-20230223112304059.png)
+```tsx
+const quickArr = [2, 1, 4, 5, 3, 4, 7, 6, 8, 47, 86, 56, 9];
+// 快速排序
+function QuickSort(arr: Array<number>): Array<number> {
+  if (arr.length < 2) {
+    return arr;
+  }
+  const base = arr[0];
+  const minArr = arr.slice(1).filter((item) => item <= base);
+  const maxArr = arr.slice(1).filter((item) => item > base);
+  return QuickSort(minArr).concat(base).concat(QuickSort(maxArr));
+}
+```
+
+
+
+#### 计数排序
+
+计数排序使用一个用来存储每个元素在原始数组中出现次数的临时数组。在所有元素都计数完成后，临时数组已排好序并可迭代以构建排序后的结果数组。
+
+```tsx
+let countArr = [2, 1, 5, 6, 45, 4, 7, 57, 5, 8, 97, 8, 4, 54, 858, 5];
+// 计数排序
+function CountSort() {
+  const count = {};
+  const temp = [];
+  countArr.forEach((item) => {
+    let value = Reflect.get(count, item) || 0;
+    Reflect.set(count, item, ++value);
+  });
+  for (let item in count) {
+    while (Reflect.get(count, item) > 0) {
+      let value = Reflect.get(count, item);
+      Reflect.set(count, item, --value);
+      temp.push(+item);
+    }
+  }
+  countArr = temp;
+}
+```
+
+
+
+
+
+#### 桶排序
+
+桶排序（也被称为箱排序）也是分布式排序算法，它将元素分为不同的桶（较小的数组），再使用一个简单的排序算法，例如插入排序（用来排序小数组的不错的算法），来对每个桶进行排序。然后，它将所有的桶合并为结果数组。
+
+```tsx
+const bucketArr = [3, 2, 4, 6, 5, 98, 7, 7, 9, 0, 1];
+// 桶排序
+function BucketSort(arr: Array<number>, bucketSize: number = 3): Array<number> {
+    let min = arr[0];
+    let max = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+        if (min > arr[i]) {
+            min = arr[i];
+        }
+        if (max < arr[i]) {
+            max = arr[i];
+        }
+    }
+    const capacity = Math.floor((max - min) / bucketSize) + 1;
+    const tempArr = [];
+    for (let i = 0; i < capacity; i++) {
+        tempArr[i] = [] as Array<number>;
+    }
+    for (let i = 0; i < arr.length; i++) {
+        const idx = Math.floor((arr[i] - min) / bucketSize);
+        tempArr[idx].push(arr[i]);
+    }
+    arr = [];
+    tempArr.forEach((item) => {
+        if (item) {
+            InsertSort(item);
+            arr = arr.concat(item);
+        }
+    });
+    return arr;
+}
+function InsertSort(arr: Array<number>) {
+    const { length } = arr;
+    if (length < 2) {
+        return arr;
+    }
+    for (let i = 0; i < length - 1; i++) {
+        let j = i + 1;
+        let temp = arr[j];
+        while (temp < arr[j - 1] && j > 0) {
+            arr[j] = arr[j - 1];
+            j--;
+        }
+        arr[j] = temp;
+    }
+}
+```
+
+
+
+
+
+#### 基数排序
+
+基数排序是一种非比较型整数排序算法，其原理是将整数按位数切割成不同的数字，然后按每个位数分别比较。由于整数也可以表达字符串（比如名字或日期）和特定格式的浮点数，所以基数排序也不是只能使用于整数。
+
+```tsx
+const baseArr = [3, 23, 44, 53, 2, 34, 12, 2, 1, 8, 9, 6, 0, 100];
+// 基数排序
+function BaseSort(arr: number[]) {
+    let base = 10;
+    let divider = 1;
+    let max = Math.max(...arr);
+    while (divider <= max) {
+        const buckets = [...Array(10)].map(() => [] as number[]);
+        for (let val of arr) {
+            buckets[Math.floor(val / divider) % base].push(val);
+        }
+        arr = ([] as Array<number>).concat(...buckets);
+        divider *= base;
+    }
+    return arr;
+}
+```
+
+
+
+### 搜索算法
+
+#### 顺序搜索
+
+顺序或线性搜索是最基本的搜索算法。它的机制是，将每一个数据结构中的元素和我们要找的元素做比较。顺序搜索是最低效的一种搜索算法。
+
+```tsx
+const searchArr = [3, 2, 6, 7, 8, 94, 0, 6, 85, 67, 4];
+function SearchAlgorithm(arr: number[], searchItem: number) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === searchItem) {
+      return i;
+    }
+  }
+  return -1;
+}
+console.log("搜索算法:", SearchAlgorithm(searchArr, 4));
+```
+
+
+
+
+
+#### 二分搜索
+
+```tsx
+//二分搜索，数组要先排序
+function BinarySearch(
+  arr: number[],
+  item: number,
+  start?: number,
+  end?: number
+): number {
+  const { length } = arr;
+  start = start || 0;
+  end = end == null ? length - 1 : end;
+  if (item >= arr[start] && item <= arr[end] && start <= end) {
+    const middle = Math.floor((end - start) / 2) + start;
+    if (item === arr[middle]) {
+      return middle;
+    }
+    if (item > arr[middle]) {
+      return BinarySearch(arr, item, middle + 1, end);
+    } else {
+      return BinarySearch(arr, item, start, middle - 1);
+    }
+  }
+  return -1;
+}
+```
+
+
+
+
+
+#### 内插搜索
+
+内插搜索是改良版的二分搜索。二分搜索总是检查 middle 位置上的值，而内插搜索可能会根据要搜索的值检查数组中的不同地方。
+
+适用于数据密集的情况下使用
+
+```tsx
+const interInsertArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+function InterpolationSort(
+  arr: number[],
+  item: number,
+  start?: number,
+  end?: number
+): number {
+  const { length } = arr;
+  start = start || 0;
+  end = end == null ? length - 1 : end;
+  if (item >= arr[start] && item <= arr[end] && start <= end) {
+    // 核心精髓
+    const middle =
+      start +
+      Math.floor(
+        ((item - arr[start]) / (arr[end] - arr[start])) * (end - start)
+      );
+    if (item === arr[middle]) {
+      return middle;
+    }
+    if (item > arr[middle]) {
+      return InterpolationSort(arr, item, middle + 1, end);
+    } else {
+      return InterpolationSort(arr, item, start, middle - 1);
+    }
+  }
+  return -1;
+}
+```
+
+
+
+
+
+#### 随机算法
+
+迭代数组，从最后一位开始并将当前位置和一个随机位置进行交换。这个随机位置比当前位置小。这样，这个算法可以保证随机过的位置不会再被随机一次
+
+```tsx
+// 随机算法
+function RandomAlgorithm(arr: number[]) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const idx = Math.floor(Math.random() * i);
+    swap(arr, idx, i);
+  }
+  return arr;
+}
+function swap(arr: number[], idx1: number, idx2: number) {
+  const temp = arr[idx1];
+  arr[idx1] = arr[idx2];
+  arr[idx2] = temp;
+}
+console.log("随机算法：", RandomAlgorithm([1, 2, 3, 4, 5, 6, 7, 8]));
+```
+
+
+
+### 算法设计
+
+#### 分而治之
+
+分而治之是算法设计中的一种方法。它将一个问题分成多个和原问题相似的小问题，递归解决小问题，再将解决方式合并以解决原来的问题。
+
+
+
+#### 动态规划
+
+动态规划(dynamic programming.,DP)是一种将复杂问题分解成更小的子问题来解决的优化技术。
+
+
+
+
+
+#### 贪心算法
+
+在对问题求解时，总是做出在当前看来是最好的选择。也就是说，不从整体最优上加以考虑，他所做出的仅
+是在某种意义上的局部最优解。贪心算法不是对所有问题都能得到整体最优解，但对范围相当广泛的许多问
+题他能产生整体最优解或者是整体最优解的近似解。
+
+
+
+
+
+#### 回溯算法
+
+回溯法采用试错的思想，它尝试分步的去解决一个问题。在分步解决问题的过程中，当它通过尝试发现现有的分步答案不能得到有效的正确的解答的时候，它将取消上一步甚至是上几步的计算，再通过其它的可能的分步解答再次尝试寻找问题的答案。
+
+
+
+#### 算法复杂度
+
+O表示法用于描述算法的性能和复杂程度。O表示法将算法按照消耗的时间进行分类，依据随输入增大所需要的空间/内存。
+
+![image-20230227114928195](./js数据结构与算法.assets/image-20230227114928195.png)
+
+![image-20230227115712201](./js数据结构与算法.assets/image-20230227115712201.png)
+
+![image-20230227115828121](./js数据结构与算法.assets/image-20230227115828121.png)
