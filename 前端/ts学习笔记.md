@@ -149,6 +149,14 @@ type MyOmit<T, K extends keyof T> = {
 
 
 
+### 数组遍历
+
+```tsx
+type AnyOf<T extends readonly any[]> = T[number]
+```
+
+
+
 
 
 ### 关键字
@@ -340,33 +348,32 @@ type numProps3 = Exclude<Obj, Obj2>; //never
 
 #### Record
 
-// TODO 待搜索
+在 TypeScript 中，`Record` 是一个泛型类型，用于定义一个由键值对组成的对象类型。其定义如下：
 
-```tsx
-Record<K,V>
+```
+Copytype Record<K extends keyof any, T> = {
+  [P in K]: T;
+};
 ```
 
-将 K 中的属性的类型都 转换成 V 类型
+其中，`K extends keyof any` 表示 `K` 是任意类型的键集合，`T` 表示对象的值类型。
 
-```tsx
-interface Props {
-    name: string,
-    age: number
-}
+`Record` 的作用是定义一个由指定键集合和值类型构成的对象类型，例如：
 
-type InfoProps = 'JS' | 'TS'
-
-const Info: Record<InfoProps, Props> = {
-    JS: {
-        name: '小杜杜',
-        age: 7
-    },
-    TS: {
-        name: 'TypeScript',
-        age: 11
-    }
-}
 ```
+Copytype User = {
+  id: number;
+  name: string;
+};
+
+const usersById: Record<number, User> = {
+  1: { id: 1, name: 'Alice' },
+  2: { id: 2, name: 'Bob' },
+  3: { id: 3, name: 'Charlie' },
+};
+```
+
+在上面的例子中，`Record<number, User>` 定义了一个键为数字，值为 `User` 类型的对象类型。`usersById` 变量使用该类型定义，并初始化为一个包含三个用户信息的对象。
 
 
 

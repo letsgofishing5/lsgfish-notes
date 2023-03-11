@@ -1323,7 +1323,7 @@ function BinarySearch(
   start = start || 0;
   end = end == null ? length - 1 : end;
   if (item >= arr[start] && item <= arr[end] && start <= end) {
-    const middle = Math.floor((end - start) / 2) + start;
+    const middle = Math.floor((end + start) / 2);
     if (item === arr[middle]) {
       return middle;
     }
@@ -1404,7 +1404,56 @@ function swap(arr: number[], idx1: number, idx2: number) {
 console.log("随机算法：", RandomAlgorithm([1, 2, 3, 4, 5, 6, 7, 8]));
 ```
 
+#### 滑动窗口
 
+求一个字符串中不重复元素的最长子字符串
+
+滑动窗口思想就是从左侧边界开始向右囊括，判断囊括的子字符串中是否有重复元素，直到有重复元素时，开始移动最左侧边界指针，直到囊括的子字符串中没有重复元素为止，然后继续周而复始操作
+
+```go
+func TestFindFirst(t *testing.T) {
+	s := "accb"
+	res := lengthOfLongestSubstring(s)
+	fmt.Printf("middleNode(s):%#v\n", res)
+}
+func lengthOfLongestSubstring(s string) int {
+	// 哈希集合，记录每个字符是否出现过
+	newMap := map[byte]int{}
+	length := len(s)
+	// 右指针，初始值为 -1，相当于我们在字符串的左边界的左侧，还没有开始移动
+	right, strLen := 0, 0
+	for i := 0; i < length; i++ {
+		if i != 0 {
+			// 一直删除，直到没有重复元素为止
+			delete(newMap, s[i-1])
+		}
+		for right < length && newMap[s[right]] == 0 {
+			// 不断地移动右指针
+			newMap[s[right]]++
+			right++
+		}
+		// 第 i 到 right 个字符是一个极长的无重复字符子串
+		strLen = max(strLen, right-i)
+	}
+	return strLen
+}
+
+func max(x, y int) int {
+	if x < y {
+		return y
+	}
+	return x
+}
+```
+
+
+
+#### 图遍历
+
+- 深度优先遍历（DFS）
+  - 以“深度”为第一关键词，每次都沿路径到不能再前进时才退回到最近的岔路
+- 广度优先遍历（BFS）
+  - 以“广度”为第一关键词，每次以扩散的方式向外访问顶点
 
 ### 算法设计
 
