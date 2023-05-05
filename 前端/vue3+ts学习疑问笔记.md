@@ -673,7 +673,10 @@ wrap.style.lineHeight = document.documentElement.clientHeight / 2 + "px";
 //vue2是如下写法	
 ::v-deep input{}
 //vue3是如下写法
-:deep(input){}
+:deep(input){}//这个貌似已经失效了亲
+::v-deep{
+    
+}
 ```
 
 ## scss
