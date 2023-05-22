@@ -60,5 +60,7 @@ models.DB.Model(&router).Association("Access").Replace(&access)
 
 ## 常用配置
 
+### 关联
 
+#### 一对一
 
