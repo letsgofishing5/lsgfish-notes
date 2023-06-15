@@ -238,3 +238,82 @@ map.set("name","文文轩")
 
 方法基本同 Set
 
+
+
+# File&Blob&FileReader&DataView
+
+FIle的原型是Blob
+
+File与Blob基本上没有什么区别，只是File比Blob多了一些磁盘属性，比如文件名，文件路径
+
+File与Blob都只能看，不能修改，DataView可以修改
+
+
+
+#### File
+
+```js
+const file = new File(["123"], "./file.txt")
+console.log('file:', file);
+var reader = new FileReader();
+reader.onload = function (evt) {
+    console.log("数据读取结果：", evt.target.result);
+};
+reader.readAsText(file);
+```
+
+#### Blob
+
+```js
+const blob = new Blob(['456'])
+console.log('blob:', blob);
+const reader2 = new FileReader()
+reader2.onload = evt => {
+    console.log('blob数据读取结果：', evt.target.result);
+}
+reader2.readAsText(blob)
+```
+
+#### DataView
+
+```js
+async function init() {
+    const file = new File(['123'], "123.txt")
+    const dv = new DataView(await file.arrayBuffer())
+    // 根据下标获取数据
+    console.log('dv:', dv.getUint8(1));
+    // 根据下标设置数据
+    dv.setUint8(1, 101)
+    console.log('dv:', dv.getUint8(1));
+}
+init()
+```
+
+
+
+### showOpenFilePicker
+
+```js
+// 创建用于存放文件句柄的变量。
+async function getFile() {
+    const pickerOpts = {
+        types: [
+            {
+                description: "Images",
+                accept: {
+                    "image/*": [".png", ".gif", ".jpeg", ".jpg"],
+                },
+            },
+        ],
+        excludeAcceptAllOption: true,
+        multiple: false,
+    };
+    // 打开文件选择器，解构返回的数组中的第一个元素
+    const [fileHandle] = await window.showOpenFilePicker(pickerOpts);
+    // 操作 fileHandle 的后续代码
+    const file = await fileHandle.getFile()
+    console.log('file:', file);
+    console.log('file.arrayBuffer():', await file.arrayBuffer());
+}
+```
+
