@@ -1791,16 +1791,12 @@ type Person struct {
 	Name string
 }
 
-func (p *Person) stop() { //指针接收者
-	fmt.Printf("%v停止了\n", p.Name)
-}
-func (p *Person) start() { //指针接收者
-	fmt.Printf("%v开始了\n", p.Name)
+func (p *Person) say() { //指针接收者
+	fmt.Printf("%v说话了\n", p.Name)
 }
 
-type Usb interface {
-	start()
-	stop()
+type Do interface {
+	say()
 }
 
 func main() {
@@ -1810,11 +1806,11 @@ func main() {
 	var p2 = &Person{
 		Name: "里斯",
 	}
-
-	var usb1 Usb = &p1
-	var usb2 Usb = p2
-	usb1.start()
-	usb2.start()
+    testDo(p1)//执行报错：Person does not implement Do (method say has pointer receiver)
+    testDo(p2)//执行正确：里斯说话了
+}
+func testDo(do Do){
+    do.stop()
 }
 ```
 
