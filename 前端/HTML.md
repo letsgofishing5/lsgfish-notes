@@ -824,7 +824,7 @@ input{
 
 ```css
 textarea{
-    resize:none;
+    resize: none;
 }
 ```
 
