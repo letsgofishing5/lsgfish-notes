@@ -20,11 +20,22 @@
    npm start
    ```
 
+3. 在官方网站获取token
 
 
-## API学习
 
-### 通用名称
+## 设置控件
 
-- heading：
-- pitch：
+
+
+## IIS 服务
+
+打开IIS服务，电脑默认不开启
+
+win10开启IIS：
+
+1. 打开控制面板
+2. 打开卸载或更改程序
+3. 启用或关闭windows功能
+4. 找到：internet information services
+
