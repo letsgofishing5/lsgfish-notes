@@ -36,9 +36,30 @@
 
 ### DataSource
 
+### Color
+
+```js
+Cesium.Color.RED//系统自带的一些枚举颜色值
+new Cesium.Color(1.0,1.0,1.0,1.0)// rgba
+Cesium.Color.fromBytes(255,255,255,255)
+Cesium.Color.fromCartesian4(new Cesium.Cartesian4(1.0,1.0,1.0,1.0))
+Cesium.Color.fromCssColorString("#FF0000FF").withAplha(0.5)//withAlpha 是用来设置 透明程度的
+```
+
+### ScreenSpaceEventHandler
 
 
 
+### <Property\>Graphics
+
+
+
+## 常用属性
+
+1. **material：**
+2. **eyeOffset：**
+3. **minimumPixelSize：**用于控制实体（Entity）在地球上显示时的最小像素大小的属性。这个属性用于在实体远离相机时防止其显示得太小而难以看到。这个属性通常用于在用户缩放或移动地球时，确保远离相机的实体仍然是可见的，避免它们变得过小而难以观察。例如，如果你有一个表示飞机的实体，你可能希望设置一个合适的 `minimumPixelSize`，以确保飞机在地球上的显示尺寸不会因为距离相机太远而变得过小。
+4. **orientation：**指定实体（Entity）的方向的属性。具体来说，它表示实体的方向，通常用于指定实体的朝向或旋转。`orientation` 的含义是实体相对于参考坐标系的旋转。
 
 ## API
 
