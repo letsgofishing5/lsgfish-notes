@@ -1,4 +1,10 @@
+## 代办
+
+1. 完善自己的学习文档
+
 ## 开始
+
+### 本地安装Github的仓库
 
 1. 下载Github仓库
 
@@ -20,78 +26,94 @@
    npm start
    ```
 
+   
 
+## 入门核心概念
 
-## API学习
+### Viewer
 
-#### 代码片段
+### Entity
+
+### DataSource
+
+### Color
 
 ```js
+Cesium.Color.RED//系统自带的一些枚举颜色值
+new Cesium.Color(1.0,1.0,1.0,1.0)// rgba
+Cesium.Color.fromBytes(255,255,255,255)
+Cesium.Color.fromCartesian4(new Cesium.Cartesian4(1.0,1.0,1.0,1.0))
+Cesium.Color.fromCssColorString("#FF0000FF").withAplha(0.5)//withAlpha 是用来设置 透明程度的
+```
 
-async function createModel(url, height, heading, pitch, roll) {
-  height = Cesium.defaultValue(height, 0.0);//高度
-  heading = Cesium.defaultValue(heading, 0.0);//摇头，左右摇摆
-  pitch = Cesium.defaultValue(pitch, 0.0);//抬头低头
-  roll = Cesium.defaultValue(roll, 0.0);//绕着自身旋转，初始角度，相对地面，始终朝东
-  const hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
-  //fromDegrees：从经纬度构建坐标
-  const origin = Cesium.Cartesian3.fromDegrees(
-    -123.0744619,//经度，正：东经，负：西经
-    44.0503706,//纬度，正：北纬，负：南纬
-    height
-  );
-  //控制模型放在地球山的位置，旋转姿态，是否缩放
-  //headingPitchRollToFixedFrame：欧拉角，三个角度
-  const modelMatrix = Cesium.Transforms.headingPitchRollToFixedFrame(
-    origin,
-    hpr
-  );
+### ScreenSpaceEventHandler
 
-  scene.primitives.removeAll(); // Remove previous model
-  try {
-    model = scene.primitives.add(
-      await Cesium.Model.fromGltfAsync({
-        url: url,
-        modelMatrix: modelMatrix,
-        minimumPixelSize: 128,//模型在屏幕上最小的像素
-      })
-    );
+### <Property\>Graphics
 
-    model.readyEvent.addEventListener(() => {
-      model.color = Cesium.Color.fromAlpha(
-        getColor(viewModel.color),
-        Number(viewModel.alpha)
-      );
-      model.colorBlendMode = getColorBlendMode(
-        viewModel.colorBlendMode
-      );
-      model.colorBlendAmount = Number(viewModel.colorBlendAmount);
-      // Play and loop all animations at half-speed
-      model.activeAnimations.addAll({
-        multiplier: 0.5,
-        loop: Cesium.ModelAnimationLoop.REPEAT,
-      });
+### Clock
 
-      const camera = viewer.camera;
 
-      // Zoom to model
-      const controller = scene.screenSpaceCameraController;
-      const r =
-        2.0 *
-        Math.max(model.boundingSphere.radius, camera.frustum.near);
-      controller.minimumZoomDistance = r * 0.5;
 
-      const center = model.boundingSphere.center;
-      const heading = Cesium.Math.toRadians(230.0);
-      const pitch = Cesium.Math.toRadians(-20.0);
-      camera.lookAt(
-        center,
-        new Cesium.HeadingPitchRange(heading, pitch, r * 2.0)
-      );
-    });
-  } catch (error) {
-    window.alert(error);
-  }
+## 常用属性
+
+1. **material：**
+2. **eyeOffset：**
+3. **minimumPixelSize：**用于控制实体（Entity）在地球上显示时的最小像素大小的属性。这个属性用于在实体远离相机时防止其显示得太小而难以看到。这个属性通常用于在用户缩放或移动地球时，确保远离相机的实体仍然是可见的，避免它们变得过小而难以观察。例如，如果你有一个表示飞机的实体，你可能希望设置一个合适的 `minimumPixelSize`，以确保飞机在地球上的显示尺寸不会因为距离相机太远而变得过小。
+4. **orientation：**指定实体（Entity）的方向的属性。具体来说，它表示实体的方向，通常用于指定实体的朝向或旋转。`orientation` 的含义是实体相对于参考坐标系的旋转。
+
+## API
+
+#### CallbackProperty
+
+```ts
+/**
+ * 用于动态计算属性值的一种机制。它允许你通过回调函数来实时计算或更新属性的值，以便在场景中实现动态效果。这个回调对象的回调函数是在每一帧渲染时执行的，以确保  属性值的实时更新。
+ * @param callback - 回调函数在场景的渲染循环中的每一帧都会被调用。这个回调函数接受一个时间参数，表示当前的时间。在这个回调函数中，你可以根据时间或其他条件计算新的属性值
+ * @param isConstant - 表示是否在每一帧都强制更新。如果设置为true，即使属性值没有变化，回调函数也会被调用。这在某些情况下可能会导致性能问题，因此要谨慎使用。
+ */
+CallbackProperty.Constructor:(callback:(time: JulianDate, result?: any) => any,isConstant:boolean)
+```
+
+##### 案例
+
+- **基本介绍**
+
+  在这个例子中，computeNewPosition 函数使用 time 计算新的位置值，并将结果存储在传入的 result 参数中。这样，就避免了在每一帧都创建新的 Cartesian3 对象，提高了性能。
+
+  需要注意的是，如果不提供 result 参数，每次回调函数执行时都会创建一个新的对象来存储属性值。这可能会在性能方面产生一些开销，尤其是在频繁执行回调函数的情况下。因此，根据实际需求，你可以选择使用或不使用 result 参数。
+
+- **疑问：如果我不执行这个 result = 的步骤，只将result当成参数传递到Cartesian3.fromDegrees()中，是否可以避免性能开销？**
+
+  如果你不执行 result = 步骤，而是将 result 直接当成参数传递给 Cesium.Cartesian3.fromDegrees，那么每次调用这个函数都会创建一个新的 Cartesian3 对象，并将结果直接返回，而不是将结果存储在你提供的 result 对象中。
+
+  在这种情况下，每次调用都会分配一个新的对象，可能导致一些性能开销，特别是在频繁调用的情况下。这是因为在 JavaScript 中，对象的创建和销毁可能会引入一些额外的开销，尤其是在循环或高性能要求的场景中。
+
+  使用 result = Cesium.Cartesian3.fromDegrees(...) 的形式可以避免在每次调用时都创建新的对象，而是重复使用你提供的 result 对象。这样可以减少垃圾收集和内存管理的开销，对性能可能有一定的积极影响，尤其是在大规模或频繁调用的情况下。
+
+  总的来说，使用 result 对象来存储计算结果可能是一种优化，具体是否会有明显的性能提升，取决于你的具体使用情境和性能需求。
+
+
+
+```js
+//创建 Cesium 地球实例
+var viewer = new Cesium.Viewer('cesiumContainer');
+//添加一个Entity
+var entity = viewer.entities.add({
+    //调用 CallbackProperty，动态计算属性值
+    position: new Cesium.CallbackProperty(function(time, result) {
+        // 在这里计算新的位置值，并将结果存储在result中
+        computeNewPosition(time, result);
+    }, false)
+});
+
+function computeNewPosition(time, result) {
+    // 根据时间等因素计算新的位置
+    // 将结果存储在传入的result参数中
+    result = Cesium.Cartesian3.fromDegrees(-75.0 + Math.sin(time.secondsOfDay),
+                                           40.0 + Math.cos(time.secondsOfDay),
+                                           0.0,
+                                           result);
+>>>>>>> 1e894248594b394f42df5ae41ae355b20e9dd246
 }
 ```
 
