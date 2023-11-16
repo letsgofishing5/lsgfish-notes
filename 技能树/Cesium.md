@@ -48,9 +48,15 @@ Cesium.Color.fromCssColorString("#FF0000FF").withAplha(0.5)//withAlpha 是用来
 
 ### ScreenSpaceEventHandler
 
-### <Property\>Graphics
+### SampledPositionProperty
 
 ### Clock
+
+![image-20231114144102015](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20231114144102015.png)
+
+### JulianDate
+
+### Camera
 
 
 
@@ -113,7 +119,6 @@ function computeNewPosition(time, result) {
                                            40.0 + Math.cos(time.secondsOfDay),
                                            0.0,
                                            result);
->>>>>>> 1e894248594b394f42df5ae41ae355b20e9dd246
 }
 ```
 
