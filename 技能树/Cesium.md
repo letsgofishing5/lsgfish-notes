@@ -12,25 +12,50 @@
    git clone https://github.com/CesiumGS/cesium.git
    ```
 
-2. 编译项目
+   编译github仓库的代码，或者使用官方[在线案例](https://sandcastle.cesium.com/)、[文档](https://cesium.com/learn/cesiumjs/ref-doc/)等信息。
 
-   ```sh
-   # 先初始化 git
-   git init
-   # 安装依赖
-   npm install
-   # 编译源码
-   npm run build
-   
-   # 启动本地服务
-   npm start
-   ```
+   - 编译下载下来的GitHub仓库代码
 
-   
+     ```bash
+     # 先初始化 git
+     git init
+     # 安装依赖
+     npm install
+     # 编译源码
+     npm run build
+     # 启动本地服务
+     npm start
+     ```
 
 ## 入门核心概念
 
 ### Viewer
+
+在Cesium中`Viewer`是一切的开端，通过`new Cesium.Viewer(container, options)`来创建一个`Viewer`对象，可以把该对象理解为三维虚拟地球，在`Viewer`对象上的所有操作，可以看作是对三维虚拟地球的操作。
+
+日常Cesium开发中，几乎都是围绕着这个对象展开的。
+
+#### Viewer属性
+
+- camera：相机属性，主要用于控制视角；
+- widgets（非属性）：`widgets`并非`Viewer`对象的属性，在这里特指所有控件：
+  - `animation`：动画控件；
+  - `baseLayerPicker`：影像图层选择器；
+  - `fullscreenButton`：全屏按钮；
+  - `geocoder`：查找位置；
+  - `homeButton`：返回视角到初始位置；
+  - `navigationHelpButton`：帮助按钮；
+  - `timeline`：时间轴；
+  - `vrButton `：VR按钮。
+- `imageryLayers`：影像图层集合；
+- `terrainProvider`：地形提供者；
+- `entities`：实体集合；
+- `dataSources`：矢量数据集合；
+- `Event`（非属性）：`Event`并非`Viewer`对象的属性，在这里特指所有事件：
+  - `screenSpaceEventHandler`：屏幕操作事件；
+  - `selectedEntityChanged`：选取实体事件；
+  - `trackedEntityChanged`：追踪实体事件。
+- `scene`：场景，`scene`是`Viewer`对象的属性，但它也是Cesium中的一个关键的对象，用于添加图形（`primitive`）、添加场景特效和添加场景事件，`scene`对象将在下一节中介绍。
 
 ### Entity
 
@@ -122,3 +147,85 @@ function computeNewPosition(time, result) {
 }
 ```
 
+
+
+## 坐标转换
+
+1. WGS84经纬度坐标； 系统中没有具体的对象。 
+
+2. WGS84弧度坐标（Cartographic）；
+
+   ```
+    对象创建： new Cesium.Cartographic(lon,lat,alt); 
+    du = radus/pi*180;
+    cos sin tan  
+    lon：经度，lat：维度，alt：海拔 
+   ```
+
+   
+
+3. 笛卡尔空间直角坐标系（Cartesian3）；
+
+   ```
+    对象创建： new Cesium.Cartesian3(x,y,z); 
+    x：x轴坐标，
+    y：y轴坐标，
+    z：z轴坐标
+   ```
+
+   
+
+4. 平面坐标系（Cartesian2）；
+
+   ```
+    对象创建： new Cesium.Cartesian2(x,y); 
+    {x:45645,y:588,z:5855}
+   ```
+
+   - 弧度经纬度转换
+
+     ```
+      弧度转经纬度 var degrees = Cesium.Math.toDegrees(radians); 
+      经纬度转弧度 var radians= Cesium.Math.toRadiancs(degrees); 
+     ```
+
+     
+
+   - WGS84坐标构建 
+
+     ```
+     由弧度创建 var cartogrographic = new Cesium.Cartographic(lonradians,latradians,alt); 
+     静态函数 var cartogrographic =Cesium.Cartogrophic.fromRadians(lonradians,latradians,alt); 
+     var cartogrographic =Cesium.Cartogrophic.fromDegrees(londegree,latdegree,alt); 
+     ```
+
+     
+
+   - WGS84弧度坐标与笛卡尔空间直角坐标系转换 
+
+     ```
+     var cartesian3 = Cesium.Cartesian3.fromDegrees(londegree,latdegree,alt); 
+     var cartesian3s = Cesium.Cartesian3.fromDegreesArray([108,39,119,38]); 
+     没有高度 var cartesian3s = Cesium.Cartesian3.fromDegreesArrayHeights([108,39,1000,119,38,200]);
+     有高度 var cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(cartesian3);
+     var cartographics = Cesium.Ellipsoid.WGS84.cartesianArrayToCartographicArray([cartesian1,cartesian2,cartesian3]);
+     ```
+
+     
+
+   - 世界坐标转屏幕坐标
+
+     ```javascript
+      var cartesian2= Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene,cartesian3) 
+      var position = viewer.scene.pickPosition(movement.position);  
+      var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+      handler.setInputAction(function (movement) {    
+          var ray = this.viewer.camera.getPickRay(movement.position);
+              if (!ray) return null; 
+              var position = this.viewer.scene.globe.pick(ray, this.viewer.scene);    
+              console.log(movement.position);    
+              console.log(position);   
+      },Cesium.ScreenSpaceEventType.LEFT_CLICK);
+     ```
+
+     
