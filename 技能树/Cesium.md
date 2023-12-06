@@ -83,6 +83,28 @@ Cesium.Color.fromCssColorString("#FF0000FF").withAplha(0.5)//withAlpha 是用来
 
 ### Camera
 
+### 事件
+
+```js
+// 屏幕事件处理器
+const screenSpaceEventHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas)
+// 设置鼠标移动事件监听
+screenSpaceEventHandler.setInputAction(moveEvent, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+function moveEvent(movement) {
+    // 拾取到的对象,包含对象的id与primitive
+    var pickedObject = viewer.scene.pick(movement.endPosition)
+    if (Cesium.defined(pickedObject)) {
+      // 获取临时拾取的实体
+      const tempEntity = dataSource.entities.getById(pickedObject.id._id)
+      // 实体是否存在
+      if (tempEntity) {
+        // 设置实体的点的像素点放大
+        tempEntity.point.pixelSize = 10
+      }
+    } 
+}
+```
+
 
 
 ## 常用属性
@@ -155,7 +177,7 @@ function computeNewPosition(time, result) {
 
 2. WGS84弧度坐标（Cartographic）；
 
-   ```
+   ```javascript
     对象创建： new Cesium.Cartographic(lon,lat,alt); 
     du = radus/pi*180;
     cos sin tan  
@@ -166,7 +188,7 @@ function computeNewPosition(time, result) {
 
 3. 笛卡尔空间直角坐标系（Cartesian3）；
 
-   ```
+   ```javascript
     对象创建： new Cesium.Cartesian3(x,y,z); 
     x：x轴坐标，
     y：y轴坐标，
@@ -177,14 +199,14 @@ function computeNewPosition(time, result) {
 
 4. 平面坐标系（Cartesian2）；
 
-   ```
+   ```javascript
     对象创建： new Cesium.Cartesian2(x,y); 
     {x:45645,y:588,z:5855}
    ```
 
    - 弧度经纬度转换
 
-     ```
+     ```javascript
       弧度转经纬度 var degrees = Cesium.Math.toDegrees(radians); 
       经纬度转弧度 var radians= Cesium.Math.toRadiancs(degrees); 
      ```
@@ -193,7 +215,7 @@ function computeNewPosition(time, result) {
 
    - WGS84坐标构建 
 
-     ```
+     ```javascript
      由弧度创建 var cartogrographic = new Cesium.Cartographic(lonradians,latradians,alt); 
      静态函数 var cartogrographic =Cesium.Cartogrophic.fromRadians(lonradians,latradians,alt); 
      var cartogrographic =Cesium.Cartogrophic.fromDegrees(londegree,latdegree,alt); 
@@ -203,7 +225,7 @@ function computeNewPosition(time, result) {
 
    - WGS84弧度坐标与笛卡尔空间直角坐标系转换 
 
-     ```
+     ```javascript
      var cartesian3 = Cesium.Cartesian3.fromDegrees(londegree,latdegree,alt); 
      var cartesian3s = Cesium.Cartesian3.fromDegreesArray([108,39,119,38]); 
      没有高度 var cartesian3s = Cesium.Cartesian3.fromDegreesArrayHeights([108,39,1000,119,38,200]);
