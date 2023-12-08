@@ -388,3 +388,40 @@ function getPosition(viewer: Cesium.Viewer, position: Cesium.Cartesian2) {
 }
 ```
 
+### 图层操作
+
+```ts
+let viewer = new Cesium.Viewer('cesiumContainer', {
+    // 初始化时便提供一个黑暗图层
+    baseLayer: Cesium.ImageryLayer.fromProviderAsync(
+      Cesium.IonImageryProvider.fromAssetId(3812, {}),
+      {}
+    )
+})
+
+viewer.clock.multiplier = 4000
+// 获取图层集合，是一个集合
+const imageryLayers = viewer.imageryLayers
+// 获取初始化时添加的黑暗图层
+const nightLayer = imageryLayers.get(0)
+// 创建一个图层对象
+const dayLayer = Cesium.ImageryLayer.fromProviderAsync(
+	Cesium.IonImageryProvider.fromAssetId(3845, {}),{}
+)
+// 往图层集合中添加图层对象
+imageryLayers.add(dayLayer)
+// 将图层对象放置最底下
+imageryLayers.lowerToBottom(dayLayer)
+
+function updateLighting(dynamicLighting: any) {
+    dayLayer.show = dynamicLighting
+    // 开启地球照明模式
+    viewer.scene.globe.enableLighting = dynamicLighting
+    // 开启动画
+    viewer.clock.shouldAnimate = dynamicLighting
+    // 当白天时，ngithLayer图层透明度为0，不显示，黑夜时为1
+    nightLayer.dayAlpha = dynamicLighting ? 0.0 : 1.0
+}
+updateLighting(true)
+```
+
