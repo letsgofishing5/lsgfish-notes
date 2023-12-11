@@ -390,6 +390,60 @@ function getPosition(viewer: Cesium.Viewer, position: Cesium.Cartesian2) {
 
 ### 图层操作
 
+#### 默认加载图层
+
+```ts
+let viewer = new Cesium.Viewer('cesiumContainer', {
+    // 初始化时便提供一个黑暗图层
+    baseLayer: Cesium.ImageryLayer.fromProviderAsync(
+      Cesium.IonImageryProvider.fromAssetId(3812, {}),
+      {}
+    )
+})
+```
+
+#### 从图层集合中获取图层
+
+```ts
+// 获取图层集合，是一个集合
+const imageryLayers = viewer.imageryLayers
+// 获取初始化时添加的图层
+const nightLayer = imageryLayers.get(0)
+```
+
+#### 添加图层
+
+```ts
+// 获取图层集合，是一个集合
+const imageryLayers = viewer.imageryLayers
+//构建图层对象
+const imageryLayer = Cesium.ImageryLayer.fromProviderAsync(Cesium.IonImageryProvider.fromAssetId(3812));
+//添加图层
+imageryLayers.add(imageryLayer)
+```
+
+
+
+#### 移除图层
+
+```ts
+// 移除这个图层对象，变量与添加图层实例 同
+imageryLayers.remove(imageryLayer)
+```
+
+
+
+#### 构建平铺图像
+
+```ts
+//构建图层对象
+const imageryLayer = Cesium.ImageryLayer.fromProviderAsync(Cesium.IonImageryProvider.fromAssetId(3812));
+//图层集合中添加图层对象
+viewer.imageryLayers.add(imageryLayer);
+```
+
+### 晨昏线
+
 ```ts
 let viewer = new Cesium.Viewer('cesiumContainer', {
     // 初始化时便提供一个黑暗图层
