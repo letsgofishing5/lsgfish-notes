@@ -390,6 +390,8 @@ function getPosition(viewer: Cesium.Viewer, position: Cesium.Cartesian2) {
 
 ### 图层操作
 
+[加载影像图层](https://www.xjx100.cn/news/308206.html?action=onClick)
+
 #### 默认加载图层
 
 ```ts
