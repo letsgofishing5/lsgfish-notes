@@ -2,6 +2,10 @@
 
 1. 完善自己的学习文档
 
+## 扩展知识
+
+[GIS格式和地理空间文件扩展名的汇总 (qq.com)](https://mp.weixin.qq.com/s?__biz=MzkyODE5OTA4Nw==&mid=2247484452&idx=1&sn=b310c68ff59c33f61f5a667fff75c9b4&chksm=c21d3ce4f56ab5f24d1951823646b9202b2579a6e721035f6e02f5230a884046070c36b08827&mpshare=1&scene=1&srcid=1211DGSkU9X7VEGyukQRKqMa&sharer_shareinfo=bf8f9cf630d4f946b321262a92cdbd76&sharer_shareinfo_first=bf8f9cf630d4f946b321262a92cdbd76&from=industrynews&version=4.1.13.6002&platform=win#rd)
+
 ## 开始
 
 ### 本地安装Github的仓库
