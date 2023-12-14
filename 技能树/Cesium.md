@@ -286,6 +286,18 @@ viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(
 )
 ```
 
+#### 开启高程遮挡
+
+```ts
+viewer!.scene.globe.depthTestAgainstTerrain = true
+```
+
+#### 开启抗锯齿
+
+```ts
+viewer!.scene.postProcessStages.fxaa.enabled = true;
+```
+
 
 
 ## 场景案例
