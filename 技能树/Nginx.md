@@ -303,3 +303,24 @@ location / {
 
 
 
+# 笔记
+
+## alias与root
+
+#### 区别
+
+1. root中的路径会与 location 后面的路径进行拼接，而alias则可以进行部分路径替换
+
+   ```bash
+   # root
+   请求路径：/path/xxx
+   root：html/dist
+   合成路径：html/dist/path/xxx
+   
+   # alias
+   请求路径：/api/dist/xxx
+   alias：html/dist/
+   合成路径：html/dist/xxx
+   ```
+
+   

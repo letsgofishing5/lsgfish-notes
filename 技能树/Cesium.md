@@ -298,6 +298,18 @@ viewer!.scene.globe.depthTestAgainstTerrain = true
 viewer!.scene.postProcessStages.fxaa.enabled = true;
 ```
 
+#### 初始化场景时定义场景位置
+
+```ts
+//默认中国
+Cesium.Camera.DEFAULT_VIEW_RECTANGLE = Cesium.Rectangle.fromDegrees(
+    75.0, // 东
+    0.0, // 南
+    140.0, // 西
+    60.0 // 北
+)
+```
+
 
 
 ## 场景案例
