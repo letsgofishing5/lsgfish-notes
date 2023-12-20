@@ -33,6 +33,26 @@
 
 ## 入门核心概念
 
+### token
+
+需要一个token，去官网申请一个
+
+```ts
+Cesium.Ion.defaultAccessToken = "token"
+```
+
+
+
+### base
+
+引入静态资源统一前缀路径，固定的变量就是**CESIUM_BASE_URL**
+
+```ts
+window.CESIUM_BASE_URL = '/cesium/'
+```
+
+
+
 ### Viewer
 
 在Cesium中`Viewer`是一切的开端，通过`new Cesium.Viewer(container, options)`来创建一个`Viewer`对象，可以把该对象理解为三维虚拟地球，在`Viewer`对象上的所有操作，可以看作是对三维虚拟地球的操作。
