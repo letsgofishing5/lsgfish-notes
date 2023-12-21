@@ -109,18 +109,34 @@ Cesium.Color.fromCartesian4(new Cesium.Cartesian4(1.0,1.0,1.0,1.0))
 Cesium.Color.fromCssColorString("#FF0000FF").withAplha(0.5)//withAlpha 是用来设置 透明程度的
 ```
 
-### ScreenSpaceEventHandler
+
 
 ### SampledPositionProperty
 
-### Clock
+### 时间轴与天文日期
 
-![image-20231114144102015](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20231114144102015.png)
+#### 将JavaScript日期转换为JulianDate
 
-### JulianDate
-
+```ts
+const julianDate = Cesium.JulianDate.fromDate(new Date())
 ```
-一种天文时间单位
+
+#### JulianDate格式化
+
+```ts
+const timeFormatter = () => {
+  // 天文儒略日期
+  var julianDT = new Cesium.JulianDate()
+  // 添加八小时
+  Cesium.JulianDate.addHours(viewer.clock.currentTime, 8, julianDT)
+  // 转换成GregorianDate，以比 JavaScript Date 对象更精确的格式表示公历日期。 除了亚毫秒精度外，此对象还可以表示闰秒
+  var gregorianDT = Cesium.JulianDate.toGregorianDate(julianDT)
+
+  let hour = gregorianDT.hour + ''
+  let minute = gregorianDT.minute + ''
+  let second = gregorianDT.second + ''
+  return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}:${second.padStart(2, '0')}`
+}
 ```
 
 
