@@ -545,3 +545,17 @@ function updateLighting(dynamicLighting: any) {
 updateLighting(true)
 ```
 
+### 操作html
+
+```ts
+this.pop = this.creatElement()
+this.viewer.container.appendChild(this.pop)
+//跟随移动
+this.viewer.scene.postRender.addEventListener(() => {
+    const result = Cesium.SceneTransforms.wgs84ToWindowCoordinates(this.viewer.scene, Cesium.Cartesian3.fromDegrees(...this.lonlat))
+    console.log('result:', result);
+    this.pop.style.left = result.x + 'px'
+    this.pop.style.top = result.y + 'px'
+})
+```
+

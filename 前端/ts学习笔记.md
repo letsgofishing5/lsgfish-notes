@@ -147,8 +147,6 @@ type MyOmit<T, K extends keyof T> = {
 }
 ```
 
-
-
 ### 数组遍历
 
 ```tsx
@@ -196,8 +194,6 @@ interface Person {
 }
 type p = keyof Person
 ```
-
-
 
 #### infer
 
@@ -374,6 +370,97 @@ const usersById: Record<number, User> = {
 ```
 
 在上面的例子中，`Record<number, User>` 定义了一个键为数字，值为 `User` 类型的对象类型。`usersById` 变量使用该类型定义，并初始化为一个包含三个用户信息的对象。
+
+
+
+
+
+## 场景案列
+
+#### 对象属性声明
+
+```ts
+type properties = {
+    [key: string]: string
+}
+```
+
+#### 判断对象属性
+
+```ts
+/**
+ * 判断当前key是否是object的属性
+ * @param key
+ * @param object
+ * @returns
+ */
+export function isValidKey(
+  key: string | number | symbol,
+  object: object
+): key is keyof typeof object {
+  return key in object
+}
+```
+
+
+
+#### 类型互斥
+
+```ts
+
+/**
+ * 工具图标
+ */
+export type ToolIcon = {
+  /**
+   * icon颜色
+   */
+  color?: string
+  /**
+   * 工具的面板是否显示
+   */
+  visible: boolean
+  /**
+   * 面板标题
+   */
+  title: string
+} & uniType
+
+type callbackIcon = {
+  type: 'callback'
+  /**
+   * 如果component传入的是 IconComponent 组件，则需要填写 icon，
+   * 或者直接引入改写好的SvgIcon 套壳组件，则icon可以不用写
+   */
+  size?: number | string
+  icon: string
+  callback: () => void
+}
+type toggleIcon = {
+  type: 'toggle'
+  /**
+   * 如果component传入的是 IconComponent 组件，则需要填写 icon，
+   * 或者直接引入改写好的SvgIcon 套壳组件，则icon可以不用写
+   */
+  icon: [string, string]
+  size?: [number | string, number | string]
+  callback: [() => void, () => void]
+}
+type stringIcon = {
+  type?: ''
+  size?: number | string
+  /**
+   * 如果component传入的是 IconComponent 组件，则需要填写 icon，
+   * 或者直接引入改写好的SvgIcon 套壳组件，则icon可以不用写
+   */
+  icon: string
+  /**
+   * 工具图标对应的工具面板组件，如果没有则运行回调函数
+   */
+  component: string
+} & CardComponentProps
+type uniType = toggleIcon | callbackIcon | stringIcon
+```
 
 
 
