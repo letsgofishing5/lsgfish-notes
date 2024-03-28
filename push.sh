@@ -13,8 +13,6 @@ git add -A
 # echo "place sure commit msg is: ${1} ${2}"
 # read -p "place sure commit msg is: ${1} ${2}. n/y?" sure
 
-
-
 echo "=== Git Commit ==="
 git commit -m "${1:- feat}: ${2:- auto script push}"
 
@@ -27,6 +25,7 @@ if  ! git diff --quiet --exit-code; then
 fi
 
 echo "=== Git Push ==="
-git push origin  ${3:- 'master'} 
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+git push origin  ${3:- $current_branch}
 
 echo "=== Script Finished ==="

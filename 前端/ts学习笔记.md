@@ -35,8 +35,8 @@
 {
     "compilerOptions": {
         /* 基本选项 */
-        "target": "es5",                       // 指定 ECMAScript 目标版本: 'ES3' (default), 'ES5', 'ES6'/'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'
-        "module": "commonjs",                  // 指定使用模块: 'commonjs', 'amd', 'system', 'umd' or 'es2015'
+        "target": "es5",                       // 指定编译后的文件是什么版本的语法：es5、es6...
+        "module": "commonjs",                  // 指定用什么去解析整个项目，esnext、es5...的语法去解析
         "lib": [],                             // 指定要包含在编译中的库文件
         "allowJs": true,                       // 允许编译 javascript 文件
         "checkJs": true,                       // 报告 javascript 文件中的错误
@@ -65,14 +65,14 @@
         "noFallthroughCasesInSwitch": true,    // 报告 switch 语句的 fallthrough 错误。（即，不允许 switch 的 case 语句贯穿）
 
         /* 模块解析选项 */
-        "moduleResolution": "node",            // 选择模块解析策略： 'node' (Node.js) or 'classic' (TypeScript pre-1.6)
+        "moduleResolution": "node",            // 使用什么模式去解析项目：'node' (Node.js) or 'classic' (TypeScript pre-1.6)
         "baseUrl": "./",                       // 用于解析非相对模块名称的基目录
         "paths": {},                           // 模块名到基于 baseUrl 的路径映射的列表
         "rootDirs": [],                        // 根文件夹列表，其组合内容表示项目运行时的结构内容
         "typeRoots": [],                       // 包含类型声明的文件列表
         "types": [],                           // 自动引入包含的类型声明文件
         "allowSyntheticDefaultImports": true,  // 允许从没有设置默认导出的模块中默认导入。
-
+		"esModuleInterop": true,			   // 注1：用于改进 CommonJS 模块（CJS）与 ES6 模块（ESM）之间的互操作性
         /* Source Map Options */
         "sourceRoot": "./",                    // 指定调试器应该找到 TypeScript 文件而不是源文件的位置
         "mapRoot": "./",                       // 指定调试器应该找到映射文件而不是生成文件的位置
@@ -83,15 +83,31 @@
         "experimentalDecorators": true,        // 启用装饰器
         "emitDecoratorMetadata": true          // 为装饰器提供元数据的支持
     },
-    include:[],
-    files:[],
+    include:[],//需要编译的文件，指定当前配置文件的配置是针对哪些文件进行配置的
+    files:[],//同上
     exclude:[],//能级最低，如果指定了 "files"或"include"，则exclude指定也没用
     extends:"",//继承其他配置文件
     compileOnSave:boolean,
 }
 ```
 
+#### 注
 
+1. ```
+   esModuleInterop 是 TypeScript 配置文件（tsconfig.json）中的一个选项，用于改进 CommonJS 模块（CJS）与 ES6 模块（ESM）之间的互操作性。当 esModuleInterop 设置为 true 时，TypeScript 编译器会在编译过程中对某些模块导入方式进行转换，以便更平滑地在同时使用 CJS 和 ESM 模块的项目中工作。
+   
+   具体来说，启用 esModuleInterop 后有以下几个影响：
+   
+   允许通过 import defaultExport from "module" 的形式直接导入 CommonJS 模块的默认导出。在没有开启此选项时，通常需要写成 import * as defaultExport from "module" 来获取默认导出。
+   
+   改变了 TypeScript 如何识别和处理由 require() 导入的具有默认导出的模块。在某些场景下，未开启此选项时可能会导致 TypeScript 在类型检查阶段不能正确识别模块的默认导出。
+   
+   解决了在 TypeScript 中引入 CommonJS 模块时可能遇到的一些类型兼容性问题，使得两种模块系统间的交互更为顺畅。
+   
+   因此，如果你的项目中既有使用 import/export 的 ES6 模块又有使用 require/module.exports 的 CommonJS 模块，开启 esModuleInterop 选项通常可以避免一些潜在的兼容性问题。
+   ```
+
+2. 
 
 
 
@@ -401,8 +417,6 @@ export function isValidKey(
   return key in object
 }
 ```
-
-
 
 #### 类型互斥
 
