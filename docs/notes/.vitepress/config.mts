@@ -30,15 +30,15 @@ export default defineConfig({
     },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: "总览", link: "/overview/index.md" },
-      { text: "我的博客", link: "https://www.cnblogs.com/letgofishing/" },
-      { text: "日常随笔", items: 随笔() },
-      { text: "自学笔记", items: 自学笔记() },
+      // { text: "总览", link: "/overview/index.md" },
+      { text: "随笔", link: "/前端/index.md" },
+      { text: "笔记", link: "/overview/index.md" },
+      { text: "博客", link: "https://www.cnblogs.com/letgofishing/" },
     ],
 
     sidebar: {
       "/overview/index.md": createPublicSiderNav(),
-      "/learn": createPublicSiderNav(),
+      "/前端/": 随笔(),
     },
 
     socialLinks: [
@@ -47,7 +47,7 @@ export default defineConfig({
   }
 })
 /**
- * 创建侧边公共导航栏
+ * 创建侧边公共导航栏-总览
  * @returns
  */
 function createPublicSiderNav() {
@@ -80,9 +80,32 @@ function createPublicSiderNav() {
 function 随笔() {
   return [
     {
-      text: "ts的配置文件",
-      link: "/前端/ts/tsconfig.md",
+      "text": "前端组件库",
+      items: [
+        {
+          text: "文章推荐",
+          link: "/前端/组件库/recommend.md"
+        }
+      ]
     },
+    {
+      text: "typescript记录",
+      items: [
+        {
+          text: "tsconfig.json配置说明",
+          link: "/前端/ts/tsconfig.md",
+        }
+      ]
+    },
+    {
+      text: "项目架构",
+      items: [
+        {
+          text: "monorepo+pnpm",
+          link: "/前端/项目架构/monorepo_pnpm.md",
+        }
+      ]
+    }
   ]
 }
 function 自学笔记() {
