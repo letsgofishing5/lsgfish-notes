@@ -105,6 +105,14 @@ function 随笔() {
           link: "/前端/项目架构/monorepo_pnpm.md",
         }
       ]
+    }, {
+      text: '三维开发',
+      items: [
+        {
+          text: "cesium",
+          link: "/前端/三维/cesium.md"
+        }
+      ]
     }
   ]
 }
