@@ -1,1 +1,0 @@
-import{_ as e,c as r,o as t,a4 as a}from"./chunks/framework.4aTu-Nia.js";const h=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"文章阅读/read.md","filePath":"文章阅读/read.md"}'),o={name:"文章阅读/read.md"},n=a("",9),p=[n];function s(c,_,i,m,q,l){return t(),r("div",null,p)}const d=e(o,[["render",s]]);export{h as __pageData,d as default};

@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "笔记",
+  base: "./",
   description: "自学笔记与日常随笔",
   themeConfig: {
     search: {
