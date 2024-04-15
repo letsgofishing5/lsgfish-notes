@@ -33,12 +33,19 @@ export default defineConfig({
       // { text: "总览", link: "/overview/index.md" },
       { text: "随笔", link: "/前端/index.md" },
       { text: "笔记", link: "/overview/index.md" },
+      { text: "文章阅读", link: "/文章阅读/read" },
       { text: "博客", link: "https://www.cnblogs.com/letgofishing/" },
     ],
 
     sidebar: {
       "/overview/index.md": createPublicSiderNav(),
       "/前端/": 随笔(),
+      "/文章阅读/": [
+        {
+          text: "文章阅读",
+          link: "/文章阅读/read"
+        }
+      ],
     },
 
     socialLinks: [
