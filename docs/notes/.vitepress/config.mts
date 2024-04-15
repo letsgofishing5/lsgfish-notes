@@ -89,6 +89,15 @@ function 随笔() {
       ]
     },
     {
+      "text": "打包工具",
+      items: [
+        {
+          text: "vite打包工具使用",
+          link: "/前端/打包工具/vite.md"
+        }
+      ]
+    },
+    {
       text: "typescript记录",
       items: [
         {
