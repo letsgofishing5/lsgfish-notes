@@ -423,7 +423,7 @@ export function isValidKey(
 ```ts
 
 /**
- * 工具图标
+ * 导出的互斥类型
  */
 export type ToolIcon = {
   /**
@@ -438,7 +438,7 @@ export type ToolIcon = {
    * 面板标题
    */
   title: string
-} & uniType
+} & uniType//联合类型
 
 type callbackIcon = {
   type: 'callback'
@@ -472,7 +472,7 @@ type stringIcon = {
    * 工具图标对应的工具面板组件，如果没有则运行回调函数
    */
   component: string
-} & CardComponentProps
+}
 type uniType = toggleIcon | callbackIcon | stringIcon
 ```
 
