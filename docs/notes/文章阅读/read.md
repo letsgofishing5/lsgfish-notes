@@ -15,3 +15,5 @@
 [Blender#全球城市三维模型离线下载 (qq.com)](https://mp.weixin.qq.com/s/X--YDc0-VrsPfc8Tz6EHjw)
 
 [别啃书了，看看这些超赞的计算机公开课！ (qq.com)](https://mp.weixin.qq.com/s/SFh1mIQpo3yiNtUwD2Micw)
+
+[本地模型训练](https://github.com/netease-youdao/QAnything/blob/master/README_zh.md)
