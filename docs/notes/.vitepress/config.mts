@@ -32,16 +32,16 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       // { text: "总览", link: "/overview/index.md" },
-      { text: "随笔", link: "/前端/index.md" },
+      { text: "随笔", link: "/目录文档/前端/index.md" },
       { text: "笔记", link: "/overview/index.md" },
-      { text: "文章阅读", link: "/文章阅读/read" },
+      { text: "文章阅读", link: "/目录文档/文章阅读/read" },
       { text: "博客", link: "https://www.cnblogs.com/letgofishing/" },
     ],
 
     sidebar: {
       "/overview/index.md": createPublicSiderNav(),
-      "/前端/": 随笔(),
-      "/文章阅读/": [
+      "/目录文档/前端/": 随笔(),
+      "/目录文档/文章阅读/": [
         {
           text: "文章阅读",
           link: "/文章阅读/read"
@@ -92,7 +92,7 @@ function 随笔() {
       items: [
         {
           text: "文章推荐",
-          link: "/前端/组件库/recommend.md"
+          link: "/目录文档/前端/组件库/recommend.md"
         }
       ]
     },
@@ -101,7 +101,7 @@ function 随笔() {
       items: [
         {
           text: "vite打包工具使用",
-          link: "/前端/打包工具/vite.md"
+          link: "/目录文档/前端/打包工具/vite.md"
         }
       ]
     },
@@ -110,7 +110,7 @@ function 随笔() {
       items: [
         {
           text: "tsconfig.json配置说明",
-          link: "/前端/ts/tsconfig.md",
+          link: "/目录文档/前端/ts/tsconfig.md",
         }
       ]
     },
@@ -119,7 +119,7 @@ function 随笔() {
       items: [
         {
           text: "monorepo+pnpm",
-          link: "/前端/项目架构/monorepo_pnpm.md",
+          link: "/目录文档/前端/项目架构/monorepo_pnpm.md",
         }
       ]
     }, {
@@ -127,7 +127,7 @@ function 随笔() {
       items: [
         {
           text: "cesium",
-          link: "/前端/三维/cesium.md"
+          link: "/目录文档/前端/三维/cesium.md"
         }
       ]
     }

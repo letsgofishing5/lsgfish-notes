@@ -1,0 +1,1 @@
+import{_ as s,c as i,o as a,a4 as t}from"./chunks/framework.CXKHhAhX.js";const c=JSON.parse('{"title":"HTML","description":"","frontmatter":{},"headers":[],"relativePath":"无目录文档/HTML.md","filePath":"无目录文档/HTML.md"}'),l={name:"无目录文档/HTML.md"},n=t("",338),h=[n];function e(p,k,r,d,E,o){return a(),i("div",null,h)}const y=s(l,[["render",e]]);export{c as __pageData,y as default};

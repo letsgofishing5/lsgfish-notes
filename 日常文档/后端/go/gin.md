@@ -4,7 +4,7 @@
    go get github.com/pilu/fresh
    ```
 
-2. ```bas
+2. ```bash
    go get github.com/codegangsta/gin
    ```
 
@@ -24,7 +24,7 @@
 
 当访问的地址后面带上了 callback=xxx 的时候，返回的结果，会以xxx为函数，返回结果为函数参数，执行函数
 
-```url
+```bash
 localhost:8080/jsonp?callback=xxx
 ```
 

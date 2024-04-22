@@ -2632,7 +2632,8 @@ public abstract class HttpServlet extends GenericServlet {
   
 - EL表达式的使用：
 
-  - ```jsp
+  - ```
+  //jsp后缀
     <%
     	// 创建User对象
     	User user = new User();
