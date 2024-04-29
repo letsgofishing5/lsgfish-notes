@@ -284,6 +284,7 @@ console.log("link:", link);
 1. 有一个首节点 head，一个尾节点 tail；还有一个双向指针节点模型
 
 ```tsx
+// 单向链表
 class SigleNode {
   data: any;
   next: SigleNode | null;
