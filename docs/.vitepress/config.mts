@@ -147,6 +147,10 @@ function 随笔() {
         {
           text: "cesium",
           link: "/目录文档/前端/三维/cesium.md"
+        },
+        {
+          text: "cesium 代码块",
+          link: "/目录文档/前端/三维/cesium-snippet.md"
         }
       ]
     },

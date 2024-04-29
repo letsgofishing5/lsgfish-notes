@@ -4,54 +4,83 @@
 
 [GIS格式和地理空间文件扩展名的汇总 (qq.com)](https://mp.weixin.qq.com/s?__biz=MzkyODE5OTA4Nw==&mid=2247484452&idx=1&sn=b310c68ff59c33f61f5a667fff75c9b4&chksm=c21d3ce4f56ab5f24d1951823646b9202b2579a6e721035f6e02f5230a884046070c36b08827&mpshare=1&scene=1&srcid=1211DGSkU9X7VEGyukQRKqMa&sharer_shareinfo=bf8f9cf630d4f946b321262a92cdbd76&sharer_shareinfo_first=bf8f9cf630d4f946b321262a92cdbd76&from=industrynews&version=4.1.13.6002&platform=win#rd)
 
-## 开始
+## 环境搭建与简介
 
-### 本地安装Github的仓库
+### 简介
 
-1. 下载Github仓库
+#### 目录结构分析
 
-   ```sh
-   git clone https://github.com/CesiumGS/cesium.git
+`Build`文件夹下包含如下三个子文件夹：
+
+- Cesium：Cesium中的资源及代码
+  - `Assets`：Cesium中的静态资源，包括图片数据及JSON数据
+  - `Scene`：自定义着色器指南，新手可以直接忽略。
+  - `ThirdParty`：Cesium中使用的第三方库。
+  - `Widgets`：Cesium中的CSS样式文件。
+  - `Workers`：Cesium核心工作代码。
+- `CesiumUnminified`：同上，区别是该文件夹下的代码都是未经过压缩（Unminified）的。
+- `Documentation`：Cesium的API文档。
+
+### 环境搭建
+
+#### npm 环境
+
+1. ```bash
+   npm install cesium # 安装cesium包
    ```
 
-   编译github仓库的代码，或者使用官方[在线案例](https://sandcastle.cesium.com/)、[文档](https://cesium.com/learn/cesiumjs/ref-doc/)等信息。
+2. 设置 base 路径与 token
 
-   - 编译下载下来的GitHub仓库代码
+   1. 使用插件方式（vite环境下）：npm i -D vite-plugin-cesium，然后在 vite.config.ts 配置文件中，导入并使用这个插件
 
-     ```bash
-     # 先初始化 git
-     git init
-     # 安装依赖
-     npm install
-     # 编译源码
-     npm run build
-     # 启动本地服务
-     npm start
-     ```
+      ```ts
+      import cesium from "vite-plugin-cesium"
+      export default {
+          plugins:[
+              cesium()
+          ]
+      }
+      ```
 
-## 入门核心概念
+3. 初始化三维球
 
-### token
+   ```vue
+   <template> 
+   	<div id="cesiumContainer"></div>
+   </template>
+   <script setup>
+   import * as Cesium from "Cesium"
+   import {onMounted} from "vue"
+   onMounted(()=>{
+       const viewer = new Cesium.Viewer("cesiumContainer")
+   })
+   </script>
+   ```
 
-需要一个token，去官网申请一个
+   
 
-```ts
-Cesium.Ion.defaultAccessToken = "token"
+#### 脚本引入
+
+```html
+<!-- css样式资源 -->
+<link rel="stylesheet" href="相对路径或者绝对路径/cesium/Widgets/widgets.css">
+<!-- cesium -->
+<script src="相对路径或者绝对路径/cesium/Cesium.js"></script>
+<script>
+    // 需要一个token，去官网申请一个，如果后期不需要使用cesium官方提供的一些服务资源，则可以不设置这个token 
+    Cesium.Ion.defaultAccessToken = "token"
+    // 引入静态资源统一前缀路径，固定的变量就是**CESIUM_BASE_URL**
+    window.CESIUM_BASE_URL = '/cesium/'
+</script>
+<div id="cesiumContainer"></div>
+<script>
+    const viewer = new Cesium.Viewer("cesiumContainer")
+</script>
 ```
 
+## 视图与场景
 
-
-### base
-
-引入静态资源统一前缀路径，固定的变量就是**CESIUM_BASE_URL**
-
-```ts
-window.CESIUM_BASE_URL = '/cesium/'
-```
-
-
-
-### Viewer
+### 视图 Viewer
 
 在Cesium中`Viewer`是一切的开端，通过`new Cesium.Viewer(container, options)`来创建一个`Viewer`对象，可以把该对象理解为三维虚拟地球，在`Viewer`对象上的所有操作，可以看作是对三维虚拟地球的操作。
 
@@ -79,9 +108,35 @@ window.CESIUM_BASE_URL = '/cesium/'
   - `trackedEntityChanged`：追踪实体事件。
 - `scene`：场景，`scene`是`Viewer`对象的属性，但它也是Cesium中的一个关键的对象，用于添加图形（`primitive`）、添加场景特效和添加场景事件，`scene`对象将在下一节中介绍。
 
-### Entity
 
-### DataSource
+
+### 场景 Scene
+
+`Scene`为Cesium视图下的3D图形对象和状态的容器，`Scene`对象并不是显式创建的，而是由`Viewer`或`CesiumWidget`初始化视图时隐式创建的，通过`Scene`对象可以在视图下添加图形（`primitive`）、添加场景特效（如后处理特效`postProcessStage`）、添加场景事件或控制视图下的星空`skyBox`、大气层`skyAtmosphere`、地球`globe`、太阳`sun`和月亮`moon`。
+
+### 相机 Camera
+
+在Cesium中通过相机`Camera`来描述和操作场景的视角，使用相机`Camera`操作场景的视角分为如下几类：
+
+- 飞行 fly：`flyHome`、`flyTo`和`flyToBoundingSphere`，与 fly 有关的方法的特点就是在改变相机视角时会伴随飞行动画；这类方法一定会改变相机的位置，但是不一定会改变相机的朝向；
+- 缩放 zoom：`zoomIn`和`zoomOut`，与 zoom 有关的方法类似于使用鼠标滚轮来操作场景进行缩小或放大；这类方法不会改变相机的朝向，只会改变相机的位置；
+- 移动 move ：`moveBackward`、`moveDown`、`moveForward`、`moveLeft`、`moveRight`和`moveUp`，与 move 有关的方法就是在前后左右上下这六个方向上移动相机，这类方法不会改变相机的朝向，只会改变相机的位置；
+- 视角 look ：`lookDown`、`lookLeft`、`lookRight`和`lookUp`，与 look 有关的方法就是在相机位置不变的情况下，调整相机镜头的上下左右四个方向朝向，这类方法不会改变相机的位置，只会改变相机的朝向；
+- 扭转 twist ：`twistLeft`和`twistRight`，与 twist 有关的方法就是在相机位置不变的情况下，调整相机视角向左（逆时针）或向右（顺时针）扭转，这类方法不会改变相机的位置，只会改变相机的朝向；
+- 旋转 rotate ：`rotateDown`、`rotateLeft`、`rotateRight`和`rotateUp`，与 rotate 有关的方法会根据提供的角度参数旋转相机视角，这类方法会改变相机的位置，也会改变相机的朝向；
+- 其他操作相机的方法：
+  - `setView`直接将相机视角定位到某个位置；
+  - `lookAt`直接将相机视角定位到某个位置，但是会锁定相机视角。
+
+<iframe src="/html/index.html" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+<iframe src="./index.html" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+
+
+## 代码块
+
+#### DataSource 创建自定义数据源管理数据
 
 ```ts
 const viewer = new Cesium.Viewer("#cesiumContainer")
@@ -95,9 +150,7 @@ dataSource.entities.add({
 dataSource.entities.removeAll()
 ```
 
-
-
-### Color
+#### Color 颜色转换
 
 ```js
 Cesium.Color.RED//系统自带的一些枚举颜色值
@@ -106,12 +159,6 @@ Cesium.Color.fromBytes(255,255,255,255)
 Cesium.Color.fromCartesian4(new Cesium.Cartesian4(1.0,1.0,1.0,1.0))
 Cesium.Color.fromCssColorString("#FF0000FF").withAplha(0.5)//withAlpha 是用来设置 透明程度的
 ```
-
-
-
-### SampledPositionProperty
-
-### 时间轴与天文日期
 
 #### 将JavaScript日期转换为JulianDate
 
@@ -137,11 +184,7 @@ const timeFormatter = () => {
 }
 ```
 
-
-
-### Camera
-
-### CallbackProperty
+#### CallbackProperty
 
 ```ts
 /**
@@ -152,55 +195,18 @@ const timeFormatter = () => {
 CallbackProperty.Constructor:(callback:(time: JulianDate, result?: any) => any,isConstant:boolean)
 ```
 
-## 常用属性
-
-1. **material：**材质，可以填充颜色
-2. **eyeOffset：**
-3. **minimumPixelSize：**用于控制实体（Entity）在地球上显示时的最小像素大小的属性。这个属性用于在实体远离相机时防止其显示得太小而难以看到。这个属性通常用于在用户缩放或移动地球时，确保远离相机的实体仍然是可见的，避免它们变得过小而难以观察。例如，如果你有一个表示飞机的实体，你可能希望设置一个合适的 `minimumPixelSize`，以确保飞机在地球上的显示尺寸不会因为距离相机太远而变得过小。
-4. **orientation：**指定实体（Entity）的方向的属性。具体来说，它表示实体的方向，通常用于指定实体的朝向或旋转。`orientation` 的含义是实体相对于参考坐标系的旋转。
-
 ## 事件
 
 ### 左击事件
 
 ```ts
 const viewer:Cesium.Viewer = new Cesium.Viewer("#cesiumContainer")
+//屏幕事件管理器
 let screenSpaceEventHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas)
+//注册回调事件和回调类型
 screenSpaceEventHandler.setInputAction(leftClick, Cesium.ScreenSpaceEventType.LEFT_CLICK)
-let movePosition: Cesium.Cartesian3 | undefined
 function leftClick(event: Cesium.ScreenSpaceEventHandler.PositionedEvent) {
-    const clickPosition = getPosition(viewer, event.position)
-    if (!clickPosition) return
-    // 绘制一个点
-    drawPoint(viewer!, clickPosition)
-    // 绘制线，线的两端默认为同一个点
-    const moveFunc = drawLine(viewer!, clickPosition)
-
-    // 开始监听当前鼠标移动事件，只要鼠标在球上，就可以获取坐标，并且动态更新另外一个坐标点
-    screenSpaceEventHandler.setInputAction(moveCallback, Cesium.ScreenSpaceEventType.MOUSE_MOVE)
-    function moveCallback(moveEvent: Cesium.ScreenSpaceEventHandler.MotionEvent) {
-        movePosition = getPosition(viewer!, moveEvent.endPosition)
-        if (!movePosition) return
-        moveFunc(movePosition)
-    }
-    // 双击事件，取消线段绘制
-    screenSpaceEventHandler.setInputAction(leftDoubleClick, Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK)
-    function leftDoubleClick() {
-        screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE)
-    }
-}
-/**
- * 获取在地球上的位置，如果当前鼠标位置不在地球上，则返回undefined
- * @param event 
- * @returns 
- */
-function getPosition(viewer: Cesium.Viewer, position: Cesium.Cartesian2) {
-    // 拾取一条射线
-    const ray = viewer.camera.getPickRay(position)
-    if (!ray) return
-    const p3 = viewer.scene.globe.pick(ray, viewer.scene)
-    // 如果射线在地球上拾取不到，则返回 
-    return p3
+    // 左击回调事件
 }
 ```
 
@@ -226,24 +232,30 @@ function moveEvent(movement) {
 }
 ```
 
-
-
 ## 坐标转换
 
-1. WGS84经纬度坐标； 系统中没有具体的对象。 
+1. 经纬度与弧度相互转换
 
-2. WGS84弧度坐标（Cartographic）；
-
-   ```javascript
-    对象创建： new Cesium.Cartographic(lon,lat,alt); 
-    du = radus/pi*180;
-    cos sin tan  
-    lon：经度，lat：维度，alt：海拔 
+   ```js
+    弧度转经纬度 var degrees = Cesium.Math.toDegrees(radians); 
+    经纬度转弧度 var radians= Cesium.Math.toRadiancs(degrees); 
    ```
 
    
 
-3. 笛卡尔空间直角坐标系（Cartesian3）；
+2. WGS84经纬度坐标； 系统中没有具体的对象。 
+
+3. WGS84弧度坐标（Cartographic）；
+
+   ```javascript
+   const cartesian3 = new Cesium.Cartesian3(lon,lat,height)
+   const cartographic = Cesium.Cartographic.fromCartesian(cartesian3)
+   
+   ```
+
+   
+
+4. 笛卡尔空间直角坐标系（Cartesian3）；
 
    ```javascript
     对象创建： new Cesium.Cartesian3(x,y,z); 
@@ -254,7 +266,7 @@ function moveEvent(movement) {
 
    
 
-4. 平面坐标系（Cartesian2）；
+5. 平面坐标系（Cartesian2）；
 
    ```javascript
     对象创建： new Cesium.Cartesian2(x,y); 
