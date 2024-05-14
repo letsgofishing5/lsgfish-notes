@@ -1,0 +1,1 @@
+import{_ as s,c as i,o as a,a4 as n}from"./chunks/framework.CXKHhAhX.js";const F=JSON.parse('{"title":"包管理工具","description":"","frontmatter":{},"headers":[],"relativePath":"随笔/pkgm.md","filePath":"随笔/pkgm.md"}'),p={name:"随笔/pkgm.md"},t=n("",68),l=[t];function e(h,k,d,r,o,c){return a(),i("div",null,l)}const m=s(p,[["render",e]]);export{F as __pageData,m as default};

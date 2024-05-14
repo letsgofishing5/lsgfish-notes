@@ -1,0 +1,1 @@
+import{_ as e,c as a,o,a4 as s}from"./chunks/framework.CXKHhAhX.js";const f=JSON.parse('{"title":"css 黑暗模式","description":"","frontmatter":{},"headers":[],"relativePath":"随笔/css_mode.md","filePath":"随笔/css_mode.md"}'),r={name:"随笔/css_mode.md"},t=s("",4),c=[t];function _(l,n,h,d,i,m){return o(),a("div",null,c)}const u=e(r,[["render",_]]);export{f as __pageData,u as default};
