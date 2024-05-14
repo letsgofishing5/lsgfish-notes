@@ -1,0 +1,1 @@
+import{_ as s,c as i,o as a,a4 as n}from"./chunks/framework.CXKHhAhX.js";const y=JSON.parse('{"title":"mapbox","description":"","frontmatter":{},"headers":[],"relativePath":"随笔/mapbox.md","filePath":"随笔/mapbox.md"}'),l={name:"随笔/mapbox.md"},h=n("",38),p=[h];function t(k,e,E,d,r,o){return a(),i("div",null,p)}const c=s(l,[["render",t]]);export{y as __pageData,c as default};
