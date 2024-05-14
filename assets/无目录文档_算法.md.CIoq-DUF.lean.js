@@ -1,1 +1,0 @@
-import{_ as s,c as i,o as a,a4 as n}from"./chunks/framework.CXKHhAhX.js";const F=JSON.parse('{"title":"算法","description":"","frontmatter":{},"headers":[],"relativePath":"无目录文档/算法.md","filePath":"无目录文档/算法.md"}'),h={name:"无目录文档/算法.md"},k=n("",32),t=[k];function l(p,e,E,r,d,g){return a(),i("div",null,t)}const c=s(h,[["render",l]]);export{F as __pageData,c as default};
